@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(ListFragment())
                 }
                 R.id.notification -> {
-                    replaceFragment(NotificationsFragment())
+                    replaceFragment(NotificationListFragment())
                 }
             }
             true
