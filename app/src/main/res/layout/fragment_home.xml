@@ -1,14 +1,254 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Home Fragment" />
+        tools:context=".ListFragment">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical">
+
+            <!-- Search Bar -->
+            <SearchView
+                android:id="@+id/jobSearchView"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/searchview_backgound"
+                android:iconifiedByDefault="false"
+                android:queryBackground="@android:color/transparent"
+                android:queryHint="Seach for a job" />
+
+<!--                    <ListView-->
+<!--                        android:id="@+id/userList"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="16dp"-->
+<!--                        android:layout_marginEnd="16dp"/>-->
+
+            <!-- Top Navigation Bar -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:background="#ffffff"
+                android:gravity="center">
+
+
+                <TextView
+                    android:id="@+id/jobListTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textColor="#5f5a5a"
+                    android:textSize="18sp"
+                    android:textStyle="normal"
+                    tools:text="Job List" />
+
+                <TextView
+                    android:id="@+id/registeredTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="#5f5a5a"
+                    android:textSize="18sp"
+                    android:textStyle="normal"
+                    tools:text="Registered" />
+
+            </RelativeLayout>
+
+            <!-- Job Listing -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/jobview_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="16dp">
+
+                        <ImageView
+                            android:id="@+id/jobImageTextView"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/jobImage"/>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:layout_marginStart="8dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_alignParentTop="true">
+
+                                <TextView
+                                    android:id="@+id/jobNameTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="16sp"
+                                    android:textColor="#156cd2"
+                                    tools:text="Food Delivery Services"/>
+
+                                <TextView
+                                    android:id="@+id/companyNameTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="#1D1D1D"
+                                    tools:text="FoodPanda Malaysia Sdn Bhd"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_alignParentBottom="true">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:layout_marginRight="4dp"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/jobIconImageView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/job"/>
+
+                                    <TextView
+                                        android:id="@+id/jobTypeTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="12sp"
+                                        android:textColor="#1D1D1D"
+                                        android:layout_marginLeft="4dp"
+                                        tools:text="Food Delivery"/>
+
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:layout_marginRight="4dp"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/locationIconImageView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/location"/>
+
+                                    <TextView
+                                        android:id="@+id/locationTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="12sp"
+                                        android:layout_marginLeft="4dp"
+                                        android:textColor="#1D1D1D"
+                                        tools:text="Selangor, KL"/>
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:textColor="#333333"
+                                tools:text="Requirements:"/>
+
+                            <FrameLayout
+                                android:layout_width="119dp"
+                                android:layout_height="25dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/jobdescription_background">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="normal"
+                                    android:textSize="12sp"
+                                    android:textColor="#333333"
+                                    android:layout_gravity="center"
+                                    tools:text="License Available"/>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#333333"
+                                android:textSize="10sp"
+                                android:textStyle="normal"
+                                tools:text="more" />
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:layout_marginLeft="4dp"
+                                android:src="@drawable/more"
+                                android:layout_gravity="center_vertical"/>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
