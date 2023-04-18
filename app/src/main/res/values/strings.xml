@@ -6,12 +6,21 @@
 
 
     <!--  Tik Joe's Stuff  -->
+    <!-- Welcome  -->
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="motto">Train To Job Application</string>
+
+
+
     <!--  Login  -->
     <string name="login">Login</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login_failed">Login Failed</string>
     <string name="login_description">Igniting potential, driving change.</string>
+    <string name="login_failed_description">Please check your username and password.</string>
+    <string name="forgot_password">Forgot Password?</string>
 
 
 

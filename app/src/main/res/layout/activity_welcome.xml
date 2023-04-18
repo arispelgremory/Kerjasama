@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/home_bg"
+    tools:context=".WelcomeActivity">
+
+    <ImageView
+        android:id="@+id/welcome_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/home_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.75" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/home_register_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/register_button"
+        android:fontFamily="@font/open_sans_regular"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:textSize="16sp"
+        app:cornerRadius="10dp"
+        android:backgroundTint="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="@+id/welcome_image"
+        app:layout_constraintStart_toStartOf="@+id/welcome_image"
+        app:layout_constraintTop_toBottomOf="@+id/motto" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/home_login_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/login_button"
+        android:paddingHorizontal="16dp"
+        android:fontFamily="@font/open_sans_regular"
+        android:paddingVertical="16dp"
+        android:textSize="16sp"
+        app:cornerRadius="10dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="@+id/welcome_image"
+        app:layout_constraintStart_toStartOf="@+id/welcome_image"
+        app:layout_constraintTop_toBottomOf="@+id/home_register_btn" />
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/app_name"
+        android:textSize="28sp"
+        android:textColor="@color/colorAccent"
+        android:fontFamily="@font/open_sans_bold"
+        app:layout_constraintEnd_toEndOf="@+id/welcome_image"
+        app:layout_constraintStart_toStartOf="@+id/welcome_image"
+        app:layout_constraintTop_toBottomOf="@+id/welcome_image" />
+
+    <TextView
+        android:id="@+id/motto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/motto"
+        android:textSize="12sp"
+        android:textColor="@color/textColorSecondary"
+        android:fontFamily="@font/open_sans_regular"
+        app:layout_constraintEnd_toEndOf="@+id/app_name"
+        app:layout_constraintStart_toStartOf="@+id/app_name"
+        app:layout_constraintTop_toBottomOf="@+id/app_name" />
+</androidx.constraintlayout.widget.ConstraintLayout>

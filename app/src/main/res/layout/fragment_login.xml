@@ -31,7 +31,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corners_input"
-        android:hint="Password"
+        android:hint="@string/password"
         app:boxBackgroundMode="outline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,12 +48,13 @@
         android:id="@+id/login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/colorAccent"
         android:paddingHorizontal="16dp"
         android:paddingVertical="10dp"
         android:text="@string/login"
         android:textColor="@color/colorPrimary"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/password"
@@ -67,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        android:textSize="@dimen/headline"
+        android:textSize="32sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.11"
@@ -83,8 +84,18 @@
         android:text="@string/login_description"
         app:layout_constraintEnd_toEndOf="@+id/loginHeadline"
         app:layout_constraintHorizontal_bias="0.0"
-        android:textSize="14dp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/loginHeadline"
         app:layout_constraintTop_toBottomOf="@+id/loginHeadline" />
+
+    <TextView
+        android:id="@+id/forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/forgot_password"
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        android:textColor="@color/colorAccent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
