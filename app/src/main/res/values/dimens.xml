@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="headline">32dp</dimen>
+    <dimen name="space_for_login_headline">100dp</dimen>
+
+</resources>
