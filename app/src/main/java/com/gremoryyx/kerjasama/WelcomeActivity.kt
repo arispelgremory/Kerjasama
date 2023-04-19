@@ -14,12 +14,14 @@ class WelcomeActivity : AppCompatActivity() {
         val loginButton = findViewById<MaterialButton>(R.id.home_login_btn)
 
         registerButton.setOnClickListener {
-            // Replace this line with the code to start the RegisterActivity
-            // startActivity(Intent(this, RegisterActivity::class.java))
+            startActivity(Intent(this, RegisterActivity::class.java))
+            // End of the welcome activity
+            finish()
         }
 
         loginButton.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         }
     }
 }
