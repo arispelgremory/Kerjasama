@@ -1,3 +1,8 @@
 package com.gremoryyx.kerjasama
 
-data class NotificationData(var companyImg: Int? = null, var messages: String? = null)
+import android.graphics.Bitmap
+
+data class NotificationData(
+    var companyImg: Bitmap? = null,
+    var messages: String? = null
+)

@@ -17,8 +17,14 @@ class NotificationAdapter(private val notificationDataList: ArrayList<Notificati
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val notificationData: NotificationData = notificationDataList[position]
-        holder.viewCompanyImg.setImageResource(notificationData.companyImg ?: R.drawable.defaultcompanypic)
-        holder.viewMessages.text = notificationData.messages
+
+        // Set the Bitmap to the ImageView
+        if (holder.viewCompanyImg != null) {
+            holder.viewCompanyImg.scaleType = ImageView.ScaleType.FIT_CENTER
+            holder.viewCompanyImg.setImageBitmap(notificationData.companyImg)
+        }
+
+        holder.viewMessages.text = notificationData.messages?: "NULL"
     }
 
     override fun getItemCount(): Int {
@@ -29,6 +35,8 @@ class NotificationAdapter(private val notificationDataList: ArrayList<Notificati
         val viewCompanyImg = itemView.findViewById<ImageView>(R.id.Notice_CompanyImg)
         val viewMessages = itemView.findViewById<TextView>(R.id.Notice_Messages)
     }
+
+
 
 
 }

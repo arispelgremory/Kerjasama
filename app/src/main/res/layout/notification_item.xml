@@ -23,10 +23,17 @@
 
             <ImageView
                 android:id="@+id/Notice_CompanyImg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_margin="15dp"
                 tools:srcCompat="@drawable/defaultcompanypic" />
+
+<!--            <ImageView-->
+<!--                android:id="@+id/Notice_CompanyImg"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="15dp"-->
+<!--                tools:srcCompat="@drawable/defaultcompanypic" />-->
 
             <TextView
                 android:id="@+id/Notice_Messages"
