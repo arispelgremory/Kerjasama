@@ -28,16 +28,45 @@
         android:fontFamily="@font/nunito_regular"
         android:textColor="@color/colorPrimaryDark"
         android:text="@string/register_basic_info"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/registerHeadline"
         app:layout_constraintTop_toBottomOf="@+id/registerHeadline" />
 
-        <FrameLayout
+    <FrameLayout
         android:id="@+id/register_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_basic_headline" />
+        app:layout_constraintDimensionRatio="H,9.5:10"
+        app:layout_constraintTop_toBottomOf="@+id/register_basic_headline"></FrameLayout>
 
+    <Button
+        android:id="@+id/register_next_button"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/next"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/register_back_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/register_back_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:text="@string/back"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@drawable/transparent_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

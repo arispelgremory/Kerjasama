@@ -2,5 +2,6 @@
 <resources>
     <dimen name="headline">32dp</dimen>
     <dimen name="space_for_login_headline">100dp</dimen>
+    <dimen name="register_button_bottom_space">64</dimen>
 
 </resources>
