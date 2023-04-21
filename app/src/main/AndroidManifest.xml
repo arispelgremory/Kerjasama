@@ -12,6 +12,9 @@
         android:theme="@style/Theme.Kerjasama"
         tools:targetApi="31">
         <activity
+            android:name=".NotificationListFragment"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
