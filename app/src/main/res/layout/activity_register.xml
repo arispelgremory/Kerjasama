@@ -26,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/nunito_regular"
+        android:text="@string/register_basic_info_headline"
         android:textColor="@color/colorPrimaryDark"
-        android:text="@string/register_basic_info"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/registerHeadline"
         app:layout_constraintTop_toBottomOf="@+id/registerHeadline" />

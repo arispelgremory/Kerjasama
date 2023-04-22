@@ -6,10 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".RegisterBasicInfoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <EditText
-        android:id="@+id/name_as_ic_input"
+        android:id="@+id/name_as_ic_register"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="32dp"
@@ -33,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-        android:id="@+id/ic_number_input"
+        android:id="@+id/ic_number_register"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="32dp"
@@ -53,7 +51,7 @@
         app:boxBackgroundMode="outline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_as_ic_input" />
+        app:layout_constraintTop_toBottomOf="@+id/name_as_ic_register" />
 
     <TextView
         android:id="@+id/gender_label"
@@ -86,7 +84,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/gender_label"
-        app:layout_constraintTop_toBottomOf="@+id/ic_number_input" />
+        app:layout_constraintTop_toBottomOf="@+id/ic_number_register" />
 
     <TextView
         android:id="@+id/date_of_birth_label"
@@ -129,8 +127,8 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
-        app:layout_constraintTop_toTopOf="@+id/editText" />
+        app:layout_constraintBottom_toBottomOf="@+id/phone_number_register"
+        app:layout_constraintTop_toTopOf="@+id/phone_number_register" />
 
     <TextView
         android:id="@+id/phone_number_prefix"
@@ -142,14 +140,14 @@
         android:text="@string/phone_prefix"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintBottom_toBottomOf="@+id/phone_number_register"
         app:layout_constraintStart_toEndOf="@+id/phone_number_label"
-        app:layout_constraintTop_toTopOf="@+id/editText" />
+        app:layout_constraintTop_toTopOf="@+id/phone_number_register" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/phone_number_register"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="32dp"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="@+id/date_picker_button"

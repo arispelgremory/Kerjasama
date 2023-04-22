@@ -39,30 +39,40 @@ class RegisterBasicInfoFragment : Fragment() {
 
     }
 
-    private var listener: OnFragmentInteractionListener? = null
-    private var mListener: RegisterBasicInfoFragment.OnFragmentInteractionListener? = null
+    private var listener: OnBasicInfoFragmentInteractionListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
+        if (context is OnBasicInfoFragmentInteractionListener) {
             listener = context
         } else {
             throw RuntimeException("$context must implement OnFragmentInteractionListener")
         }
     }
 
+    fun sendDataToActivity(): Bundle {
+        val data = Bundle()
+
+        val nameEditText: EditText = requireView().findViewById(R.id.name_as_ic_register)
+        val icNumberEditText: EditText = requireView().findViewById(R.id.ic_number_register)
+        val genderSpinner: Spinner = requireView().findViewById(R.id.gender_spinner)
+        val dateOfBirthButton: Button = requireView().findViewById(R.id.date_picker_button)
+        val phoneNumberEditText: EditText = requireView().findViewById(R.id.phone_number_register)
+
+        data.putString("name", nameEditText.text.toString())
+        data.putString("ic_number", icNumberEditText.text.toString())
+        data.putString("gender", genderSpinner.selectedItem.toString())
+        data.putString("date_of_birth", dateOfBirthButton.text.toString())
+        data.putString("phone_number", phoneNumberEditText.text.toString())
+
+        return data
+    }
+
+
     override fun onDetach() {
         super.onDetach()
         listener = null
     }
-
-    private fun sendDataToActivity() {
-        val data = Bundle()
-        data.putString("name", "John Doe") // Replace with the actual data from the input fields
-        // Add other data as needed
-        listener?.onFragmentInteraction(data)
-    }
-
 
 
     private fun showDatePickerDialog() {
@@ -89,8 +99,17 @@ class RegisterBasicInfoFragment : Fragment() {
 
 
     // Pass to activity interface
-    interface OnFragmentInteractionListener {
-        fun onFragmentInteraction(data: Bundle)
+    interface OnBasicInfoFragmentInteractionListener {
+        fun onBasicInfoFragmentInteraction(data: Bundle)
+    }
+
+
+    // In RegisterBasicInfoFragment
+    fun collectBasicInfoData(): Bundle {
+        val data = Bundle()
+        data.putString("name", "John Doe") // Replace with actual data from input fields
+        // Add other data as needed
+        return data
     }
 
 }

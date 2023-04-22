@@ -22,7 +22,7 @@
 
     <!--  Register  -->
     <string name="register">Register</string>
-    <string name="register_basic_info">Step 1: Basic Information</string>
+    <string name="register_basic_info_headline">Step 1: Basic Information</string>
     <string name="name_as_ic">Name as in IC</string>
     <string name="ic_number">IC Number</string>
     <string name="gender">Gender:</string>
@@ -35,6 +35,8 @@
     </string-array>
     <string name="next">Next</string>
     <string name="back">Back</string>
-    <string name="register_login_info">Step 2: Login Information</string>
+    <string name="register_login_info_headline">Step 2: Login Information</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm Password</string>
 
 </resources>
