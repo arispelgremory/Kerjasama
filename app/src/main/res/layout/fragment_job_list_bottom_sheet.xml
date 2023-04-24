@@ -235,7 +235,6 @@
                             android:layout_marginTop="4dp"
                             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation."/>
 
-
                     </LinearLayout>
 
                 </LinearLayout>
@@ -268,7 +267,7 @@
                             android:padding="8dp">
 
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/walfresChip"
+                                android:id="@+id/walfresChip11"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Chip 1"/>
@@ -318,6 +317,54 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="8dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/contactButton"
+                            android:layout_width="140dp"
+                            android:layout_height="48dp"
+                            android:backgroundTint="#F5F5F5"
+                            android:text="Contact"
+                            android:textStyle="normal"
+                            android:textSize="12sp"
+                            android:textColor="#333333"
+                            app:cornerRadius="5dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/applyButton"
+                            android:layout_width="140dp"
+                            android:layout_height="48dp"
+                            android:backgroundTint="#ed2d2d"
+                            android:text="Apply"
+                            android:textStyle="normal"
+                            android:textSize="12sp"
+                            app:cornerRadius="5dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
@@ -325,5 +372,3 @@
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-

@@ -4,16 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:listitem=".RegisterFragment"
-    android:layout_marginHorizontal="8dp">
+    tools:listitem=".RegisterFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/registered_job_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/register_item"/>
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/job_list_item"
+        android:layout_marginHorizontal="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <include layout="@layout/registered_job_bottom_sheet_layout"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

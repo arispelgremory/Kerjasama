@@ -17,20 +17,20 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/job_view_background">
+            android:background="@drawable/job_view_background"
+            android:paddingBottom="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:orientation="horizontal"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp">
+                android:layout_margin="16dp"
+                android:paddingVertical="8dp">
 
                 <ImageView
-                    android:id="@+id/jobImageTextView"
+                    android:id="@+id/jobImageView"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/job_image"/>
@@ -80,8 +80,8 @@
 
                             <ImageView
                                 android:id="@+id/jobIconImageView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
                                 android:src="@drawable/job"/>
 
                             <TextView
@@ -104,8 +104,8 @@
 
                             <ImageView
                                 android:id="@+id/locationIconImageView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
                                 android:src="@drawable/location"/>
 
                             <TextView
@@ -125,9 +125,9 @@
 
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="90dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp">
@@ -135,7 +135,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingBottom="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -146,67 +147,40 @@
                         android:text="Requirements:"/>
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/requirementsTextView"
+                        android:id="@+id/requirementsChipGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:padding="8dp">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip"
+                            android:id="@+id/requirementChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Chip 1" />
+                            android:text="Chip 1"/>
 
                     </com.google.android.material.chip.ChipGroup>
-
-<!--                    <FrameLayout-->
-<!--                        android:id="@+id/requirementLayout"-->
-<!--                        android:layout_width="119dp"-->
-<!--                        android:layout_height="25dp"-->
-<!--                        android:layout_marginTop="8dp"-->
-<!--                        android:background="@drawable/job_description_background">-->
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/requirementTextView"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:textStyle="normal"-->
-<!--                            android:textSize="12sp"-->
-<!--                            android:textColor="#333333"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            tools:text="License Available"/>-->
-
-<!--                    </FrameLayout>-->
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/moreLayout"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true">
+                    android:gravity="bottom|end">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/moreButton"
+                        android:layout_width="75dp"
+                        android:layout_height="35dp"
+                        android:background="@android:color/transparent"
                         android:textColor="#333333"
-                        android:textSize="10sp"
+                        android:text="more >"
                         android:textStyle="normal"
-                        android:text="more" />
-
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginLeft="4dp"
-                        android:src="@drawable/more"
-                        android:layout_gravity="center_vertical"/>
+                        android:textSize="10sp" />
 
                 </LinearLayout>
 
-            </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

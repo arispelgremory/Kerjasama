@@ -1,4 +1,5 @@
 package com.gremoryyx.kerjasama
 
-class JobSearchListener {
+interface JobSearchListener {
+    fun onSearchInput(newText: String)
 }

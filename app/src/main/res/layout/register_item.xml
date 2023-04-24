@@ -17,9 +17,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/job_view_background">
+            android:background="@drawable/job_view_background"
+            android:paddingBottom="8dp">
 
             <TextView
                 android:id="@+id/registerStatusTextView"
@@ -33,14 +34,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp">
+                android:layout_margin="16dp"
+                android:paddingVertical="8dp">
 
                 <ImageView
-                    android:id="@+id/jobImageTextView"
+                    android:id="@+id/jobImageView"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/job_image"/>
@@ -104,6 +104,7 @@
                                 android:text="Food Delivery"/>
 
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -127,20 +128,25 @@
                                 android:text="Selangor, KL"/>
 
                         </LinearLayout>
+
                     </LinearLayout>
+
                 </RelativeLayout>
+
             </LinearLayout>
-            <RelativeLayout
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -151,86 +157,75 @@
                         android:text="Requirements:" />
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chip_group"
+                        android:id="@+id/requirementsChipGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:padding="8dp">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip1"
+                            android:id="@+id/requirementsChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Chip 1" />
+                            android:text="Chip"/>
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chip2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="License Availiable" />
 
                     </com.google.android.material.chip.ChipGroup>
 
-<!--                    <FrameLayout-->
-<!--                        android:id="@+id/requirementLayout"-->
-<!--                        android:layout_width="119dp"-->
-<!--                        android:layout_height="25dp"-->
-<!--                        android:layout_marginTop="8dp"-->
-<!--                        android:background="@drawable/job_description_background">-->
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/requirementTextView"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:textStyle="normal"-->
-<!--                            android:textSize="12sp"-->
-<!--                            android:textColor="#333333"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:text="License Available"/>-->
-
-<!--                    </FrameLayout>-->
-
                 </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/cancelButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#ed2d2d"
-                    android:text="Cancel"
-                    android:textStyle="normal"
-                    android:textSize="12sp"
-                    app:cornerRadius="5dp"
-                    android:layout_gravity="center"
-                    android:layout_alignParentBottom="true"/>
-
 
                 <LinearLayout
-                    android:id="@+id/moreButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true">
+                    android:layout_marginHorizontal="8dp">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#333333"
-                        android:textSize="10sp"
-                        android:textStyle="normal"
-                        android:text="more" />
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
 
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginLeft="4dp"
-                        android:src="@drawable/more"
-                        android:layout_gravity="center_vertical"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/cancelButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#ed2d2d"
+                            android:text="Cancel"
+                            android:textStyle="normal"
+                            android:textSize="12sp"
+                            app:cornerRadius="5dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:gravity="bottom|end">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="bottom|end">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/moreButton"
+                                android:layout_width="75dp"
+                                android:layout_height="35dp"
+                                android:background="@android:color/transparent"
+                                android:textColor="#333333"
+                                android:text="more >"
+                                android:textStyle="normal"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

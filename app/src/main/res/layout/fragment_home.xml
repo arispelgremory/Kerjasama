@@ -39,6 +39,7 @@
                 app:tabTextColor="#5F5A5A"
                 app:tabSelectedTextColor="#5F5A5A"
                 app:tabIndicatorColor="@color/tab_indicator_color" />
+
         </LinearLayout>
 
         <androidx.viewpager2.widget.ViewPager2

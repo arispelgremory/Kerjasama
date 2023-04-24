@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:listitem=".JobListFragment"
-    android:layout_marginHorizontal="8dp">
+    tools:listitem=".JobListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/job_list_recycler_view"
@@ -17,6 +16,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/job_list_item" />
+        tools:listitem="@layout/job_list_item"
+        android:layout_marginHorizontal="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <include layout="@layout/fragment_job_list_bottom_sheet"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
