@@ -1,26 +1,19 @@
+package com.gremoryyx.kerjasama
+
 import TabPagerAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.gremoryyx.kerjasama.JobListFragment
-import com.gremoryyx.kerjasama.R
-import com.gremoryyx.kerjasama.RegisteredJobFragment
 
 class HomeFragment : Fragment() {
 
     private lateinit var tabPagerAdapter: TabPagerAdapter
-//    private lateinit var jobAdapter: JobAdapter
-//    private lateinit var jobListArrayList: ArrayList<Job>
-//    private lateinit var jobListBottomSheetBehavior: BottomSheetBehavior<FrameLayout>
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,9 +29,6 @@ class HomeFragment : Fragment() {
         val tabLayout: TabLayout = view.findViewById(R.id.tab_layout)
         val viewPager: ViewPager2 = view.findViewById(R.id.view_pager)
         val tabTitles = listOf("Job List", "Registered") // add the tab titles here
-
-//        jobListArrayList = ArrayList()
-//        jobAdapter = JobAdapter(jobListArrayList)
 
         // Initialize the TabPagerAdapter (Step 2)
         tabPagerAdapter = TabPagerAdapter(this, fragment)
@@ -68,6 +58,7 @@ class HomeFragment : Fragment() {
                 return true
             }
         })
+
         return view
     }
 }

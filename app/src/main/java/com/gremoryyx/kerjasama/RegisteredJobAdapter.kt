@@ -11,10 +11,27 @@ import com.google.android.material.chip.ChipGroup
 
 class RegisteredJobAdapter(private val registeredJobList: ArrayList<RegisteredJob>) : RecyclerView.Adapter<RegisteredJobAdapter.RegisteredJobViewHolder>() {
 
-    private var onMoreButtonClickListener: ((RegisteredJob) -> Unit)? = null
+//    private var onMoreButtonClickListener: ((RegisteredJob) -> Unit)? = null
+//
+//    fun setOnMoreButtonClickListenerLambda(listener: (RegisteredJob) -> Unit) {
+//        onMoreButtonClickListener = listener
+//    }
 
-    fun setOnMoreButtonClickListenerLambda(listener: (RegisteredJob) -> Unit) {
-        onMoreButtonClickListener = listener
+    private var onCancelButtonClickListener: ((RegisteredJob) -> Unit)? = null
+
+    fun setOnCancelButtonClickListenerLambda(listener: (RegisteredJob) -> Unit) {
+        onCancelButtonClickListener = listener
+    }
+
+    fun updateJobList(newJobList: ArrayList<RegisteredJob>) {
+        registeredJobList.clear()
+        registeredJobList.addAll(newJobList)
+        notifyDataSetChanged()
+    }
+
+    fun setJobList(newList: List<RegisteredJob>) {
+        registeredJobList.clear()
+        registeredJobList.addAll(newList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegisteredJobViewHolder {
@@ -25,9 +42,13 @@ class RegisteredJobAdapter(private val registeredJobList: ArrayList<RegisteredJo
     override fun onBindViewHolder(holder: RegisteredJobViewHolder, position: Int) {
         val currentItem = registeredJobList[position]
         holder.bind(currentItem)
-        holder.moreButton.setOnClickListener {
-            onMoreButtonClickListener?.invoke(currentItem)
+        holder.cancelButton.setOnClickListener {
+            onCancelButtonClickListener?.invoke(currentItem)
         }
+//        holder.moreButton.setOnClickListener {
+//            onMoreButtonClickListener?.invoke(currentItem)
+//            Toast.makeText(it.context, "2", Toast.LENGTH_LONG).show()
+//        }
     }
 
     override fun getItemCount(): Int {
@@ -36,7 +57,8 @@ class RegisteredJobAdapter(private val registeredJobList: ArrayList<RegisteredJo
 
     inner class RegisteredJobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val moreButton = itemView.findViewById<Button>(R.id.moreButton)
+//        val moreButton = itemView.findViewById<Button>(R.id.moreButton)
+        val cancelButton = itemView.findViewById<Button>(R.id.cancelButton)
 
         fun bind(registeredJob: RegisteredJob) {
             itemView.findViewById<TextView>(R.id.registerStatusTextView).text = registeredJob.registeredStatus
@@ -45,7 +67,7 @@ class RegisteredJobAdapter(private val registeredJobList: ArrayList<RegisteredJo
             itemView.findViewById<TextView>(R.id.jobTypeTextView).text = registeredJob.jobType
             itemView.findViewById<TextView>(R.id.locationTextView).text = registeredJob.location
 
-            val chipGroup = itemView.findViewById<ChipGroup>(R.id.requirementsChipGroup)
+            val chipGroup = itemView.findViewById<ChipGroup>(R.id.requirementChipGroup)
             chipGroup.removeAllViews()
 
             for (criterion in registeredJob.requirements) {

@@ -1,21 +1,21 @@
 package com.gremoryyx.kerjasama
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class JobListFragment : Fragment(), JobSearchListener {
 
     private lateinit var jobListRecyclerView: RecyclerView
     private lateinit var jobListArrayList: ArrayList<Job>
     private lateinit var jobAdapter: JobAdapter
-    private lateinit var jobListBottomSheetBehavior: BottomSheetBehavior<FrameLayout>
     private lateinit var originalJobList: ArrayList<Job>
 
     fun filterJobList(filteredJobList: ArrayList<Job>) {
@@ -60,82 +60,65 @@ class JobListFragment : Fragment(), JobSearchListener {
 
         jobListArrayList = ArrayList()
         jobAdapter = JobAdapter(jobListArrayList)
-
-        originalJobList = ArrayList(jobListArrayList)
-        loadJobs()
-
         jobListRecyclerView.adapter = jobAdapter
 
-        // Initialize the BottomSheetBehavior
-        jobListBottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.bottom_sheet))
-        jobListBottomSheetBehavior.peekHeight = 0
-        jobListBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        originalJobList = ArrayList(jobListArrayList)
+        jobListLoadJobs()
 
-        jobAdapter.setOnMoreButtonClickListenerLambda { job ->
+        // Contact Button OnClick
+        jobAdapter.setOnContactButtonClickListenerLambda { job ->
             // Handle the click event for the "more" button here
-            jobListBottomSheetBehavior.peekHeight = 0
-            jobListBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            val emailIntent = Intent(Intent.ACTION_SENDTO)
+            emailIntent.data = Uri.parse("mailto:")
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("example@example.com"))
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Job Application for ${job.jobName}")
+            // Specify the package name of the Gmail app
+            emailIntent.setPackage("com.google.android.gm")
+            startActivity(Intent.createChooser(emailIntent, "Send email via:"))
         }
 
-        jobListBottomSheetBehavior.setBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN || newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    // The bottom sheet is hidden, do something here
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                // The bottom sheet is sliding, do something here if needed
-                if (slideOffset == -1f) {
-                    jobListBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                }
-            }
-        })
-
-        view.setOnClickListener {
-            if (jobListBottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
-                jobListBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            }
+        // Apply Button OnClick
+        jobAdapter.setOnApplyButtonClickListenerLambda { job ->
+            // Handle the click event for the "more" button here
+            Toast.makeText(context, "Applied for ${job.jobName}", Toast.LENGTH_LONG).show()
         }
 
         return view
     }
 
-    private fun loadJobs() {
+    private fun jobListLoadJobs() {
         // Add your job data here
         val jobs = listOf(
             Job(
-                R.drawable.job_image,
-                "Software Engineer",
-                "Google",
-                "Mountain View, CA",
-                "$120k-$150k",
-                "Full-time",
-                "https://careers.google.com/jobs/results/131139632569880966-software-engineer/",
-                welfares = listOf("Flexible Schedule", "401(k) Plan"),
-                requirements = listOf("Bachelor's degree in Marketing or related field", "3+ years of experience in marketing management", "Excellent communication and leadership skills")
-
-            ),
-            Job(
-                R.drawable.job_image,
-                "UX Designer",
-                "Apple",
-                "Cupertino, CA",
-                "$130k-$160k",
-                "Full-time",
-                "https://careers.google.com/jobs/results/131139632569880966-software-engineer/",
+                imageResource = R.drawable.job_image,
+                jobName = "Software Engineer",
+                companyName = "ABC Company",
+                jobType = "Full-time",
+                location = "San Francisco, CA",
+                duration = "Permanent",
+                jobDescription = "We are looking for a talented software engineer to join our team.",
                 welfares = listOf("Flexible Schedule", "401(k) Plan"),
                 requirements = listOf("Bachelor's degree in Marketing or related field", "3+ years of experience in marketing management", "Excellent communication and leadership skills")
             ),
             Job(
-                R.drawable.job_image,
-                "Data Scientist",
-                "Microsoft",
-                "Redmond, WA",
-                "$140k-$170k",
-                "Full-time",
-                "https://careers.google.com/jobs/results/131139632569880966-software-engineer/",
+                imageResource = R.drawable.job_image,
+                jobName = "Software Engineer",
+                companyName = "ABC Company",
+                jobType = "Full-time",
+                location = "San Francisco, CA",
+                duration = "Permanent",
+                jobDescription = "We are looking for a talented software engineer to join our team.",
+                welfares = listOf("Flexible Schedule", "401(k) Plan"),
+                requirements = listOf("Bachelor's degree in Marketing or related field", "3+ years of experience in marketing management", "Excellent communication and leadership skills")
+            ),
+            Job(
+                imageResource = R.drawable.job_image,
+                jobName = "Software Engineer",
+                companyName = "ABC Company",
+                jobType = "Full-time",
+                location = "San Francisco, CA",
+                duration = "Permanent",
+                jobDescription = "We are looking for a talented software engineer to join our team.",
                 welfares = listOf("Flexible Schedule", "401(k) Plan"),
                 requirements = listOf("Bachelor's degree in Marketing or related field", "3+ years of experience in marketing management", "Excellent communication and leadership skills")
             ),

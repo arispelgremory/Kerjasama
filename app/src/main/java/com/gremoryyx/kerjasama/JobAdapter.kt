@@ -9,12 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 
+
 class JobAdapter(private val jobList: ArrayList<Job>) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
 
-    private var onMoreButtonClickListener: ((Job) -> Unit)? = null
+    private var onContactButtonClickListener: ((Job) -> Unit)? = null
+    private var onApplyButtonClickListener: ((Job) -> Unit)? = null
 
-    fun setOnMoreButtonClickListenerLambda(listener: (Job) -> Unit) {
-        onMoreButtonClickListener = listener
+    fun setOnContactButtonClickListenerLambda(listener: (Job) -> Unit) {
+        onContactButtonClickListener = listener
+
+    }
+
+    fun setOnApplyButtonClickListenerLambda(listener: (Job) -> Unit) {
+        onApplyButtonClickListener = listener
+
     }
 
     fun updateJobList(newJobList: ArrayList<Job>) {
@@ -36,8 +44,12 @@ class JobAdapter(private val jobList: ArrayList<Job>) : RecyclerView.Adapter<Job
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         val currentItem = jobList[position]
         holder.bind(currentItem)
-        holder.moreButton.setOnClickListener {
-            onMoreButtonClickListener?.invoke(currentItem)
+        holder.contactButton.setOnClickListener {
+            onContactButtonClickListener?.invoke(currentItem)
+        }
+
+        holder.applyButton.setOnClickListener {
+            onApplyButtonClickListener?.invoke(currentItem)
         }
     }
 
@@ -46,8 +58,8 @@ class JobAdapter(private val jobList: ArrayList<Job>) : RecyclerView.Adapter<Job
     }
 
     inner class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        val moreButton = itemView.findViewById<Button>(R.id.moreButton)
+        val contactButton: Button = itemView.findViewById(R.id.contactButton)
+        val applyButton: Button = itemView.findViewById(R.id.applyButton)
 
         fun bind(job: Job) {
             itemView.findViewById<TextView>(R.id.jobNameTextView).text = job.jobName
@@ -55,7 +67,7 @@ class JobAdapter(private val jobList: ArrayList<Job>) : RecyclerView.Adapter<Job
             itemView.findViewById<TextView>(R.id.jobTypeTextView).text = job.jobType
             itemView.findViewById<TextView>(R.id.locationTextView).text = job.location
 
-            val chipGroup = itemView.findViewById<ChipGroup>(R.id.requirementsChipGroup)
+            val chipGroup = itemView.findViewById<ChipGroup>(R.id.requirementChipGroup)
 
             for (criterion in job.requirements) {
                 val chip = Chip(itemView.context)
