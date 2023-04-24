@@ -5,6 +5,7 @@
     <color name="colorPrimaryDark">#333333</color> <!-- 30% -->
     <color name="colorAccent">#ED2D2D</color> <!-- 10% -->
     <color name="textColorPrimary">#cccccc</color> <!-- Neutral -->
+    <color name="textColorSecondary">#666666</color> <!-- Dark -->
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
