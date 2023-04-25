@@ -15,6 +15,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
 import com.gremoryyx.kerjasama.repository.CompanyRepository
+import com.gremoryyx.kerjasama.repository.LoginRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,10 +27,9 @@ class NotificationListFragment : Fragment() {
     private lateinit var notificationDataArrayList: ArrayList<NotificationData>
     private lateinit var notificationAdapter: NotificationAdapter
     private lateinit var db: FirebaseFirestore
-    private lateinit var auth: FirebaseAuth
 
     private var companyRepository = CompanyRepository()
-
+    var loginRepo = LoginRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,22 +44,14 @@ class NotificationListFragment : Fragment() {
         notificationDataArrayList = ArrayList()
         notificationAdapter = NotificationAdapter(notificationDataArrayList)
 
-        auth = Firebase.auth
-        val currentUser = auth.currentUser
 
-        auth.signInAnonymously()
-            .addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "signInAnonymously:success")
-                    val user = auth.currentUser
-                    CoroutineScope(Dispatchers.IO).launch {
-                        getItemData()
-                    }
-                } else {
-                    Log.w(TAG, "signInAnonymously:failure", task.exception)
-                }
+        if (loginRepo.validateUser()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                getItemData()
             }
-
+        } else {
+            Toast.makeText(requireContext(), "Please Login First", Toast.LENGTH_SHORT).show()
+        }
 
         recyclerView.adapter = notificationAdapter
         return view
@@ -77,7 +69,9 @@ class NotificationListFragment : Fragment() {
 
                         // Use CoroutineScope to wait for the image to be retrieved
                         val companyName = document.data["company"] as String
+                        Log.d("Company NAME", companyName)
                         val bitmap = companyRepository.getImageFile(companyName).await()
+                        Log.d("bitmap Noti:###", "${bitmap}")
                         notificationData.companyImg = bitmap
 
                         notificationDataArrayList.add(notificationData)
@@ -89,6 +83,7 @@ class NotificationListFragment : Fragment() {
             } else {
                 // Handle error getting documents
                 Log.w(TAG, "Error getting documents.", task.exception)
+                Toast.makeText(requireContext(), "Error getting documents.", Toast.LENGTH_SHORT).show()
             }
         }
     }
