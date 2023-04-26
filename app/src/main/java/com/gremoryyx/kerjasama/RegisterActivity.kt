@@ -1,5 +1,6 @@
 package com.gremoryyx.kerjasama
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -9,7 +10,8 @@ import androidx.fragment.app.Fragment
 
 class RegisterActivity : AppCompatActivity(),
     RegisterLoginInfoFragment.OnLoginInfoFragmentInteractionListener,
-    RegisterBasicInfoFragment.OnBasicInfoFragmentInteractionListener{
+    RegisterBasicInfoFragment.OnBasicInfoFragmentInteractionListener,
+    RegisterEducationFragment.OnEducationFragmentInteractionListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,7 @@ class RegisterActivity : AppCompatActivity(),
         nextButton.setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.register_fragment_container)
             when (currentFragment) {
+                // Step 1
                 is RegisterBasicInfoFragment -> {
                     val data = currentFragment.sendDataToActivity()
                     userData.putAll(data)
@@ -34,9 +37,19 @@ class RegisterActivity : AppCompatActivity(),
                     replaceHeadline(getString(R.string.register_login_info_headline))
                 }
                 is RegisterLoginInfoFragment -> {
+                    // Step 2
                     val data = currentFragment.sendDataToActivity()
                     userData.putAll(data)
                     onLoginInfoFragmentInteraction(userData)
+                    // Handle navigation to the next screen or activity
+                    replaceFragment(RegisterEducationFragment())
+                    replaceHeadline(getString(R.string.register_qualifications_headline))
+                }
+                is RegisterEducationFragment -> {
+                    // Step 3
+                    val data = currentFragment.sendDataToActivity()
+                    userData.putAll(data)
+                    onEducationFragmentInteraction(userData)
                     // Handle navigation to the next screen or activity
                 }
             }
@@ -47,6 +60,13 @@ class RegisterActivity : AppCompatActivity(),
         backButton.setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.register_fragment_container)
             when (currentFragment) {
+                is RegisterBasicInfoFragment -> {
+                    // Handle navigation to the welcome activity
+                    Intent(this, WelcomeActivity::class.java).also {
+                        startActivity(it)
+                        finish()
+                    }
+                }
                 is RegisterLoginInfoFragment -> {
                     replaceFragment(RegisterBasicInfoFragment())
                     replaceHeadline(getString(R.string.register_basic_info_headline))
@@ -66,15 +86,14 @@ class RegisterActivity : AppCompatActivity(),
     }
 
     override fun onLoginInfoFragmentInteraction(data: Bundle) {
-        // Handle the received data from RegisterLoginInfoFragment
-        val username = data.getString("username")
-        val email = data.getString("email")
-        val password = data.getString("password")
-        val confirmPassword = data.getString("confirm_password")
-        // Get other data and store them as needed
+        // This method is not used anymore, but we still need to implement it to satisfy the interface requirements
     }
 
     override fun onBasicInfoFragmentInteraction(data: Bundle) {
+        // This method is not used anymore, but we still need to implement it to satisfy the interface requirements
+    }
+
+    override fun onEducationFragmentInteraction(data: Bundle) {
         // This method is not used anymore, but we still need to implement it to satisfy the interface requirements
     }
 }
