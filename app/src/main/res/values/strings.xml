@@ -39,5 +39,11 @@
     <string name="register_qualifications_headline">Step 3: Qualifications</string>
     <string name="highest_qualifications">Highest Qualifications</string>
 
+    <!--  Profile Picture  -->
+    <string name="register_profile_picture_headline">Step 4: Profile Picture (optional)</string>
+    <string name="your_picture">Your Picture</string>
+
+
+
 
 </resources>

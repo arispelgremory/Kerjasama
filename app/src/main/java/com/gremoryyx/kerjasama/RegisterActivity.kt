@@ -5,13 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 
 class RegisterActivity : AppCompatActivity(),
     RegisterLoginInfoFragment.OnLoginInfoFragmentInteractionListener,
     RegisterBasicInfoFragment.OnBasicInfoFragmentInteractionListener,
-    RegisterEducationFragment.OnEducationFragmentInteractionListener{
+    RegisterEducationFragment.OnEducationFragmentInteractionListener,
+    RegisterSetupProfilePictureFragment.OnProfilePictureFragmentInteractionListener {
+
+    // Stored user input data
+    private val userData = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,9 +23,6 @@ class RegisterActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             replaceFragment(RegisterBasicInfoFragment())
         }
-
-        // Stored user input data
-        val userData = Bundle()
 
         // Next button
         val nextButton: Button = findViewById(R.id.register_next_button)
@@ -51,6 +51,16 @@ class RegisterActivity : AppCompatActivity(),
                     userData.putAll(data)
                     onEducationFragmentInteraction(userData)
                     // Handle navigation to the next screen or activity
+                    replaceFragment(RegisterSetupProfilePictureFragment())
+                    replaceHeadline(getString(R.string.register_profile_picture_headline))
+
+                }
+                is RegisterSetupProfilePictureFragment -> {
+                    // Step 4
+                    // val data = currentFragment.sendDataToActivity()
+                    // userData.putAll(data)
+                    // Handle navigation to the next screen or activity
+
                 }
             }
         }
@@ -75,10 +85,15 @@ class RegisterActivity : AppCompatActivity(),
         }
     }
 
+
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.register_fragment_container, fragment)
             .commit()
+
+        if(fragment is RegisterSetupProfilePictureFragment) {
+            fragment.setUsername(userData.getString("username")!!)
+        }
     }
 
     private fun replaceHeadline(headline: String) {
