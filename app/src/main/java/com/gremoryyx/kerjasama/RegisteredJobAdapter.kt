@@ -4,12 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 
-class RegisteredJobAdapter(private val registeredJobList: ArrayList<RegisteredJob>) : RecyclerView.Adapter<RegisteredJobAdapter.RegisteredJobViewHolder>() {
+class RegisteredJobAdapter(private val registeredJobList: ArrayList<RegisteredJobData>) : RecyclerView.Adapter<RegisteredJobAdapter.RegisteredJobViewHolder>() {
 
 //    private var onMoreButtonClickListener: ((RegisteredJob) -> Unit)? = null
 //
@@ -17,19 +18,19 @@ class RegisteredJobAdapter(private val registeredJobList: ArrayList<RegisteredJo
 //        onMoreButtonClickListener = listener
 //    }
 
-    private var onCancelButtonClickListener: ((RegisteredJob) -> Unit)? = null
+    private var onCancelButtonClickListener: ((RegisteredJobData) -> Unit)? = null
 
-    fun setOnCancelButtonClickListenerLambda(listener: (RegisteredJob) -> Unit) {
+    fun setOnCancelButtonClickListenerLambda(listener: (RegisteredJobData) -> Unit) {
         onCancelButtonClickListener = listener
     }
 
-    fun updateJobList(newJobList: ArrayList<RegisteredJob>) {
+    fun updateJobList(newJobList: ArrayList<RegisteredJobData>) {
         registeredJobList.clear()
         registeredJobList.addAll(newJobList)
         notifyDataSetChanged()
     }
 
-    fun setJobList(newList: List<RegisteredJob>) {
+    fun setJobList(newList: List<RegisteredJobData>) {
         registeredJobList.clear()
         registeredJobList.addAll(newList)
     }
@@ -57,23 +58,35 @@ class RegisteredJobAdapter(private val registeredJobList: ArrayList<RegisteredJo
 
     inner class RegisteredJobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-//        val moreButton = itemView.findViewById<Button>(R.id.moreButton)
+        //        val moreButton = itemView.findViewById<Button>(R.id.moreButton)
         val cancelButton = itemView.findViewById<Button>(R.id.cancelButton)
 
-        fun bind(registeredJob: RegisteredJob) {
-            itemView.findViewById<TextView>(R.id.registerStatusTextView).text = registeredJob.registeredStatus
+        fun bind(registeredJob: RegisteredJobData) {
+            itemView.findViewById<ImageView>(R.id.jobImageView)
+                .setImageBitmap(registeredJob.jobImage)
             itemView.findViewById<TextView>(R.id.jobNameTextView).text = registeredJob.jobName
-            itemView.findViewById<TextView>(R.id.companyNameTextView).text = registeredJob.companyName
+            itemView.findViewById<TextView>(R.id.companyNameTextView).text =
+                registeredJob.companyName
             itemView.findViewById<TextView>(R.id.jobTypeTextView).text = registeredJob.jobType
             itemView.findViewById<TextView>(R.id.locationTextView).text = registeredJob.location
+            itemView.findViewById<TextView>(R.id.durationTextView).text = registeredJob.duration
+            itemView.findViewById<TextView>(R.id.salaryTextView).text = registeredJob.salary
+            itemView.findViewById<TextView>(R.id.jobDescriptionContentTextView).text =
+                registeredJob.jobDescription
+            val WalfresChipGroup = itemView.findViewById<ChipGroup>(R.id.walfresChipGroup)
 
-            val chipGroup = itemView.findViewById<ChipGroup>(R.id.requirementChipGroup)
-            chipGroup.removeAllViews()
+            for (criterion in registeredJob.walfares) {
+                val chip = Chip(itemView.context)
+                chip.text = criterion
+                WalfresChipGroup.addView(chip)
+            }
+
+            val RequirementChipGroup = itemView.findViewById<ChipGroup>(R.id.requirementChipGroup)
 
             for (criterion in registeredJob.requirements) {
                 val chip = Chip(itemView.context)
                 chip.text = criterion
-                chipGroup.addView(chip)
+                RequirementChipGroup.addView(chip)
             }
         }
     }

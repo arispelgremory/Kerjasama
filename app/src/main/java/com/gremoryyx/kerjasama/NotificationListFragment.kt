@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.gremoryyx.kerjasama.repository.CompanyRepository
 import com.gremoryyx.kerjasama.repository.LoginRepository
@@ -68,10 +69,10 @@ class NotificationListFragment : Fragment() {
                         notificationData.messages = document.data["message"] as String?
 
                         // Use CoroutineScope to wait for the image to be retrieved
-                        val companyName = document.data["company"] as String
-                        Log.d("Company NAME", companyName)
-                        val bitmap = companyRepository.getImageFile(companyName).await()
-                        Log.d("bitmap Noti:###", "${bitmap}")
+                        val companyDoc = document.data["company"] as DocumentReference
+                        val cmpy_doc = Firebase.firestore.collection("Company").document("${companyDoc.id}")
+                        val cmpy_phone = cmpy_doc.get().await().data?.get("phonenumber") as String
+                        val bitmap = companyRepository.getImageFile(cmpy_phone).await()
                         notificationData.companyImg = bitmap
 
                         notificationDataArrayList.add(notificationData)
@@ -82,35 +83,10 @@ class NotificationListFragment : Fragment() {
                 }
             } else {
                 // Handle error getting documents
-                Log.w(TAG, "Error getting documents.", task.exception)
                 Toast.makeText(requireContext(), "Error getting documents.", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
-//    private fun getItemData(auth: FirebaseUser?) {
-//
-//        db = FirebaseFirestore.getInstance()
-//        val NotificationRef = db.collection("Notification")
-//        NotificationRef.get().addOnCompleteListener { task ->
-//            if (task.isSuccessful) {
-//                for (document in task.result!!) {
-//                    val notificationData = NotificationData()
-//
-//                    notificationData.messages = document.data["messages"] as String?
-//                    companyRepository.getImageFile(document.data["company"] as String)
-//                    notificationData.companyImg = companyRepository.companyImg_bitmap
-//                    notificationDataArrayList.add(notificationData)
-//                }
-//                notificationAdapter.notifyDataSetChanged() // Notify adapter that data has changed
-//            } else {
-//                // Handle error getting documents
-//                Log.w(TAG, "Error getting documents.", task.exception)
-//            }
-//        }
-//
-//        recyclerView.adapter = notificationAdapter
-//    }
 
 
 
