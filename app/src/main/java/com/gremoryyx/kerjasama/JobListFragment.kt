@@ -12,13 +12,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.rpc.context.AttributeContext.Auth
 import com.gremoryyx.kerjasama.repository.JobRepository
 import com.gremoryyx.kerjasama.repository.LoginRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import org.w3c.dom.Document
 
 class JobListFragment : Fragment(), JobSearchListener {
 
@@ -30,6 +36,7 @@ class JobListFragment : Fragment(), JobSearchListener {
     private lateinit var db: FirebaseFirestore
     var loginRepo = LoginRepository()
     var jobRepo = JobRepository()
+    var regisFrag = RegisteredJobFragment()
 
     fun filterJobList(filteredJobList: ArrayList<JobData>) {
         jobAdapter.updateJobList(filteredJobList)
@@ -103,39 +110,58 @@ class JobListFragment : Fragment(), JobSearchListener {
         // Apply Button OnClick
         jobAdapter.setOnApplyButtonClickListenerLambda { job ->
             // Handle the click event for the "more" button here
-            Toast.makeText(context, "Failed to applied for ${job.jobName}", Toast.LENGTH_LONG).show()
-            addJob(job)
-
-//            val appliedJob = hashMapOf(
-//                "company" to job.companyName,
-//                "job" to job.jobImage,
-//                "registered_status" to "pending",
-//            )
-//            db.collection("Registered Job").add(appliedJob).addOnSuccessListener { documentReference ->
-//                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-//                Toast.makeText(context, "Applied for ${job.jobName}", Toast.LENGTH_LONG).show()
-//            }.addOnFailureListener { e ->
-//                Log.w(ContentValues.TAG, "Error adding document", e)
-//                Toast.makeText(context, "Failed to applied for ${job.jobName}", Toast.LENGTH_LONG).show()
-//            }
+            applyJob(job)
         }
 
         return view
     }
 
-    private fun addJob(jobData: JobData) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val appliedJob = hashMapOf(
-                "company" to jobData.companyName,
-                "job" to jobData.jobName,
-                "registered_status" to "pending",
-            )
-            db.collection("Registered Job").add(appliedJob).addOnSuccessListener { documentReference ->
-                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                Toast.makeText(context, "Applied for ${jobData.jobName}", Toast.LENGTH_LONG).show()
-            }.addOnFailureListener { e ->
-                Log.w(ContentValues.TAG, "Error adding document", e)
-                Toast.makeText(context, "Failed to applied for ${jobData.jobName}", Toast.LENGTH_LONG).show()
+    private fun applyJob(jobData: JobData) {
+        val user = Firebase.auth.currentUser
+        val regRef = db.collection("Registered Job")
+        regRef.get().addOnCompleteListener { task->
+            if (task.isSuccessful){
+                CoroutineScope(Dispatchers.IO).launch {
+                    // Registered job will have some field data
+                    // job, registered status and user
+                    var jobDocument = ""
+                    var userDoc = ""
+                        //JOB
+                        // job will be a reference to the job, to get the job reference, use jobData.jobName and jobData.companyName
+                        // After that, use the job reference to get the job document
+                        // Go through all the document, to check which one contain both jobName and companyName
+                        // If the document contain both jobName and companyName, then get the document path reference
+                        val jobRef = db.collection("Job")
+                        CoroutineScope(Dispatchers.IO).launch {
+                            jobDocument = withContext(Dispatchers.IO){
+                                jobRepo.validateDocument(jobRef, jobData.jobName, jobData.companyName)
+                            }
+
+                            //USER
+                            // get into the user collection and then compare the user.uid with the document.id to get the document path reference
+                            val userRef = db.collection("User")
+                            if (userRef.document("${user!!.uid}").id != null){
+                                userDoc = userRef.document("${user!!.uid}").path
+                            }
+
+                            if (jobDocument != "" && userDoc != ""){
+                                //ADD DATA TO REGISTERED JOB
+                                val docFormat_jobDocument: DocumentReference = db.document(jobDocument)
+                                val docFormat_userDoc: DocumentReference = db.document(userDoc)
+                                regRef.add(hashMapOf(
+                                    "job" to docFormat_jobDocument,
+                                    "registered_status" to "pending",
+                                    "user" to docFormat_userDoc
+                                ))
+                            }
+                        }
+
+
+                }
+
+            }else {
+                // Handle error getting documents
+                Toast.makeText(requireContext(), "Error getting documents.", Toast.LENGTH_SHORT).show()
             }
         }
 

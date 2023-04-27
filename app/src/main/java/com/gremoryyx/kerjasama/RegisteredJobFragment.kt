@@ -1,6 +1,7 @@
 package com.gremoryyx.kerjasama
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,27 +11,55 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.gremoryyx.kerjasama.repository.JobRepository
+import com.gremoryyx.kerjasama.repository.LoginRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class RegisteredJobFragment : Fragment(), JobSearchListener {
     private lateinit var registeredJobRecyclerView: RecyclerView
-    private lateinit var registeredJobArrayList: ArrayList<RegisteredJob>
+    private lateinit var registeredJobArrayList: ArrayList<RegisteredJobData>
     private lateinit var registeredJobAdapter: RegisteredJobAdapter
     private lateinit var registeredJobBottomSheetBehavior: BottomSheetBehavior<FrameLayout>
-    private lateinit var originalJobList: ArrayList<RegisteredJob>
+    private lateinit var originalJobList: ArrayList<RegisteredJobData>
 
-    fun filterJobList(filteredJobList: ArrayList<RegisteredJob>) {
+    private lateinit var db: FirebaseFirestore
+    var loginRepo = LoginRepository()
+    var jobRepo = JobRepository()
+
+    fun filterJobList(filteredJobList: ArrayList<RegisteredJobData>) {
         registeredJobAdapter.updateJobList(filteredJobList)
     }
 
-    fun getJobList(): ArrayList<RegisteredJob> {
+    fun getJobList(): ArrayList<RegisteredJobData> {
         return registeredJobArrayList
     }
 
-    fun getJobArrayList(): ArrayList<RegisteredJob> {
+    fun getJobArrayList(): ArrayList<RegisteredJobData> {
         return registeredJobArrayList
     }
 
-    fun updateJobList(newList: List<RegisteredJob>) {
+    override fun onResume(){
+        super.onResume()
+        if (loginRepo.validateUser()){
+            CoroutineScope(Dispatchers.IO).launch {
+                registeredJobLoadJobs()
+            }
+        }
+        else{
+            Toast.makeText(context, "Login First", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun updateJobList(newList: List<RegisteredJobData>) {
         registeredJobArrayList.clear()
         registeredJobAdapter.setJobList(newList)
         registeredJobAdapter.notifyDataSetChanged()
@@ -53,7 +82,6 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_register, container, false)
-
         registeredJobRecyclerView = view.findViewById(R.id.registered_job_recycler_view)
         registeredJobRecyclerView.layoutManager = LinearLayoutManager(context)
         registeredJobRecyclerView.setHasFixedSize(true)
@@ -63,71 +91,118 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
         registeredJobRecyclerView.adapter = registeredJobAdapter
 
         originalJobList = ArrayList(registeredJobArrayList)
-        registeredJobLoadJobs()
+
+        if (loginRepo.validateUser()){
+            CoroutineScope(Dispatchers.IO).launch {
+                registeredJobLoadJobs()
+            }
+        }
+        else{
+            Toast.makeText(context, "Login First", Toast.LENGTH_LONG).show()
+        }
 
         // Cancel Button OnClick
         registeredJobAdapter.setOnCancelButtonClickListenerLambda { job ->
-            // Handle the click event for the "more" button here
+            // To delete the document in the Registered Job Collection
             Toast.makeText(context, "Cancel button clicked", Toast.LENGTH_SHORT).show()
+            removeJob(job)
         }
 
         return view
     }
 
-    private fun registeredJobLoadJobs() {
+    private fun removeJob(regJobData: RegisteredJobData){
+        val jobRef = db.collection("Job")   // Get the job collection
+        val userRef = db.collection("User") // Get the user collection
+        val regJobRef = db.collection("Registered Job") // Get the Registered Job collection
+        val user = Firebase.auth.currentUser
+        val user_email = user!!.email
+        var jobDocId = ""
+
+        userRef.get().addOnCompleteListener{ task->
+            if (task.isSuccessful){
+                CoroutineScope(Dispatchers.IO).launch{
+                    for (document in task.result!!){
+                        if (document.data["email"] == user_email){
+                            jobRef.get().addOnCompleteListener { task->
+                                if (task.isSuccessful){
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        for (document in task.result!!){
+                                            if (document.data["job_name"] == regJobData.jobName && document.data["company"] == regJobData.companyName){
+                                                jobDocId = document.id
+
+                                                regJobRef.get().addOnCompleteListener { task->
+                                                    if (task.isSuccessful){
+                                                        CoroutineScope(Dispatchers.IO).launch {
+                                                            for (document in task.result!!){
+                                                                if (document.data["job"] == jobRef.document(jobDocId) && document.data["user"] == userRef.document(user.uid)){
+                                                                    regJobRef.document(document.id).delete().await()
+
+
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                    activity?.runOnUiThread {
+                                        registeredJobArrayList.remove(regJobData)
+                                        registeredJobAdapter.notifyDataSetChanged()
+                                    }
+                                }else{
+                                    Log.d("Job!!!!", "Error getting documents: ", task.exception)
+                                }
+                            }
+                        }
+                    }
+                }
+            }else{
+                Log.d("User!!!!", "Error getting documents: ", task.exception)
+            }
+        }
+
+
+    }
+
+    private suspend fun registeredJobLoadJobs() {
         // Add your job data here
-        val registeredJobs = listOf(
-            RegisteredJob(
-                registeredStatus = "Registered",
-                imageResource = R.drawable.job_image,
-                jobName = "Software Engineer",
-                companyName = "ABC Company",
-                jobType = "Full-time",
-                location = "San Francisco, CA",
-                duration = "Permanent",
-                jobDescription = "We are looking for a talented software engineer to join our team.",
-                welfares = listOf("Health Insurance", "Paid Time Off", "Retirement Plan"),
-                requirements = listOf(
-                    "Bachelor's degree in Computer Science or equivalent experience",
-                    "5+ years of experience in software development",
-                    "Proficiency in Java and Python"
-                )
-            ),
-            RegisteredJob(
-                registeredStatus = "Registered",
-                imageResource = R.drawable.job_image,
-                jobName = "Marketing Manager",
-                companyName = "XYZ Company",
-                jobType = "Part-time",
-                location = "New York, NY",
-                duration = "Contract",
-                jobDescription = "We are seeking an experienced marketing manager to help us drive growth.",
-                welfares = listOf("Flexible Schedule", "401(k) Plan"),
-                requirements = listOf(
-                    "Bachelor's degree in Marketing or related field",
-                    "3+ years of experience in marketing management",
-                    "Excellent communication and leadership skills"
-                )
-            ),
-            RegisteredJob(
-                registeredStatus = "Registered",
-                imageResource = R.drawable.job_image,
-                jobName = "Graphic Designer",
-                companyName = "PQR Company",
-                jobType = "Freelance",
-                location = "Los Angeles, CA",
-                duration = "Temporary",
-                jobDescription = "We are looking for a talented graphic designer to work on our new project.",
-                welfares = listOf("Remote work", "Competitive pay"),
-                requirements = listOf(
-                    "Bachelor's degree in Graphic Design or related field",
-                    "2+ years of experience in graphic design",
-                    "Proficiency in Adobe Creative Suite"
-                )
-            )
-        )
-        registeredJobArrayList.addAll(registeredJobs)
-        originalJobList.addAll(registeredJobs)
-        registeredJobAdapter.notifyDataSetChanged()
+        db = FirebaseFirestore.getInstance()
+        val user = Firebase.auth.currentUser
+        val reg_jobRef = db.collection("Registered Job")
+        reg_jobRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    for (document in task.result!!) {
+                        var resJob = document.data["job"] as DocumentReference
+                        var resUser = document.data["user"] as DocumentReference
+                        if (resUser.id == user!!.uid) {
+                            val jobRef = db.collection("Job")
+                            CoroutineScope(Dispatchers.IO).launch {
+                                withContext(Dispatchers.IO) {
+                                    if (jobRepo.validateDocument(jobRef, resJob)) {
+                                        Log.d("Job!!!!", "Job is valid")
+                                        var regJobData = jobRepo.getData(resJob)
+
+
+                                        registeredJobArrayList.add(regJobData)
+                                        withContext(Dispatchers.Main) {
+                                            registeredJobAdapter.notifyDataSetChanged()
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Handle error getting documents
+                Toast.makeText(requireContext(), "Error getting documents.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 }
