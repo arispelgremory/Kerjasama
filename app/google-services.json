@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "199662406627",
+    "project_id": "kerjasama-676767",
+    "storage_bucket": "kerjasama-676767.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199662406627:android:6b5d3eede04bfde8c12ed6",
+        "android_client_info": {
+          "package_name": "com.gremoryyx.kerjasama"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199662406627-urd2cqu92sc7rsu6h5srpndvvaqute1k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIvMIBeMsuPk-en5_XNQYJF2SxRKF-ykU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199662406627-urd2cqu92sc7rsu6h5srpndvvaqute1k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

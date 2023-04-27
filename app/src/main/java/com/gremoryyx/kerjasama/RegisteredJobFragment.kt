@@ -81,7 +81,6 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Toast.makeText(context, "Registered Job Fragment", Toast.LENGTH_SHORT).show()
         val view = inflater.inflate(R.layout.fragment_register, container, false)
         registeredJobRecyclerView = view.findViewById(R.id.registered_job_recycler_view)
         registeredJobRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -123,7 +122,6 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
         userRef.get().addOnCompleteListener{ task->
             if (task.isSuccessful){
                 CoroutineScope(Dispatchers.IO).launch{
-                    Log.d("Launching user", "Launching user")
                     for (document in task.result!!){
                         if (document.data["email"] == user_email){
                             jobRef.get().addOnCompleteListener { task->
@@ -136,12 +134,6 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
                                                 regJobRef.get().addOnCompleteListener { task->
                                                     if (task.isSuccessful){
                                                         CoroutineScope(Dispatchers.IO).launch {
-                                                            Log.d("Launching RegJob", "Launching RegJob")
-                                                            Log.d("JobDocId######", jobDocId)
-                                                            Log.d("JobRef", "${jobRef.document(jobDocId)}")
-                                                            Log.d("JobRefID", "${jobRef.document(jobDocId).id}")
-                                                            Log.d("UserDoc######", "${userRef.document(user.uid)}")
-                                                            Log.d("UserDocId######", "${userRef.document(user.uid).id}")
                                                             for (document in task.result!!){
                                                                 if (document.data["job"] == jobRef.document(jobDocId) && document.data["user"] == userRef.document(user.uid)){
                                                                     regJobRef.document(document.id).delete().await()

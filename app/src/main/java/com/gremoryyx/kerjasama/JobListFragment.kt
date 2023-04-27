@@ -137,17 +137,12 @@ class JobListFragment : Fragment(), JobSearchListener {
                                 jobRepo.validateDocument(jobRef, jobData.jobName, jobData.companyName)
                             }
 
-                            Log.d("LOG job doc#####", "Job Doc: $jobDocument")
-
                             //USER
                             // get into the user collection and then compare the user.uid with the document.id to get the document path reference
                             val userRef = db.collection("User")
-
-                            Log.d("LOG user id#####", "User ID: ${userRef.document("${user!!.uid}").id}")
                             if (userRef.document("${user!!.uid}").id != null){
                                 userDoc = userRef.document("${user!!.uid}").path
                             }
-                            Log.d("LOG user doc#####", "User Doc: $userDoc")
 
                             if (jobDocument != "" && userDoc != ""){
                                 //ADD DATA TO REGISTERED JOB
