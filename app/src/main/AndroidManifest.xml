@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Kerjasama"
         tools:targetApi="31">
         <activity
-            android:name=".WelcomeActivity"
+            android:name="com.gremoryyx.kerjasama.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,9 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name="com.gremoryyx.kerjasama.LoginActivity" />
+        <activity android:name="com.gremoryyx.kerjasama.RegisterActivity" />
+        <activity android:name="com.gremoryyx.kerjasama.MainActivity" />
 
     </application>
 

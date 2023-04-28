@@ -1,10 +1,15 @@
 package com.gremoryyx.kerjasama
 
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 class RegisterActivity : AppCompatActivity(),
@@ -21,7 +26,7 @@ class RegisterActivity : AppCompatActivity(),
         setContentView(R.layout.activity_register)
 
         if (savedInstanceState == null) {
-            replaceFragment(RegisterBasicInfoFragment())
+            replaceFragment(RegisterTermsAndConditionsFragment())
         }
 
         // Next button
@@ -60,7 +65,11 @@ class RegisterActivity : AppCompatActivity(),
                     // val data = currentFragment.sendDataToActivity()
                     // userData.putAll(data)
                     // Handle navigation to the next screen or activity
-
+                    replaceFragment(RegisterTermsAndConditionsFragment())
+                    replaceHeadline(getString(R.string.register_terms_and_conditions_headline))
+                }
+                is RegisterTermsAndConditionsFragment -> {
+                    showCompleteDialog()
                 }
             }
         }
@@ -81,9 +90,39 @@ class RegisterActivity : AppCompatActivity(),
                     replaceFragment(RegisterBasicInfoFragment())
                     replaceHeadline(getString(R.string.register_basic_info_headline))
                 }
+                is RegisterEducationFragment -> {
+                    replaceFragment(RegisterLoginInfoFragment())
+                    replaceHeadline(getString(R.string.register_login_info_headline))
+                }
+                is RegisterSetupProfilePictureFragment -> {
+                    replaceFragment(RegisterEducationFragment())
+                    replaceHeadline(getString(R.string.register_qualifications_headline))
+                }
             }
         }
     }
+
+    private fun showCompleteDialog() {
+        val builder = AlertDialog.Builder(this)
+
+        // Inflate custom layout
+        val customView = layoutInflater.inflate(R.layout.create_successful_dialog, null)
+
+        // Set custom layout to the dialog
+        builder.setView(customView)
+
+        // Create and show the dialog
+        val alertDialog = builder.create()
+        alertDialog.show()
+
+        // Set click listener on OK button
+        customView.findViewById<Button>(R.id.success_button)?.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            alertDialog.dismiss()
+        }
+    }
+
 
 
     private fun replaceFragment(fragment: Fragment) {
