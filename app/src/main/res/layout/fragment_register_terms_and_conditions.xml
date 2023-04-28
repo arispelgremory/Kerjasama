@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".RegisterTermsAndConditionsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Your TextView elements go here -->
+
+        <TextView
+            android:id="@+id/tnc1_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c1_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tnc1_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c1_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tnc1_title"
+            app:layout_constraintTop_toBottomOf="@+id/tnc1_title" />
+
+        <TextView
+            android:id="@+id/tnc2_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c2_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tnc1_desc" />
+
+        <TextView
+            android:id="@+id/tnc2_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c2_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tnc2_title"
+            app:layout_constraintTop_toBottomOf="@+id/tnc2_title" />
+
+        <TextView
+            android:id="@+id/tnc3_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c3_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tnc2_desc" />
+
+        <TextView
+            android:id="@+id/tnc3_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c3_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tnc3_title"
+            app:layout_constraintTop_toBottomOf="@+id/tnc3_title" />
+
+        <TextView
+            android:id="@+id/tnc4_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c4_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tnc3_desc" />
+
+        <TextView
+            android:id="@+id/tnc4_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c2_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tnc4_title"
+            app:layout_constraintTop_toBottomOf="@+id/tnc4_title" />
+
+        <TextView
+            android:id="@+id/tnc5_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c5_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tnc4_desc" />
+
+        <TextView
+            android:id="@+id/tnc5_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c5_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tnc5_title"
+            app:layout_constraintTop_toBottomOf="@+id/tnc5_title" />
+
+        <TextView
+            android:id="@+id/tnc6_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c6_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tnc5_desc" />
+
+        <TextView
+            android:id="@+id/tnc6_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c6_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tnc6_title"
+            app:layout_constraintTop_toBottomOf="@+id/tnc6_title" />
+
+        <TextView
+            android:id="@+id/tnc7_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c7_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tnc6_desc" />
+
+        <TextView
+            android:id="@+id/tnc7_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c7_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tnc7_title"
+            app:layout_constraintTop_toBottomOf="@+id/tnc7_title" />
+
+        <TextView
+            android:id="@+id/tnc8_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c8_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tnc7_desc" />
+
+        <TextView
+            android:id="@+id/tnc8_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c8_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tnc8_title"
+            app:layout_constraintTop_toBottomOf="@+id/tnc8_title" />
+
+        <TextView
+            android:id="@+id/tnc9_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c9_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tnc8_desc" />
+
+        <TextView
+            android:id="@+id/tnc9_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/tnc_c9_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tnc9_title"
+            app:layout_constraintTop_toBottomOf="@+id/tnc9_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
