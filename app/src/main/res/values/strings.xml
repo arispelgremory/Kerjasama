@@ -29,14 +29,51 @@
     <string name="date_of_birth">Date of Birth:</string>
     <string name="phone_number">Phone Number:</string>
     <string name="phone_prefix">+60</string>
-    <string-array name="gender_items">
-        <item name="male">Male</item>
-        <item name="female">Female</item>
-    </string-array>
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="register_login_info_headline">Step 2: Login Information</string>
     <string name="email">Email</string>
     <string name="confirm_password">Confirm Password</string>
+
+    <!--  Qualifications  -->
+    <string name="register_qualifications_headline">Step 3: Qualifications</string>
+    <string name="highest_qualifications">Highest Qualifications</string>
+
+    <!--  Profile Picture  -->
+    <string name="register_profile_picture_headline">Step 4: Profile Picture (optional)</string>
+    <string name="your_picture">Your Picture</string>
+
+    <!--  Terms and Conditions  -->
+    <string name="register_terms_and_conditions_headline">Step 5: Terms and Conditions</string>
+    <string name="create_successful">You\'re all set!</string>
+    <string name="create_successful_caption">Navigate to Login</string>
+    <string name="tnc_c1_title">1. INTRODUCTION</string>
+    <string name="tnc_c1_description">Welcome to the Kerjasama platform (the "Site"). Please read the following Terms of Service carefully before using this Site or opening a Kerjasama account ("Account") so that you are aware of your legal rights and obligations with respect to Kerjasama Mobile Malaysia Sdn. Bhd. (Company Registration No. 12345678 (9487943-W)), its affiliates and/or subsidiaries (individually and collectively, "Kerjasama", "we", "us" or "our").</string>
+
+    <string name="tnc_c2_title">2. SERVICES</string>
+    <string name="tnc_c2_description">Kerjasama provides an online marketplace that allows Users to buy and sell products and services. By using the Site, you agree to comply with these Terms of Service, as well as any additional terms that may apply to specific features or services offered on the Site.</string>
+
+    <string name="tnc_c3_title">3. ACCOUNT REGISTRATION AND USE</string>
+    <string name="tnc_c3_description">To use certain features of the Site, you may be required to register for an Account and provide certain information about yourself. You are responsible for maintaining the confidentiality of your Account information and for all activities that occur under your Account.</string>
+
+    <string name="tnc_c4_title">4. CONTENT AND INFORMATION</string>
+    <string name="tnc_c4_description">You are solely responsible for any Content or information that you post on the Site, including but not limited to product listings, reviews, comments, and messages. Kerjasama reserves the right to remove any Content or information posted by you on the Site in accordance with Section 6.4 herein.</string>
+
+    <string name="tnc_c5_title">5. PROHIBITED CONDUCT AND ACTIVITIES</string>
+    <string name="tnc_c5_description">You agree not to use the Services to engage in any prohibited conduct or activities, including but not limited to: (a) violating any applicable laws or regulations; (b) infringing the rights of third parties; using the Services to collect or store personal data about other Users without their consent; and (d) engaging in any activity that interferes with or disrupts the Site or the Services.</string>
+
+    <string name="tnc_c6_title">6. INTELLECTUAL PROPERTY</string>
+    <string name="tnc_c6_description">All intellectual property rights in the Site and the Services, including but not limited to trademarks, logos, copyrights, and patents, are owned by or licensed to Kerjasama. You may not use any of these intellectual property rights without our prior written consent.</string>
+
+    <string name="tnc_c7_title">7. DISCLAIMER OF WARRANTIES</string>
+    <string name="tnc_c7_description">The Site and the Services are provided on an "as is" and "as available" basis without warranties of any kind, whether express or implied. Kerjasama does not warrant that the Site or the Services will be uninterrupted or error-free, nor does it make any warranty as to the accuracy, completeness, or reliability of any information obtained through the Site or the Services.</string>
+
+    <string name="tnc_c8_title">8. LIMITATION OF LIABILITY</string>
+    <string name="tnc_c8_description">In no event shall Kerjasama be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or in connection with your use of the Site or the Services. Kerjasamas total liability to you for all claims arising out of or in connection with these Terms of Service shall not exceed RM100.</string>
+
+    <string name="tnc_c9_title">9. INDEMNIFICATION</string>
+    <string name="tnc_c9_description">You agree to indemnify and hold harmless Kerjasama from any claims, damages, liabilities, costs, and expenses (including reasonable attorneys fees) arising out of or in connection with your use of the Site or the Services.</string>
+    <string name="ok">Ok</string>
+
 
 </resources>

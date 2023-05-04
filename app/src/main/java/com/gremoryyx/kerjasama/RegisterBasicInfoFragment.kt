@@ -14,6 +14,8 @@ import java.util.*
 
 class RegisterBasicInfoFragment : Fragment() {
 
+    private var listener: OnBasicInfoFragmentInteractionListener? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,13 +27,16 @@ class RegisterBasicInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val items = listOf("Gender", "Male", "Female")
-        val adapter = CustomArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
+        // Set up the gender spinner
+        val genders = listOf("Gender", "Male", "Female")
+        val adapter = CustomArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genders)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
+        // append the adapter to the spinner
         val spinner = view.findViewById<Spinner>(R.id.gender_spinner)
         spinner.adapter = adapter
 
+        // Set up the date picker
         val datePickerButton = view.findViewById<Button>(R.id.date_picker_button)
         datePickerButton.setOnClickListener {
             showDatePickerDialog()
@@ -39,8 +44,7 @@ class RegisterBasicInfoFragment : Fragment() {
 
     }
 
-    private var listener: OnBasicInfoFragmentInteractionListener? = null
-
+    // Interface for sending data to the activity
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnBasicInfoFragmentInteractionListener) {
@@ -50,6 +54,7 @@ class RegisterBasicInfoFragment : Fragment() {
         }
     }
 
+    // function that send data to the activity
     fun sendDataToActivity(): Bundle {
         val data = Bundle()
 
@@ -68,13 +73,13 @@ class RegisterBasicInfoFragment : Fragment() {
         return data
     }
 
-
+    // Destroys the listener
     override fun onDetach() {
         super.onDetach()
         listener = null
     }
 
-
+    // Show date picker dialog
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -91,6 +96,8 @@ class RegisterBasicInfoFragment : Fragment() {
         datePickerDialog.setOnShowListener {
             datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.argb(255, 51, 51, 51))
             datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(Color.argb(255, 237, 45, 45))
+            // Set button text color to primary color
+            view?.findViewById<com.google.android.material.button.MaterialButton>(R.id.date_picker_button)?.setTextColor(Color.argb(255, 51, 51, 51))
         }
 
         datePickerDialog.show()
@@ -103,17 +110,9 @@ class RegisterBasicInfoFragment : Fragment() {
         fun onBasicInfoFragmentInteraction(data: Bundle)
     }
 
-
-    // In RegisterBasicInfoFragment
-    fun collectBasicInfoData(): Bundle {
-        val data = Bundle()
-        data.putString("name", "John Doe") // Replace with actual data from input fields
-        // Add other data as needed
-        return data
-    }
-
 }
 
+// Class function that takes in a list of strings and returns a custom ArrayAdapter
 class CustomArrayAdapter(context: Context, resource: Int, objects: List<String>) :
     ArrayAdapter<String>(context, resource, objects) {
 
@@ -132,6 +131,26 @@ class CustomArrayAdapter(context: Context, resource: Int, objects: List<String>)
         } else {
             textView.setTextColor(Color.argb(255, 51, 51, 51))
         }
+
         return view
     }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val view = super.getView(position, convertView, parent)
+        val textView = view as TextView
+
+        if (position == 0) {
+            textView.setTextColor(Color.GRAY)
+        } else {
+            textView.setTextColor(Color.argb(255, 51, 51, 51))
+        }
+
+        // Set the color of the selected item
+        if (position == (parent as Spinner).selectedItemPosition && position != 0) {
+            textView.setTextColor(Color.argb(255, 51, 51, 51))
+        }
+
+        return view
+    }
+
 }

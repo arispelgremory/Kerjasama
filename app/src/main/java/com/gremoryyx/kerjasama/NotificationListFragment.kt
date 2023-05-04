@@ -28,6 +28,7 @@ class NotificationListFragment : Fragment() {
     private lateinit var notificationDataArrayList: ArrayList<NotificationData>
     private lateinit var notificationAdapter: NotificationAdapter
     private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
 
     private var companyRepository = CompanyRepository()
     var loginRepo = LoginRepository()
@@ -60,22 +61,28 @@ class NotificationListFragment : Fragment() {
 
     private suspend fun getItemData() {
         db = FirebaseFirestore.getInstance()
+        val user = Firebase.auth.currentUser
         val NotificationRef = db.collection("Notification")
+
         NotificationRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
+
                 CoroutineScope(Dispatchers.IO).launch {
                     for (document in task.result!!) {
-                        val notificationData = NotificationData()
-                        notificationData.messages = document.data["message"] as String?
+                        if (user!!.uid == (document.data["user"] as DocumentReference).id){
+                            val notificationData = NotificationData()
+                            notificationData.messages = document.data["message"] as String?
 
-                        // Use CoroutineScope to wait for the image to be retrieved
-                        val companyDoc = document.data["company"] as DocumentReference
-                        val cmpy_doc = Firebase.firestore.collection("Company").document("${companyDoc.id}")
-                        val cmpy_phone = cmpy_doc.get().await().data?.get("phonenumber") as String
-                        val bitmap = companyRepository.getImageFile(cmpy_phone).await()
-                        notificationData.companyImg = bitmap
+                            // Use CoroutineScope to wait for the image to be retrieved
+                            val companyDoc = document.data["company"] as DocumentReference
+                            val cmpy_doc = Firebase.firestore.collection("Company").document("${companyDoc.id}")
+                            val cmpy_phone = cmpy_doc.get().await().data?.get("phonenumber") as String
+                            val bitmap = companyRepository.getImageFile(cmpy_phone).await()
+                            notificationData.companyImg = bitmap
 
-                        notificationDataArrayList.add(notificationData)
+                            notificationDataArrayList.add(notificationData)
+                        }
+
                     }
                     activity?.runOnUiThread {
                         notificationAdapter.notifyDataSetChanged()
