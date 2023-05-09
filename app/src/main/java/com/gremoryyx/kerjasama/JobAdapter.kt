@@ -1,11 +1,13 @@
 package com.gremoryyx.kerjasama
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -73,6 +75,8 @@ class JobAdapter(private val jobList: ArrayList<JobData>) : RecyclerView.Adapter
             itemView.findViewById<TextView>(R.id.jobDescriptionContentTextView).text = job.jobDescription
             val WalfresChipGroup = itemView.findViewById<ChipGroup>(R.id.walfresChipGroup)
 
+
+            Log.d("JobAdapter", "This is job adapter: RYU JIN NO KEN WO KURAE")
             for (criterion in job.walfares){
                 val chip = Chip(itemView.context)
                 chip.text = criterion
@@ -90,4 +94,23 @@ class JobAdapter(private val jobList: ArrayList<JobData>) : RecyclerView.Adapter
 
         }
     }
+
+//    class JobDiffCallback(private val oldList: List<JobData>, private val newList: List<JobData>) : DiffUtil.Callback() {
+//
+//        override fun getOldListSize(): Int {
+//            return oldList.size
+//        }
+//
+//        override fun getNewListSize(): Int {
+//            return newList.size
+//        }
+//
+//        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+//            return oldList[oldItemPosition].id == newList[newItemPosition].id
+//        }
+//
+//        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+//            return oldList[oldItemPosition] == newList[newItemPosition]
+//        }
+//    }
 }

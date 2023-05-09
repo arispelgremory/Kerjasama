@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 data class UserData(
     var name: String,
     var username:String,
+    var email:String,
     var ic_number: String,
     var gender: String,
     var date_of_birth: String,
@@ -13,5 +14,5 @@ data class UserData(
 
 
 ){
-    constructor(): this("", "", "", "", "", "", "")
+    constructor(): this("", "", "", "", "", "", "","")
 }

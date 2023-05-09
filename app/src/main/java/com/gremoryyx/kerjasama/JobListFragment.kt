@@ -2,6 +2,7 @@ package com.gremoryyx.kerjasama
 
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -174,11 +175,13 @@ class JobListFragment : Fragment(), JobSearchListener {
             if (task.isSuccessful) {
                 CoroutineScope(Dispatchers.IO).launch {
                     for (document in task.result!!) {
+                        Log.d("TAG", document.id + " => " + document.data)
                         val jobData = JobData()
                         // Use CoroutineScope to wait for the image to be retrieved
-                        val jobImage = document.data["job_image"] as String
+                        val jobImage = (document.data["job_image"]).toString()
                         val bitmap = jobRepo.getImageFile(jobImage).await()
                         jobData.jobImage = bitmap
+                        Log.d("TAG", "After Exception:")
                         jobData.jobName = (document.data["job_name"]).toString()
                         jobData.companyName = (document.data["company"]).toString()
                         jobData.jobType = (document.data["job_type"]).toString()
@@ -187,11 +190,14 @@ class JobListFragment : Fragment(), JobSearchListener {
                         jobData.salary = (document.data["salary"]).toString()
                         jobData.jobDescription = (document.data["job_description"]).toString()
 
+                        jobData.walfares.clear()
                         var walfaresList = document.data["walfares"]
+                        Log.d("Check UI LOAD", "JOBLIST FRAGMENT ALERT: RYU GA WAGA TEKI WO KURAU")
                         for (walfaresData in walfaresList as ArrayList<String>) {
                             jobData.walfares.add(walfaresData)
                         }
 
+                        jobData.requirements.clear()
                         var requirementList = document.data["requirements"]
                         for (requirementData in requirementList as ArrayList<String>) {
                             jobData.requirements.add(requirementData)

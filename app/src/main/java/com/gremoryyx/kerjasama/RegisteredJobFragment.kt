@@ -183,9 +183,8 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
                             CoroutineScope(Dispatchers.IO).launch {
                                 withContext(Dispatchers.IO) {
                                     if (jobRepo.validateDocument(jobRef, resJob)) {
-                                        Log.d("Job!!!!", "Job is valid")
+                                        registeredJobArrayList.clear()
                                         var regJobData = jobRepo.getData(resJob)
-
 
                                         registeredJobArrayList.add(regJobData)
                                         withContext(Dispatchers.Main) {
