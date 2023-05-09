@@ -16,4 +16,5 @@ data class RegisteredJobData(
 ){
     constructor(): this(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888), "", "", "", "", "", "", "", ArrayList(), ArrayList())
 
+
 }

@@ -162,6 +162,7 @@ class RegisterActivity : AppCompatActivity(),
                         val newUser = UserData()
                         newUser.name = userData.getString("name")!!
                         newUser.username = userData.getString("username")!!
+                        newUser.email = userData.getString("email")!!
                         newUser.gender = userData.getString("gender")!!
                         newUser.date_of_birth = userData.getString("date_of_birth")!!
                         newUser.ic_number = userData.getString("ic_number")!!
