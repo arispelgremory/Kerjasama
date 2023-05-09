@@ -69,12 +69,15 @@ class JobRepository {
 
     fun getImageFile(jobImage: String): Task<Bitmap> {
         val jobStorageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("Job")
-        val jobImgRef = jobStorageRef.child("${jobImage}.png")
+        val jobImgRef = jobStorageRef.child("${jobImage}.jpg")
         Log.d("IMAGE#######", "getImageFile: ${jobImgRef.toString()}")
         return jobImgRef.getBytes(Long.MAX_VALUE)
             .continueWithTask { task ->
                 if (!task.isSuccessful) {
                     throw task.exception!!
+
+                }else{
+                    Log.d("getImageFailed!!!!", "getImageFile: ${task.result}")
                 }
                 val data = task.result
                 val bitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
@@ -87,10 +90,7 @@ class JobRepository {
         CoroutineScope(Dispatchers.IO).launch {
             db = FirebaseFirestore.getInstance()
             jobRef = db.collection("Job")
-            Log.d("job ref#####!!!!", "jobRef: ${jobRef}")
             jobRef.document("${doc.id}").get().addOnSuccessListener { documents ->
-                Log.d("job id#####!!!!", "doc id: ${doc.id}")
-                Log.d("GET DATA!!!!!!", "getData's jobname: ${documents.data?.get("job_name")}")
                 var regJobData = RegisteredJobData()
                 val jobImage = documents.data?.get("job_image") as String
                 CoroutineScope(Dispatchers.IO).launch {
@@ -104,16 +104,7 @@ class JobRepository {
                     regJobData.location = documents.data?.get("location") as String
                     regJobData.duration = documents.data?.get("work_duration") as String
                     regJobData.salary = documents.data?.get("salary") as String
-
-                    var walfaresList = documents.data!!["walfares"]
-                    for (walfaresData in walfaresList as ArrayList<String>) {
-                        regJobData.walfares.add(walfaresData)
-                    }
-
-                    var requirementList = documents.data!!["requirements"]
-                    for (requirementData in requirementList as ArrayList<String>) {
-                        regJobData.requirements.add(requirementData)
-                    }
+                    regJobData.walfares.clear()
 
                     continuation.resume(regJobData)
                 }
