@@ -3,7 +3,7 @@ package com.gremoryyx.kerjasama
 import android.graphics.Bitmap
 
 data class UserData(
-    var jobImage: Bitmap,
+    var user_image: String,
     var name: String,
     var username:String,
     var email:String,
@@ -15,5 +15,5 @@ data class UserData(
 
 
 ){
-    constructor(): this(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),"", "", "", "", "", "", "","")
+    constructor(): this("","", "", "", "", "", "", "","")
 }

@@ -2,12 +2,17 @@ package com.gremoryyx.kerjasama
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.media.Image
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -78,6 +83,9 @@ class RegisterActivity : AppCompatActivity(),
                     // val data = currentFragment.sendDataToActivity()
                     // userData.putAll(data)
                     // Handle navigation to the next screen or activity
+                    val data = currentFragment.sendDataToActivity()
+                    userData.putAll(data)
+                    OnProfilePictureFragmentInteraction(userData)
                     replaceFragment(RegisterTermsAndConditionsFragment())
                     replaceHeadline(getString(R.string.register_terms_and_conditions_headline))
                 }
@@ -154,9 +162,30 @@ class RegisterActivity : AppCompatActivity(),
         findViewById<TextView>(R.id.register_basic_headline).text = headline
     }
 
-    private fun uploadImageToStorage(userImage:String){
-        val storageRef = Firebase.storage.reference
-        userData.getString("")
+
+    fun uploadImageToStorage(userImageUri:Uri){
+//        val storageRef = Firebase.storage.reference
+        val storageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("User")
+        val userImageRef = storageRef.child("${userData.getString("phone_number")}")
+        val uploadTask = userImageRef.putFile(userImageUri)
+
+        // Get the URL of the uploaded image file
+        uploadTask.continueWithTask{ task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            userImageRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                userData.putString("user_image", downloadUri.toString())
+            } else {
+                // Handle failures
+                // ...
+            }
+        }
     }
 
     private fun registerNewUsers(email:String, password:String){
@@ -167,8 +196,11 @@ class RegisterActivity : AppCompatActivity(),
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("Register msg", "createUserWithEmail:success")
                     task.result?.user?.let {
+//                        uploadImageToStorage()
                         val newUser = UserData()
-
+                        val userImageString = userData.getString("user_image")
+                        uploadImageToStorage(Uri.parse(userImageString))
+                        newUser.user_image = userImageString!!
                         newUser.name = userData.getString("name")!!
                         newUser.username = userData.getString("username")!!
                         newUser.email = userData.getString("email")!!
@@ -177,9 +209,12 @@ class RegisterActivity : AppCompatActivity(),
                         newUser.ic_number = userData.getString("ic_number")!!
                         newUser.phone_number = "0"+userData.getString("phone_number")!!
                         newUser.highest_qualifications = userData.getString("highest_qualifications")!!
+                        Log.d("User GET REGISTERDATA#####", "${newUser}")
+                        Log.d("User ID#####", "${it.uid}")
                         db.collection("User").document("${it.uid}").set(newUser)
                             .addOnSuccessListener {
                                 Log.d("User", "User added to database")
+
                             }
                             .addOnFailureListener {
                                 Log.d("User", "Failed to add user to database")
@@ -210,4 +245,8 @@ class RegisterActivity : AppCompatActivity(),
     override fun onEducationFragmentInteraction(data: Bundle) {
         // This method is not used anymore, but we still need to implement it to satisfy the interface requirements
     }
+    override fun OnProfilePictureFragmentInteraction(data: Bundle) {
+        // This method is not used anymore, but we still need to implement it to satisfy the interface requirements
+    }
+
 }
