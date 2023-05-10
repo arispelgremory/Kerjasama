@@ -162,7 +162,6 @@ class RegisterActivity : AppCompatActivity(),
         findViewById<TextView>(R.id.register_basic_headline).text = headline
     }
 
-
     fun uploadImageToStorage(userImageUri:Uri){
 //        val storageRef = Firebase.storage.reference
         val storageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("User")
@@ -186,6 +185,9 @@ class RegisterActivity : AppCompatActivity(),
                 // ...
             }
         }
+    private fun uploadImageToStorage(userImage:String){
+        val storageRef = Firebase.storage.reference
+        userData.getString("")
     }
 
     private fun registerNewUsers(email:String, password:String){
