@@ -23,16 +23,11 @@ import kotlin.coroutines.*
 
 class JobRepository {
     var jobImg_bitmap: Bitmap
-    lateinit var db: FirebaseFirestore
+    private var db = FirebaseFirestore.getInstance()
     lateinit var jobRef: CollectionReference
-    lateinit var jobDocument: DocumentReference
 
     init {
         jobImg_bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-    }
-
-    suspend fun getCollection(){
-        jobRef = db.collection("Job")
     }
 
     suspend fun validateDocument(collection:CollectionReference, jobName: String, companyName: String): String = suspendCoroutine{ continuation ->
@@ -65,8 +60,6 @@ class JobRepository {
 
     }
 
-
-
     fun getImageFile(jobImage: String): Task<Bitmap> {
         val jobStorageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("Job")
         val jobImgRef = jobStorageRef.child("${jobImage}.jpg")
@@ -88,7 +81,6 @@ class JobRepository {
 
     suspend fun getData(doc:DocumentReference): RegisteredJobData = suspendCoroutine{ continuation ->
         CoroutineScope(Dispatchers.IO).launch {
-            db = FirebaseFirestore.getInstance()
             jobRef = db.collection("Job")
             jobRef.document("${doc.id}").get().addOnSuccessListener { documents ->
                 var regJobData = RegisteredJobData()
