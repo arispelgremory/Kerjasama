@@ -41,7 +41,7 @@ class CompanyRepository {
 
     fun getImageFile(phonenumber: String): Task<Bitmap> {
         val companyStorageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("Company")
-        val companyImgRef = companyStorageRef.child("${phonenumber}.png")
+        val companyImgRef = companyStorageRef.child("${phonenumber}.jpg")
         return companyImgRef.getBytes(Long.MAX_VALUE)
             .continueWithTask { task ->
                 if (!task.isSuccessful) {

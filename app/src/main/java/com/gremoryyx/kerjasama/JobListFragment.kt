@@ -175,13 +175,11 @@ class JobListFragment : Fragment(), JobSearchListener {
             if (task.isSuccessful) {
                 CoroutineScope(Dispatchers.IO).launch {
                     for (document in task.result!!) {
-                        Log.d("TAG", document.id + " => " + document.data)
                         val jobData = JobData()
                         // Use CoroutineScope to wait for the image to be retrieved
                         val jobImage = (document.data["job_image"]).toString()
                         val bitmap = jobRepo.getImageFile(jobImage).await()
                         jobData.jobImage = bitmap
-                        Log.d("TAG", "After Exception:")
                         jobData.jobName = (document.data["job_name"]).toString()
                         jobData.companyName = (document.data["company"]).toString()
                         jobData.jobType = (document.data["job_type"]).toString()
@@ -192,7 +190,6 @@ class JobListFragment : Fragment(), JobSearchListener {
 
                         jobData.walfares.clear()
                         var walfaresList = document.data["walfares"]
-                        Log.d("Check UI LOAD", "JOBLIST FRAGMENT ALERT: RYU GA WAGA TEKI WO KURAU")
                         for (walfaresData in walfaresList as ArrayList<String>) {
                             jobData.walfares.add(walfaresData)
                         }
@@ -204,6 +201,7 @@ class JobListFragment : Fragment(), JobSearchListener {
                         }
 
                         jobListArrayList.add(jobData)
+
                     }
                     activity?.runOnUiThread {
                         jobAdapter.notifyDataSetChanged()
@@ -215,44 +213,5 @@ class JobListFragment : Fragment(), JobSearchListener {
             }
         }
     }
-//        // Add your job data here
-//        val jobs = listOf(
-//            JobData(
-//                imageResource = null,
-//                jobName = "Software Engineer",
-//                companyName = "ABC Company",
-//                jobType = "Full-time",
-//                location = "San Francisco, CA",
-//                duration = "Permanent",
-//                jobDescription = "We are looking for a talented software engineer to join our team.",
-//                welfares = listOf("Flexible Schedule", "401(k) Plan"),
-//                requirements = listOf("Bachelor's degree in Marketing or related field", "3+ years of experience in marketing management", "Excellent communication and leadership skills")
-//            ),
-//            JobData(
-//                imageResource = null,
-//                jobName = "Software Engineer",
-//                companyName = "ABC Company",
-//                jobType = "Full-time",
-//                location = "San Francisco, CA",
-//                duration = "Permanent",
-//                jobDescription = "We are looking for a talented software engineer to join our team.",
-//                welfares = listOf("Flexible Schedule", "401(k) Plan"),
-//                requirements = listOf("Bachelor's degree in Marketing or related field", "3+ years of experience in marketing management", "Excellent communication and leadership skills")
-//            ),
-//            JobData(
-//                imageResource = null,
-//                jobName = "Software Engineer",
-//                companyName = "ABC Company",
-//                jobType = "Full-time",
-//                location = "San Francisco, CA",
-//                duration = "Permanent",
-//                jobDescription = "We are looking for a talented software engineer to join our team.",
-//                welfares = listOf("Flexible Schedule", "401(k) Plan"),
-//                requirements = listOf("Bachelor's degree in Marketing or related field", "3+ years of experience in marketing management", "Excellent communication and leadership skills")
-//            ),
-//            // Add more job data here
-//        )
-//        jobListArrayList.addAll(jobs)
-//        originalJobList.addAll(jobs)
 
 }

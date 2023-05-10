@@ -96,7 +96,6 @@ class JobRepository {
                 CoroutineScope(Dispatchers.IO).launch {
                     val bitmap = getImageFile(jobImage).await()
                     regJobData.jobImage = bitmap
-
                     regJobData.jobName = documents.data?.get("job_name") as String
                     regJobData.companyName = documents.data?.get("company") as String
                     regJobData.jobDescription = documents.data?.get("job_description") as String
