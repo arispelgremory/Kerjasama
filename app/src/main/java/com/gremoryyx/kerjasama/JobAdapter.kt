@@ -63,54 +63,54 @@ class JobAdapter(private val jobList: ArrayList<JobData>) : RecyclerView.Adapter
     inner class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val contactButton: Button = itemView.findViewById(R.id.contactButton)
         val applyButton: Button = itemView.findViewById(R.id.applyButton)
+        private val jobImageView: ImageView = itemView.findViewById(R.id.jobImageView)
+        private val jobNameTextView: TextView = itemView.findViewById(R.id.jobNameTextView)
+        private val companyNameTextView: TextView = itemView.findViewById(R.id.companyNameTextView)
+        private val jobTypeTextView: TextView = itemView.findViewById(R.id.jobTypeTextView)
+        private val locationTextView: TextView = itemView.findViewById(R.id.locationTextView)
+        private val durationTextView: TextView = itemView.findViewById(R.id.durationTextView)
+        private val salaryTextView: TextView = itemView.findViewById(R.id.salaryTextView)
+        private val jobDescriptionContentTextView: TextView = itemView.findViewById(R.id.jobDescriptionContentTextView)
+        private val WalfresChipGroup: ChipGroup = itemView.findViewById(R.id.walfresChipGroup)
+        private val RequirementChipGroup: ChipGroup = itemView.findViewById(R.id.requirementChipGroup)
+
+        private var currentJob: JobData? = null
 
         fun bind(job: JobData) {
-            itemView.findViewById<ImageView>(R.id.jobImageView).setImageBitmap(job.jobImage)
-            itemView.findViewById<TextView>(R.id.jobNameTextView).text = job.jobName
-            itemView.findViewById<TextView>(R.id.companyNameTextView).text = job.companyName
-            itemView.findViewById<TextView>(R.id.jobTypeTextView).text = job.jobType
-            itemView.findViewById<TextView>(R.id.locationTextView).text = job.location
-            itemView.findViewById<TextView>(R.id.durationTextView).text = job.duration
-            itemView.findViewById<TextView>(R.id.salaryTextView).text = job.salary
-            itemView.findViewById<TextView>(R.id.jobDescriptionContentTextView).text = job.jobDescription
-            val WalfresChipGroup = itemView.findViewById<ChipGroup>(R.id.walfresChipGroup)
+            if (currentJob == null || currentJob != job) {
+                jobImageView.setImageBitmap(job.jobImage)
+                jobNameTextView.text = job.jobName
+                companyNameTextView.text = job.companyName
+                jobTypeTextView.text = job.jobType
+                locationTextView.text = job.location
+                durationTextView.text = job.duration
+                salaryTextView.text = job.salary
+                jobDescriptionContentTextView.text = job.jobDescription
 
+                setWalfares(job.walfares)
+                setRequirements(job.requirements)
 
-            Log.d("JobAdapter", "This is job adapter: RYU JIN NO KEN WO KURAE")
-            for (criterion in job.walfares){
+                currentJob = job
+            }
+        }
+
+        private fun setWalfares(walfares: List<String>) {
+            WalfresChipGroup.removeAllViews()
+            for (criterion in walfares) {
                 val chip = Chip(itemView.context)
                 chip.text = criterion
                 WalfresChipGroup.addView(chip)
             }
+        }
 
-            val RequirementChipGroup = itemView.findViewById<ChipGroup>(R.id.requirementChipGroup)
-
-            for (criterion in job.requirements) {
+        private fun setRequirements(requirements: List<String>) {
+            RequirementChipGroup.removeAllViews()
+            for (criterion in requirements) {
                 val chip = Chip(itemView.context)
                 chip.text = criterion
                 RequirementChipGroup.addView(chip)
             }
-
-
         }
     }
 
-//    class JobDiffCallback(private val oldList: List<JobData>, private val newList: List<JobData>) : DiffUtil.Callback() {
-//
-//        override fun getOldListSize(): Int {
-//            return oldList.size
-//        }
-//
-//        override fun getNewListSize(): Int {
-//            return newList.size
-//        }
-//
-//        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-//            return oldList[oldItemPosition].id == newList[newItemPosition].id
-//        }
-//
-//        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-//            return oldList[oldItemPosition] == newList[newItemPosition]
-//        }
-//    }
 }

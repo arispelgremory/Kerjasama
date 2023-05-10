@@ -2,6 +2,7 @@ package com.gremoryyx.kerjasama
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +19,8 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.io.File
 
 class RegisterActivity : AppCompatActivity(),
     RegisterLoginInfoFragment.OnLoginInfoFragmentInteractionListener,
@@ -151,6 +154,11 @@ class RegisterActivity : AppCompatActivity(),
         findViewById<TextView>(R.id.register_basic_headline).text = headline
     }
 
+    private fun uploadImageToStorage(userImage:String){
+        val storageRef = Firebase.storage.reference
+        userData.getString("")
+    }
+
     private fun registerNewUsers(email:String, password:String){
         auth = Firebase.auth
         auth.createUserWithEmailAndPassword(email, password)
@@ -160,6 +168,7 @@ class RegisterActivity : AppCompatActivity(),
                     Log.d("Register msg", "createUserWithEmail:success")
                     task.result?.user?.let {
                         val newUser = UserData()
+
                         newUser.name = userData.getString("name")!!
                         newUser.username = userData.getString("username")!!
                         newUser.email = userData.getString("email")!!
