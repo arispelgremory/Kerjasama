@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import java.io.File
@@ -17,7 +16,7 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class ProfileRegisterFragment : Fragment() {
+class ProfilePersonalFragment : Fragment() {
 
     private val getPhoto = registerForActivityResult(ActivityResultContracts.GetContent()){ uri ->
         if(uri != null){
@@ -30,7 +29,7 @@ class ProfileRegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_register, container, false)
+        return inflater.inflate(R.layout.fragment_profile_personal, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

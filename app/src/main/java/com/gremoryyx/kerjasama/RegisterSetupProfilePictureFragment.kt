@@ -62,7 +62,7 @@ class RegisterSetupProfilePictureFragment : Fragment() {
 
 
     interface OnProfilePictureFragmentInteractionListener {
-        fun onLoginInfoFragmentInteraction(data: Bundle)
+        fun onProfilePictureFragmentInteraction(data: Bundle)
     }
 
     public fun setUsername(text: String) {
