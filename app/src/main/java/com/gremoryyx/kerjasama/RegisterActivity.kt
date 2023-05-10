@@ -50,12 +50,59 @@ class RegisterActivity : AppCompatActivity(),
         // Next button
         val nextButton: Button = findViewById(R.id.register_next_button)
         nextButton.setOnClickListener {
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.register_fragment_container)
-            when (currentFragment) {
+            when (val currentFragment = supportFragmentManager.findFragmentById(R.id.register_fragment_container)) {
                 // Step 1
                 is RegisterBasicInfoFragment -> {
                     val data = currentFragment.sendDataToActivity()
                     userData.putAll(data)
+
+
+                    //  Check if all fields are filled
+                    var options = ""
+                    if (userData.getString("name") == "") {
+                        options += "Fill in your name,"
+                    }
+
+
+                    if (userData.getString("ic_number") == "") {
+                        options += " IC Number,"
+                    } else if (userData.getString("ic_number")!!.length != 12) {
+                        options += " IC Number must be 12 digits,"
+                    }
+
+                    if (userData.getString("phone_number") == "") {
+                        options += " Phone Number,"
+                    } else if ((userData.getString("phone_number")!!.length != 9
+                        && userData.getString("phone_number")!!.length != 10)
+                        || !userData.getString("phone_number")!!.startsWith("1")
+                    ) {
+                        options += " Phone Number must be 9 or 10 digits and starts with 1,"
+                    }
+
+                    if (userData.getString("address") == "") {
+                        options += " Address,"
+                    }
+
+                    // User didn't press the gender button
+                    if (userData.getString("gender") == "Gender") {
+                        if (options.isNotEmpty()) options += " and"
+                        options += " Select your gender,"
+                    }
+
+                    if (userData.getString("date_of_birth") == "Choose Date") {
+                        options += " Choose your Date of Birth."
+                    }
+
+
+                    if (options.isNotEmpty()) {
+                        var message = "Please fill in the following fields: "
+                        message += options
+                        message = message.substring(0, message.length - 1)
+                        message += "."
+                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+
                     replaceFragment(RegisterLoginInfoFragment())
                     replaceHeadline(getString(R.string.register_login_info_headline))
                 }
@@ -63,7 +110,23 @@ class RegisterActivity : AppCompatActivity(),
                     // Step 2
                     val data = currentFragment.sendDataToActivity()
                     userData.putAll(data)
-                    onLoginInfoFragmentInteraction(userData)
+
+                    val emailPattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z]{2,6}$".toRegex(RegexOption.IGNORE_CASE)
+                    if(!emailPattern.matches(userData.getString("email")!!)) {
+                        Toast.makeText(this, "Invalid Email", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+
+                    if(userData.getString("password")!!.length < 6) {
+                        Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+
+                    if (userData.getString("password") != userData.getString("confirm_password")) {
+                        Toast.makeText(this, "Password and Confirm Password must be the same", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+
                     // Handle navigation to the next screen or activity
                     replaceFragment(RegisterEducationFragment())
                     replaceHeadline(getString(R.string.register_qualifications_headline))
@@ -72,7 +135,12 @@ class RegisterActivity : AppCompatActivity(),
                     // Step 3
                     val data = currentFragment.sendDataToActivity()
                     userData.putAll(data)
-                    onEducationFragmentInteraction(userData)
+
+                    if(userData.getString("highest_qualifications") == getString(R.string.highest_qualifications)) {
+                        Toast.makeText(this, "Please select your highest qualification", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+
                     // Handle navigation to the next screen or activity
                     replaceFragment(RegisterSetupProfilePictureFragment())
                     replaceHeadline(getString(R.string.register_profile_picture_headline))
@@ -85,7 +153,9 @@ class RegisterActivity : AppCompatActivity(),
                     // Handle navigation to the next screen or activity
                     val data = currentFragment.sendDataToActivity()
                     userData.putAll(data)
-                    onProfilePictureFragmentInteraction(userData)
+
+
+
                     replaceFragment(RegisterTermsAndConditionsFragment())
                     replaceHeadline(getString(R.string.register_terms_and_conditions_headline))
                 }
@@ -100,8 +170,7 @@ class RegisterActivity : AppCompatActivity(),
         // Back button
         val backButton: Button = findViewById(R.id.register_back_button)
         backButton.setOnClickListener {
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.register_fragment_container)
-            when (currentFragment) {
+            when (val currentFragment = supportFragmentManager.findFragmentById(R.id.register_fragment_container)) {
                 is RegisterBasicInfoFragment -> {
                     // Handle navigation to the welcome activity
                     Intent(this, WelcomeActivity::class.java).also {
@@ -112,14 +181,21 @@ class RegisterActivity : AppCompatActivity(),
                 is RegisterLoginInfoFragment -> {
                     replaceFragment(RegisterBasicInfoFragment())
                     replaceHeadline(getString(R.string.register_basic_info_headline))
+                    userData.clear()
                 }
                 is RegisterEducationFragment -> {
                     replaceFragment(RegisterLoginInfoFragment())
                     replaceHeadline(getString(R.string.register_login_info_headline))
+                    // Remove the filled data
+                    userData.remove("email")
+                    userData.remove("password")
+                    userData.remove("confirm_password")
                 }
                 is RegisterSetupProfilePictureFragment -> {
                     replaceFragment(RegisterEducationFragment())
                     replaceHeadline(getString(R.string.register_qualifications_headline))
+                    // Remove the filled data
+                    userData.remove("highest_qualification")
                 }
                 is RegisterTermsAndConditionsFragment -> {
                     replaceFragment(RegisterSetupProfilePictureFragment())
