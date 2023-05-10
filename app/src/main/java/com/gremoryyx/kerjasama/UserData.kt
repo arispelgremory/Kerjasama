@@ -3,6 +3,7 @@ package com.gremoryyx.kerjasama
 import android.graphics.Bitmap
 
 data class UserData(
+    var user_image: String,
     var jobImage: Bitmap,
     var name: String,
     var username:String,
