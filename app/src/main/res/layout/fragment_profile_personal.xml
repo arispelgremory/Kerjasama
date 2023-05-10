@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfilePersonalFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <ImageView
+               android:id="@+id/profile_picture"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:adjustViewBounds="true"
+               android:clickable="true"
+               android:contentDescription="@string/your_picture"
+               android:focusable="true"
+               android:layout_marginTop="16dp"
+               android:src="@drawable/dummy_profile_image"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintVertical_bias="0.3"
+               app:layout_constraintWidth_percent="0.5" />
+
+           <TextView
+               android:id="@+id/profile_username"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="16dp"
+               android:fontFamily="@font/nunito_regular"
+               android:text="@string/profile"
+               android:textSize="24sp"
+               app:layout_constraintEnd_toEndOf="@+id/profile_picture"
+               app:layout_constraintStart_toStartOf="@+id/profile_picture"
+               app:layout_constraintTop_toBottomOf="@+id/profile_picture" />
+
+           <EditText
+               android:id="@+id/profile_gender"
+               android:layout_width="match_parent"
+               android:layout_height="48dp"
+               android:layout_marginStart="32dp"
+               android:layout_marginTop="24dp"
+               android:layout_marginEnd="32dp"
+               android:background="@drawable/rounded_corners_input"
+               android:drawableStart="@drawable/gender"
+               android:drawablePadding="16dp"
+               android:focusable="false"
+               android:fontFamily="@font/open_sans_regular"
+               android:hint="@string/profile_gender"
+               android:inputType="text"
+               android:paddingHorizontal="16dp"
+               android:paddingVertical="10dp"
+               android:singleLine="true"
+               android:textColor="@color/colorPrimaryDark"
+               android:textSize="16sp"
+               android:visibility="visible"
+               app:boxBackgroundMode="outline"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/profile_username" />
+
+           <EditText
+               android:id="@+id/profile_ic_number"
+               android:layout_width="match_parent"
+               android:layout_height="48dp"
+               android:layout_marginStart="32dp"
+               android:layout_marginEnd="32dp"
+               android:background="@drawable/rounded_corners_input"
+               android:drawableStart="@drawable/name_as_ic"
+               android:drawablePadding="16dp"
+               android:fontFamily="@font/open_sans_regular"
+               android:hint="@string/ic_number"
+               android:inputType="number"
+               android:paddingHorizontal="16dp"
+               android:paddingVertical="10dp"
+               android:singleLine="true"
+               android:textColor="@color/colorPrimaryDark"
+               android:textSize="16sp"
+               app:boxBackgroundMode="outline"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/profile_gender"
+               android:layout_marginTop="24dp"
+               android:focusable="false"/>
+
+           <EditText
+               android:id="@+id/profile_phone_number"
+               android:layout_width="match_parent"
+               android:layout_height="48dp"
+               android:layout_marginStart="32dp"
+               android:layout_marginEnd="32dp"
+               android:background="@drawable/rounded_corners_input"
+               android:drawableStart="@drawable/phone"
+               android:drawablePadding="16dp"
+               android:fontFamily="@font/open_sans_regular"
+               android:hint="@string/profile_phone_number"
+               android:inputType="phone"
+               android:paddingHorizontal="16dp"
+               android:paddingVertical="10dp"
+               android:singleLine="true"
+               android:textColor="@color/colorPrimaryDark"
+               android:textSize="16sp"
+               app:boxBackgroundMode="outline"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/profile_ic_number"
+               android:layout_marginTop="24dp"/>
+
+           <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profile_certificate"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="32dp"
+               android:layout_marginStart="32dp"
+               android:layout_marginEnd="32dp"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/profile_phone_number">
+
+               <TextView
+                   android:id="@+id/profile_certificate_title"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:fontFamily="@font/open_sans_regular"
+                   android:paddingHorizontal="16dp"
+                   android:paddingVertical="10dp"
+                   android:text="@string/profile_certificate"
+                   android:textSize="18sp"
+                   app:drawableStartCompat="@drawable/certificate"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toTopOf="parent" />
+
+               <com.google.android.material.divider.MaterialDivider
+                   android:id="@+id/profile_certificate_title_divider"
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content"
+                   app:dividerThickness="1dp"
+                   app:layout_constraintEnd_toEndOf="@+id/profile_certificate_title"
+                   app:layout_constraintStart_toStartOf="@+id/profile_certificate_title"
+                   app:layout_constraintTop_toBottomOf="@+id/profile_certificate_title" />
+
+                <!-- Other Certificates here -->
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:fontFamily="@font/open_sans_regular"
+                       android:paddingHorizontal="16dp"
+                       android:paddingVertical="10dp"
+                       android:layout_marginTop="8dp"
+                       android:text="test"
+                       android:textSize="14sp"
+                       app:drawableStartCompat="@drawable/certificate"
+                       app:layout_constraintTop_toBottomOf="@id/profile_certificate_title_divider" />
+
+           </androidx.constraintlayout.widget.ConstraintLayout>
+
+           <EditText
+               android:id="@+id/profile_bio"
+               android:layout_width="match_parent"
+               android:layout_height="48dp"
+               android:layout_marginStart="32dp"
+               android:layout_marginEnd="32dp"
+               android:background="@drawable/rounded_corners_input"
+               android:drawableStart="@drawable/bio"
+               android:drawablePadding="16dp"
+               android:fontFamily="@font/open_sans_regular"
+               android:hint="@string/profile_bio"
+               android:paddingHorizontal="16dp"
+               android:paddingVertical="10dp"
+               android:singleLine="false"
+               android:textColor="@color/colorPrimaryDark"
+               android:textSize="16sp"
+               app:boxBackgroundMode="outline"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/profile_certificate"
+               android:layout_marginTop="24dp"/>
+
+           <EditText
+               android:id="@+id/profile_highest_qualifications"
+               android:layout_width="match_parent"
+               android:layout_height="48dp"
+               android:layout_marginStart="32dp"
+               android:layout_marginEnd="32dp"
+               android:background="@drawable/rounded_corners_input"
+               android:drawableStart="@drawable/qualifications"
+               android:drawablePadding="16dp"
+               android:fontFamily="@font/open_sans_regular"
+               android:hint="@string/highest_qualifications"
+               android:paddingHorizontal="16dp"
+               android:paddingVertical="10dp"
+               android:singleLine="true"
+               android:textColor="@color/colorPrimaryDark"
+               android:textSize="16sp"
+               android:focusable="false"
+               app:boxBackgroundMode="outline"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/profile_bio"
+               android:layout_marginTop="24dp"/>
+
+           <com.google.android.material.button.MaterialButton
+               android:id="@+id/profile_save"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="24dp"
+               android:backgroundTint="@color/colorAccent"
+               android:paddingHorizontal="16dp"
+               android:paddingVertical="10dp"
+               android:text="@string/profile_save"
+               android:textColor="@color/colorPrimary"
+               android:textSize="16sp"
+               app:cornerRadius="10dp"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="@+id/profile_bio"
+               app:layout_constraintStart_toStartOf="@+id/profile_bio"
+               app:layout_constraintTop_toBottomOf="@+id/profile_bio" />
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

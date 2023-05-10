@@ -30,12 +30,10 @@ class RegisterLoginInfoFragment : Fragment() {
     public fun sendDataToActivity(): Bundle {
         val data = Bundle()
 
-        val usernameEditText: EditText = requireView().findViewById(R.id.username_register)
         val emailEditText: EditText = requireView().findViewById(R.id.email_register)
         val passwordEditText: EditText = requireView().findViewById(R.id.password_register)
         val confirmPasswordEditText: EditText = requireView().findViewById(R.id.confirm_password_register)
 
-        data.putString("username", usernameEditText.text.toString())
         data.putString("email", emailEditText.text.toString())
         data.putString("password", passwordEditText.text.toString())
         data.putString("confirm_password", confirmPasswordEditText.text.toString())

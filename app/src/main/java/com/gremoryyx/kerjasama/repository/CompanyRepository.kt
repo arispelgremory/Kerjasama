@@ -55,12 +55,4 @@ class CompanyRepository {
     }
 
 
-//    fun getCompanyData(): DocumentReference{
-//        CoroutineScope(Dispatchers.IO).launch {
-//            getCollection()
-//            getDocument(jobRef)
-//        }
-//        return jobDocument
-//    }
-
 }

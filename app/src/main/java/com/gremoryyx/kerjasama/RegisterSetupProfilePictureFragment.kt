@@ -20,7 +20,6 @@ class RegisterSetupProfilePictureFragment : Fragment() {
 
     private lateinit var username: String
     private var ProfilePictureListener: RegisterSetupProfilePictureFragment.OnProfilePictureFragmentInteractionListener? = null
-    private val GALLERY_REQUEST_CODE = 100
     private lateinit var imageUri: Uri
     private val getPhoto = registerForActivityResult(ActivityResultContracts.GetContent()){ uri ->
         if(uri != null){
@@ -63,7 +62,7 @@ class RegisterSetupProfilePictureFragment : Fragment() {
 
 
     interface OnProfilePictureFragmentInteractionListener {
-        fun OnProfilePictureFragmentInteraction(data: Bundle)
+        fun onProfilePictureFragmentInteraction(data: Bundle)
     }
 
     public fun setUsername(text: String) {

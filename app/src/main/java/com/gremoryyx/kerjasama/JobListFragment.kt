@@ -20,6 +20,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.rpc.context.AttributeContext.Auth
 import com.gremoryyx.kerjasama.repository.JobRepository
 import com.gremoryyx.kerjasama.repository.LoginRepository
+import com.gremoryyx.kerjasama.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ class JobListFragment : Fragment(), JobSearchListener {
     var loginRepo = LoginRepository()
     var jobRepo = JobRepository()
     var regisFrag = RegisteredJobFragment()
+    var userRepo = UserRepository()
 
     fun filterJobList(filteredJobList: ArrayList<JobData>) {
         jobAdapter.updateJobList(filteredJobList)
@@ -118,8 +120,8 @@ class JobListFragment : Fragment(), JobSearchListener {
     }
 
     private fun applyJob(jobData: JobData) {
-        val user = Firebase.auth.currentUser
         val regRef = db.collection("Registered Job")
+        val userId = userRepo.getUserID()
         regRef.get().addOnCompleteListener { task->
             if (task.isSuccessful){
                 CoroutineScope(Dispatchers.IO).launch {
@@ -141,8 +143,8 @@ class JobListFragment : Fragment(), JobSearchListener {
                             //USER
                             // get into the user collection and then compare the user.uid with the document.id to get the document path reference
                             val userRef = db.collection("User")
-                            if (userRef.document("${user!!.uid}").id != null){
-                                userDoc = userRef.document("${user!!.uid}").path
+                            if (userRef.document("${userId}") != null){
+                                userDoc = userRef.document("${userId}").path
                             }
 
                             if (jobDocument != "" && userDoc != ""){

@@ -85,7 +85,7 @@ class RegisterActivity : AppCompatActivity(),
                     // Handle navigation to the next screen or activity
                     val data = currentFragment.sendDataToActivity()
                     userData.putAll(data)
-                    OnProfilePictureFragmentInteraction(userData)
+                    onProfilePictureFragmentInteraction(userData)
                     replaceFragment(RegisterTermsAndConditionsFragment())
                     replaceHeadline(getString(R.string.register_terms_and_conditions_headline))
                 }
@@ -121,6 +121,11 @@ class RegisterActivity : AppCompatActivity(),
                     replaceFragment(RegisterEducationFragment())
                     replaceHeadline(getString(R.string.register_qualifications_headline))
                 }
+                is RegisterTermsAndConditionsFragment -> {
+                    replaceFragment(RegisterSetupProfilePictureFragment())
+                    replaceHeadline(getString(R.string.register_profile_picture_headline))
+                }
+
             }
         }
     }
@@ -154,7 +159,7 @@ class RegisterActivity : AppCompatActivity(),
             .commit()
 
         if(fragment is RegisterSetupProfilePictureFragment) {
-            fragment.setUsername(userData.getString("username")!!)
+            fragment.setUsername(userData.getString("name")!!)
         }
     }
 
@@ -162,14 +167,15 @@ class RegisterActivity : AppCompatActivity(),
         findViewById<TextView>(R.id.register_basic_headline).text = headline
     }
 
-    fun uploadImageToStorage(userImageUri:Uri){
+    private fun uploadImageToStorage(userImageUri:Uri) {
 //        val storageRef = Firebase.storage.reference
-        val storageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("User")
+        val storageRef =
+            Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("User")
         val userImageRef = storageRef.child("${userData.getString("phone_number")}")
         val uploadTask = userImageRef.putFile(userImageUri)
 
         // Get the URL of the uploaded image file
-        uploadTask.continueWithTask{ task ->
+        uploadTask.continueWithTask { task ->
             if (!task.isSuccessful) {
                 task.exception?.let {
                     throw it
@@ -185,6 +191,8 @@ class RegisterActivity : AppCompatActivity(),
                 // ...
             }
         }
+    }
+
     private fun uploadImageToStorage(userImage:String){
         val storageRef = Firebase.storage.reference
         userData.getString("")
@@ -247,7 +255,7 @@ class RegisterActivity : AppCompatActivity(),
     override fun onEducationFragmentInteraction(data: Bundle) {
         // This method is not used anymore, but we still need to implement it to satisfy the interface requirements
     }
-    override fun OnProfilePictureFragmentInteraction(data: Bundle) {
+    override fun onProfilePictureFragmentInteraction(data: Bundle) {
         // This method is not used anymore, but we still need to implement it to satisfy the interface requirements
     }
 

@@ -184,8 +184,6 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
                                 withContext(Dispatchers.IO) {
                                     if (jobRepo.validateDocument(jobRef, resJob)) {
                                         registeredJobArrayList.clear()
-                                        Log.d("Job arraylist size!!!!", "${registeredJobArrayList.size}}")
-                                        Log.d("Job arraylist!!!!", "${registeredJobArrayList}}")
                                         var regJobData = jobRepo.getData(resJob)
 
                                         registeredJobArrayList.add(regJobData)
@@ -206,4 +204,6 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
         }
 
     }
+
+
 }
