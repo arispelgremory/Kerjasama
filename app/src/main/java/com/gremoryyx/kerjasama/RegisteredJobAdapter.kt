@@ -47,22 +47,37 @@ class RegisteredJobAdapter(private val registeredJobList: ArrayList<RegisteredJo
         return registeredJobList.size
     }
 
+
+
     inner class RegisteredJobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val cancelButton = itemView.findViewById<Button>(R.id.cancelButton)
+        private val jobImageView: ImageView = itemView.findViewById(R.id.jobImageView)
+        private val jobNameTextView: TextView = itemView.findViewById(R.id.jobNameTextView)
+        private val companyNameTextView: TextView = itemView.findViewById(R.id.companyNameTextView)
+        private val jobTypeTextView: TextView = itemView.findViewById(R.id.jobTypeTextView)
+        private val locationTextView: TextView = itemView.findViewById(R.id.locationTextView)
+        private val durationTextView: TextView = itemView.findViewById(R.id.durationTextView)
+        private val salaryTextView: TextView = itemView.findViewById(R.id.salaryTextView)
+        private val jobDescriptionContentTextView: TextView = itemView.findViewById(R.id.jobDescriptionContentTextView)
 
-        fun bind(registeredJob: RegisteredJobData) {
-            itemView.findViewById<ImageView>(R.id.jobImageView)
-                .setImageBitmap(registeredJob.jobImage)
-            itemView.findViewById<TextView>(R.id.jobNameTextView).text = registeredJob.jobName
-            itemView.findViewById<TextView>(R.id.companyNameTextView).text =
-                registeredJob.companyName
-            itemView.findViewById<TextView>(R.id.jobTypeTextView).text = registeredJob.jobType
-            itemView.findViewById<TextView>(R.id.locationTextView).text = registeredJob.location
-            itemView.findViewById<TextView>(R.id.durationTextView).text = registeredJob.duration
-            itemView.findViewById<TextView>(R.id.salaryTextView).text = registeredJob.salary
-            itemView.findViewById<TextView>(R.id.jobDescriptionContentTextView).text =
-                registeredJob.jobDescription
+        private var currentRegJob: RegisteredJobData? = null
+
+        fun bind(job: RegisteredJobData) {
+            if (currentRegJob == null || currentRegJob != job) {
+                jobImageView.setImageBitmap(job.jobImage)
+                jobNameTextView.text = job.jobName
+                companyNameTextView.text = job.companyName
+                jobTypeTextView.text = job.jobType
+                locationTextView.text = job.location
+                durationTextView.text = job.duration
+                salaryTextView.text = job.salary
+                jobDescriptionContentTextView.text = job.jobDescription
+
+
+                currentRegJob = job
+            }
         }
     }
+
 }
