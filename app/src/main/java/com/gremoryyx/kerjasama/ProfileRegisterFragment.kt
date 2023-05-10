@@ -1,31 +1,27 @@
 package com.gremoryyx.kerjasama
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.OutputStream
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileRegisterFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileRegisterFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private val getPhoto = registerForActivityResult(ActivityResultContracts.GetContent()){ uri ->
+        if(uri != null){
+            requireView().findViewById<ImageView>(R.id.profile_picture).setImageURI(uri)
         }
     }
 
@@ -37,23 +33,64 @@ class ProfileRegisterFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_profile_register, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileRegisterFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileRegisterFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+
+        // getView()?.findViewById<TextView>(R.id.profile_username)?.text = username
+
+        // Save profile picture on click listener
+        val image = readProfilePicture()
+        if(image != null){
+            getView()?.findViewById<ImageView>(R.id.profile_picture)?.setImageBitmap(image)
+        }
+
+        // Image on click listener to open the gallery
+        getView()?.findViewById<ImageView>(R.id.profile_picture)?.setOnClickListener {
+            getPhoto.launch("image/*")
+
+        }
+
     }
+
+
+    private fun saveProfilePicture(view: View) {
+        val filename = "profile.png"
+        val file = File(this.context?.filesDir, filename)
+        val image = view as ImageView
+
+        val bd = image.drawable as BitmapDrawable
+        val bitmap = bd.bitmap
+        val outputStream: OutputStream
+
+        try{
+            outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 50, outputStream)
+            outputStream.flush()
+            outputStream.close()
+
+            // Add firebase code here
+
+
+        } catch (e: FileNotFoundException){
+            Toast.makeText(requireContext(), "Image not found!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun readProfilePicture(): Bitmap? {
+        val filename = "profile.png"
+        val file = File(this.context?.filesDir, filename)
+
+        if(file.isFile){
+            try{
+                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                return bitmap
+            }catch (e: FileNotFoundException){
+                e.printStackTrace()
+            }
+        }
+        return null
+    }
+
 }

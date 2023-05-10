@@ -31,7 +31,7 @@
                app:layout_constraintWidth_percent="0.5" />
 
            <TextView
-               android:id="@+id/textView3"
+               android:id="@+id/profile_username"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_marginTop="16dp"
@@ -47,10 +47,12 @@
                android:layout_width="match_parent"
                android:layout_height="48dp"
                android:layout_marginStart="32dp"
+               android:layout_marginTop="24dp"
                android:layout_marginEnd="32dp"
                android:background="@drawable/rounded_corners_input"
                android:drawableStart="@drawable/gender"
                android:drawablePadding="16dp"
+               android:focusable="false"
                android:fontFamily="@font/open_sans_regular"
                android:hint="@string/profile_gender"
                android:inputType="text"
@@ -63,9 +65,7 @@
                app:boxBackgroundMode="outline"
                app:layout_constraintEnd_toEndOf="parent"
                app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toBottomOf="@+id/textView3"
-               android:layout_marginTop="32dp"
-               android:focusable="false"/>
+               app:layout_constraintTop_toBottomOf="@+id/profile_username" />
 
            <EditText
                android:id="@+id/profile_ic_number"
@@ -147,18 +147,18 @@
                    app:layout_constraintStart_toStartOf="@+id/profile_certificate_title"
                    app:layout_constraintTop_toBottomOf="@+id/profile_certificate_title" />
 
-               <!-- Other Certificates here -->
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:fontFamily="@font/open_sans_regular"
-                   android:paddingHorizontal="16dp"
-                   android:paddingVertical="10dp"
-                   android:layout_marginTop="8dp"
-                   android:text="test"
-                   android:textSize="14sp"
-                   app:drawableStartCompat="@drawable/certificate"
-                   app:layout_constraintTop_toBottomOf="@id/profile_certificate_title_divider" />
+                <!-- Other Certificates here -->
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:fontFamily="@font/open_sans_regular"
+                       android:paddingHorizontal="16dp"
+                       android:paddingVertical="10dp"
+                       android:layout_marginTop="8dp"
+                       android:text="test"
+                       android:textSize="14sp"
+                       app:drawableStartCompat="@drawable/certificate"
+                       app:layout_constraintTop_toBottomOf="@id/profile_certificate_title_divider" />
 
            </androidx.constraintlayout.widget.ConstraintLayout>
 

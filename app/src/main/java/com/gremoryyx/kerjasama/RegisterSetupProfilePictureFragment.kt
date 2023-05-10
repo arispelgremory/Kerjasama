@@ -55,6 +55,7 @@ class RegisterSetupProfilePictureFragment : Fragment() {
         // Image on click listener to open the gallery
         getView()?.findViewById<ImageView>(R.id.register_profile_picture)?.setOnClickListener {
             getPhoto.launch("image/*")
+
         }
 
     }
