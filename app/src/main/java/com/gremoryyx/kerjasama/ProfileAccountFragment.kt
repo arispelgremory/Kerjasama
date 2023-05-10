@@ -1,33 +1,20 @@
 package com.gremoryyx.kerjasama
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import com.gremoryyx.kerjasama.repository.UserRepository
+import com.google.firebase.auth.FirebaseAuth
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileAccountFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileAccountFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    val userRepo = UserRepository()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,23 +24,79 @@ class ProfileAccountFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_profile_account, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RegisterAccountFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileAccountFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val saveButton = getView()?.findViewById<Button>(R.id.profile_save)
+        saveButton?.setOnClickListener {
+            updateAccount()
+        }
     }
+
+    private fun updateAccount(){
+        val newEmail = getView()?.findViewById<TextView>(R.id.profile_email)?.text
+        val newPassword = getView()?.findViewById<TextView>(R.id.profile_password)?.text
+        val confirmPassword = getView()?.findViewById<TextView>(R.id.confirm_password_register)?.text
+        val currentUser = userRepo.getCurrentUser()
+        if (newEmail != null && newEmail != "") {
+            // Update the user's email
+            if (isValidEmail(newEmail.toString())) {
+                // Update the user's email
+                currentUser?.updateEmail(newEmail.toString())?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Update the user's email in the database
+                        userRepo.updateUserEmail(newEmail.toString())
+                        Toast.makeText(context, "Email updated", Toast.LENGTH_LONG).show()
+                    } else {
+                        // Display error message
+                        Toast.makeText(context, "Email update failed", Toast.LENGTH_LONG).show()
+                    }
+                }
+            } else {
+                // Display error message
+                Toast.makeText(context, "Invalid email address", Toast.LENGTH_LONG).show()
+            }
+
+        }
+
+        if (confirmPassword != "" && newPassword != "") {
+            // Update the user's password
+            if(newPassword.toString() == confirmPassword.toString()){
+                // Update the user's password
+                if (isValidPassword(newPassword.toString())){
+                    currentUser?.updatePassword(newPassword.toString())
+                        ?.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // Update the user's password in the database
+                                Toast.makeText(context, "Password updated", Toast.LENGTH_LONG).show()
+                            } else {
+                                // Display error message
+                                Toast.makeText(context, "Password update failed", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                }else{
+                    // Display error message
+                    Toast.makeText(context, "Password must be at least 6 characters", Toast.LENGTH_LONG).show()
+                }
+
+            }else{
+                Log.d("newPassword!!!","$newPassword")
+                Log.d("confirmPassword!!!","$confirmPassword")
+                // Display error message
+                Toast.makeText(context, "Password not match!", Toast.LENGTH_LONG).show()
+            }
+
+        }
+
+    }
+
+    private fun isValidEmail(email: String): Boolean{
+        val emailRegex = Regex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")
+        return emailRegex.matches(email)
+    }
+
+    private fun isValidPassword(password: String): Boolean{
+        return password.length >= 6
+    }
+
 }

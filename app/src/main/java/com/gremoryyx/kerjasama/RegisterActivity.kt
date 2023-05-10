@@ -25,7 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.*
 import java.io.File
+import kotlin.coroutines.suspendCoroutine
 
 class RegisterActivity : AppCompatActivity(),
     RegisterLoginInfoFragment.OnLoginInfoFragmentInteractionListener,
@@ -167,35 +169,42 @@ class RegisterActivity : AppCompatActivity(),
         findViewById<TextView>(R.id.register_basic_headline).text = headline
     }
 
-    private fun uploadImageToStorage(userImageUri:Uri) {
+    private suspend fun uploadImageToStorage(userImageUri:Uri):Unit = suspendCoroutine{continuation->
 //        val storageRef = Firebase.storage.reference
-        val storageRef =
-            Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("User")
+        val storageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("User")
         val userImageRef = storageRef.child("${userData.getString("phone_number")}")
-        val uploadTask = userImageRef.putFile(userImageUri)
 
-        // Get the URL of the uploaded image file
-        uploadTask.continueWithTask { task ->
-            if (!task.isSuccessful) {
-                task.exception?.let {
-                    throw it
+        if (userImageUri == Uri.EMPTY){
+            userData.putString("user_image", userData.getString("phone_number"))
+            continuation.resumeWith(Result.success(Unit))
+        }else {
+            val uploadTask = userImageRef.putFile(userImageUri)
+
+            // Get the URL of the uploaded image file
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
                 }
-            }
-            userImageRef.downloadUrl
-        }.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val downloadUri = task.result
-                userData.putString("user_image", downloadUri.toString())
-            } else {
-                // Handle failures
-                // ...
+                userImageRef.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    Log.d("Register msg!!!!!!!!!!!!", "Image uploaded successfully: $downloadUri")
+
+                    userData.putString("user_image", userData.getString("phone_number"))
+                    Log.d("Assign phonenumber to user_image", "${userData.getString("user_image")}")
+                    continuation.resumeWith(Result.success(Unit))
+                } else {
+                    // Handle failures
+                    // ...
+                    continuation.resumeWith(Result.failure(task.exception!!))
+                }
+
             }
         }
-    }
 
-    private fun uploadImageToStorage(userImage:String){
-        val storageRef = Firebase.storage.reference
-        userData.getString("")
     }
 
     private fun registerNewUsers(email:String, password:String){
@@ -206,29 +215,33 @@ class RegisterActivity : AppCompatActivity(),
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("Register msg", "createUserWithEmail:success")
                     task.result?.user?.let {
-//                        uploadImageToStorage()
                         val newUser = UserData()
-                        val userImageString = userData.getString("user_image")
-                        uploadImageToStorage(Uri.parse(userImageString))
-                        newUser.user_image = userImageString!!
-                        newUser.name = userData.getString("name")!!
-                        newUser.username = userData.getString("username")!!
-                        newUser.email = userData.getString("email")!!
-                        newUser.gender = userData.getString("gender")!!
-                        newUser.date_of_birth = userData.getString("date_of_birth")!!
-                        newUser.ic_number = userData.getString("ic_number")!!
-                        newUser.phone_number = "0"+userData.getString("phone_number")!!
-                        newUser.highest_qualifications = userData.getString("highest_qualifications")!!
-                        Log.d("User GET REGISTERDATA#####", "${newUser}")
-                        Log.d("User ID#####", "${it.uid}")
-                        db.collection("User").document("${it.uid}").set(newUser)
-                            .addOnSuccessListener {
-                                Log.d("User", "User added to database")
+                        CoroutineScope(Dispatchers.Main).launch {
+                            uploadImageToStorage(Uri.parse(userData.getString("user_image")))
 
-                            }
-                            .addOnFailureListener {
-                                Log.d("User", "Failed to add user to database")
-                            }
+                            newUser.user_image = userData.getString("user_image")!!
+                            Log.d("After passed image@@@@@", "${newUser.user_image}")
+                            newUser.name = userData.getString("name")!!
+                            newUser.email = userData.getString("email")!!
+                            newUser.gender = userData.getString("gender")!!
+                            newUser.date_of_birth = userData.getString("date_of_birth")!!
+                            newUser.ic_number = userData.getString("ic_number")!!
+                            newUser.phone_number = "0"+userData.getString("phone_number")!!
+                            newUser.highest_qualifications = userData.getString("highest_qualifications")!!
+                            Log.d("User GET REGISTERDATA#####", "${newUser}")
+                            Log.d("User ID#####", "${it.uid}")
+                            db.collection("User").document("${it.uid}").set(newUser)
+                                .addOnSuccessListener {
+                                    Log.d("User", "User added to database")
+
+                                }
+                                .addOnFailureListener {
+                                    Log.d("User", "Failed to add user to database")
+                                }
+                        }
+
+
+
                     }
                 } else {
                     // If sign in fails, display a message to the user.
