@@ -29,7 +29,9 @@ class RegisterSetupProfilePictureFragment : Fragment() {
     private var ProfilePictureListener: RegisterSetupProfilePictureFragment.OnProfilePictureFragmentInteractionListener? = null
     private val getPhoto = registerForActivityResult(ActivityResultContracts.GetContent()){ uri ->
         if(uri != null){
-            requireView().findViewById<ImageView>(R.id.register_profile_picture).setImageURI(uri)
+            requireView().findViewById<ImageView>(R.id.register_profile_picture).setImageURI(uri).apply {
+                Toast.makeText(requireContext(), "picture selected", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

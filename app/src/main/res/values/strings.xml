@@ -80,6 +80,7 @@
     <string name="profile_phone_number">Phone Number</string>
     <string name="profile_bio">Bio</string>
     <string name="profile_certificate">Certificates</string>
+    <string name="profile_save">Save</string>
 
 
 </resources>
