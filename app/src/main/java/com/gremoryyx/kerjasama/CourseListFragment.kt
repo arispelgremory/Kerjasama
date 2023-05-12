@@ -1,59 +1,141 @@
 package com.gremoryyx.kerjasama
 
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.gremoryyx.kerjasama.repository.LoginRepository
+import com.gremoryyx.kerjasama.repository.UserRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import android.provider.MediaStore.Video
+import android.provider.MediaStore.Files
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class CourseListFragment : Fragment(), JobSearchListener {
+    private lateinit var courseListRecyclerView: RecyclerView
+    private lateinit var courseListArrayList: ArrayList<CourseData>
+    private lateinit var courseListAdapter: CourseListAdapter
+    private lateinit var defaultCourseList: ArrayList<CourseData>
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CourseListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CourseListFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var db: FirebaseFirestore
+    var loginRepo = LoginRepository()
+//    var courseRepo = CourseRepository()
+//    var regisFrag = RegisteredCourseFragment()
+    var userRepo = UserRepository()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    fun filterCourseList(filteredCourseList: ArrayList<CourseData>) {
+        courseListAdapter.updateCourseList(filteredCourseList)
+    }
+
+    fun getCourseList(): ArrayList<CourseData> {
+        return courseListArrayList
+    }
+
+    fun updateCourseList(newList: ArrayList<CourseData>) {
+        courseListArrayList.clear()
+        courseListAdapter.setCourseList(newList)
+        courseListAdapter.notifyDataSetChanged()
+    }
+
+    fun resetCourseList() {
+        courseListAdapter.setCourseList(defaultCourseList)
+        courseListAdapter.notifyDataSetChanged()
+    }
+
+    override fun onSearchInput(newText: String) {
+        val filteredCourseList = courseListArrayList.filter { course ->
+            course.courseName.contains(newText, true)
         }
+        updateCourseList(filteredCourseList as ArrayList<CourseData>)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course_list, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_course_list, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CourseListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CourseListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        courseListRecyclerView = view.findViewById(R.id.course_list_recycler_view)
+        courseListRecyclerView.layoutManager = LinearLayoutManager(context)
+        courseListRecyclerView.setHasFixedSize(true)
+
+        courseListArrayList = ArrayList()
+        courseListAdapter = CourseListAdapter(courseListArrayList)
+        courseListRecyclerView.adapter = courseListAdapter
+
+        defaultCourseList = ArrayList(courseListArrayList)
+
+        if (loginRepo.validateUser()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                courseListLoadCourse()
             }
+        }
+        else {
+            Toast.makeText(context, "Please login first", Toast.LENGTH_SHORT).show()
+        }
+
+        // Card onClick
+        courseListAdapter.setOnCardViewClickListener { courseData ->
+
+            // TODO: Replace fragment
+        }
+
+        return view
+    }
+
+    private suspend fun courseListLoadCourse() {
+        db = FirebaseFirestore.getInstance()
+
+        val courseRef = db.collection("Course")
+        courseRef.get().addOnCompleteListener { task->
+            if (task.isSuccessful) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    for (document in task.result!!) {
+                        val courseData = CourseData()
+
+                        val courseImage = document.data["course_image"].toString()
+                        val bitmap = courseRepo.getImageFile(courseImage).await()
+                        courseData.courseImage = bitmap
+                        courseData.courseName = document.data["course_name"].toString()
+                        courseData.courseDescription = document.data["course_description"].toString()
+                        courseData.instructorName = document.data["instructor_name"].toString()
+                        courseData.ratingNumber = document.data["rating_number"].toString().toFloat()
+                        courseData.usersRated = document.data["users_rated"].toString().toInt()
+                        courseData.lastUpdate = document.data["last_update"].toString()
+
+                        courseData.itemsToLearn.clear()
+                        var itemsToLearn = document.data["items_to_learn"]
+                        for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
+                            courseData.itemsToLearn.add(itemsToLearnData)
+                        }
+
+                        courseData.lectureVideos.clear()
+                        var lectureVideos = document.data["lecture_videos"]
+                        for (lectureVideosData in lectureVideos as ArrayList<Video>) {
+                            courseData.lectureVideos.add(lectureVideosData)
+                        }
+
+                        courseData.courseMaterials.clear()
+                        var courseMaterials = document.data["course_materials"]
+                        for (courseMaterialsData in courseMaterials as ArrayList<Files>) {
+                            courseData.courseMaterials.add(courseMaterialsData)
+                        }
+
+                        courseListArrayList.add(courseData)
+                    }
+
+                    activity?.runOnUiThread {
+                        courseListAdapter.notifyDataSetChanged()
+                    }
+                }
+            } else {
+                Toast.makeText(context, "Failed to load course list", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

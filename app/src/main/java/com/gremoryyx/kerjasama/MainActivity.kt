@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(ProfileFragment())
                 }
                 R.id.list -> {
-                    replaceFragment(ListFragment())
+                    replaceFragment(CourseFragment())
                 }
                 R.id.notification -> {
                     replaceFragment(NotificationListFragment())
