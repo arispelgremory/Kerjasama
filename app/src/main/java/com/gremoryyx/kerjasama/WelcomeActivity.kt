@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.button.MaterialButton
@@ -27,6 +28,8 @@ class WelcomeActivity : AppCompatActivity() {
             if (isLoggedIn) {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
+            } else {
+                Toast.makeText(this, "not logged in", Toast.LENGTH_SHORT).show()
             }
         })
 

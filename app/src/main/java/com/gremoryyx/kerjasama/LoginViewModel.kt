@@ -1,7 +1,9 @@
 package com.gremoryyx.kerjasama
 
+import SingleLiveEvent
 import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LiveData
@@ -10,9 +12,8 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel(private val sharedPreferences: SharedPreferences) : ViewModel() {
-    private val _isLoggedIn = MutableLiveData<Boolean>()
+    private val _isLoggedIn = SingleLiveEvent<Boolean>()
     val isLoggedIn: LiveData<Boolean> = _isLoggedIn
-
 
     init {
         _isLoggedIn.value = sharedPreferences.getBoolean("isLoggedIn", false)
@@ -26,16 +27,19 @@ class LoginViewModel(private val sharedPreferences: SharedPreferences) : ViewMod
         editor.apply()
 
         _isLoggedIn.value = true
+
+
     }
 
     // Call this method when the user logs out
-    private fun logoutUser() {
+     fun logoutUser() {
         val editor = sharedPreferences.edit()
         editor.putBoolean("isLoggedIn", false)
         editor.putString("userToken", null)
         editor.apply()
 
         _isLoggedIn.value = false
+        Log.d("LoginViewModel", "logoutUser: ${isLoggedIn.value.toString()}")
     }
 
 
