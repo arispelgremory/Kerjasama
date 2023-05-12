@@ -17,9 +17,9 @@ import com.gremoryyx.kerjasama.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 
 class ProfileAccountFragment : Fragment() {
+
     val userRepo = UserRepository()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-
     private val loginViewModelFactory by lazy {
         LoginViewModelFactory(requireActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE))
     }
