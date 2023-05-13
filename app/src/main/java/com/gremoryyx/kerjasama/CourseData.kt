@@ -17,6 +17,6 @@ data class CourseData(
     var courseMaterials: ArrayList<Files>
 
 ){
-    constructor(): this(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888), "", "", "", 0, 0, "",  ArrayList(), ArrayList(), ArrayList())
+    constructor(): this(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888), "", "", "", 0.0f, 0, "",  ArrayList(), ArrayList(), ArrayList())
 
 }

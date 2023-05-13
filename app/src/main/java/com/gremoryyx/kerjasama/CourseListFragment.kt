@@ -1,7 +1,6 @@
 package com.gremoryyx.kerjasama
 
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +14,9 @@ import com.gremoryyx.kerjasama.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import android.provider.MediaStore.Video
-import android.provider.MediaStore.Files
+import android.util.Log
+import com.gremoryyx.kerjasama.repository.CourseRepository
+import kotlinx.coroutines.async
 
 class CourseListFragment : Fragment(), JobSearchListener {
     private lateinit var courseListRecyclerView: RecyclerView
@@ -26,27 +26,21 @@ class CourseListFragment : Fragment(), JobSearchListener {
 
     private lateinit var db: FirebaseFirestore
     var loginRepo = LoginRepository()
-//    var courseRepo = CourseRepository()
+    var courseRepo = CourseRepository()
 //    var regisFrag = RegisteredCourseFragment()
     var userRepo = UserRepository()
 
-    fun filterCourseList(filteredCourseList: ArrayList<CourseData>) {
-        courseListAdapter.updateCourseList(filteredCourseList)
-    }
-
-    fun getCourseList(): ArrayList<CourseData> {
-        return courseListArrayList
-    }
-
     fun updateCourseList(newList: ArrayList<CourseData>) {
-        courseListArrayList.clear()
         courseListAdapter.setCourseList(newList)
         courseListAdapter.notifyDataSetChanged()
     }
 
     fun resetCourseList() {
-        courseListAdapter.setCourseList(defaultCourseList)
-        courseListAdapter.notifyDataSetChanged()
+        courseListArrayList.clear()
+        CoroutineScope(Dispatchers.IO).launch {
+            courseListLoadCourse()
+        }
+        courseListRecyclerView.scrollToPosition(0)
     }
 
     override fun onSearchInput(newText: String) {
@@ -90,51 +84,49 @@ class CourseListFragment : Fragment(), JobSearchListener {
 
     private suspend fun courseListLoadCourse() {
         db = FirebaseFirestore.getInstance()
-
         val courseRef = db.collection("Course")
-        courseRef.get().addOnCompleteListener { task->
+        var CourseRegisteredList = ArrayList<String>()
+        courseRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    for (document in task.result!!) {
-                        val courseData = CourseData()
-
-                        val courseImage = document.data["course_image"].toString()
-                        val bitmap = courseRepo.getImageFile(courseImage).await()
-                        courseData.courseImage = bitmap
-                        courseData.courseName = document.data["course_name"].toString()
-                        courseData.courseDescription = document.data["course_description"].toString()
-                        courseData.instructorName = document.data["instructor_name"].toString()
-                        courseData.ratingNumber = document.data["rating_number"].toString().toFloat()
-                        courseData.usersRated = document.data["users_rated"].toString().toInt()
-                        courseData.lastUpdate = document.data["last_update"].toString()
-
-                        courseData.itemsToLearn.clear()
-                        var itemsToLearn = document.data["items_to_learn"]
-                        for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
-                            courseData.itemsToLearn.add(itemsToLearnData)
+                CoroutineScope(Dispatchers.IO).async {
+                    Log.d("FILTERING", "@@@@@@@@@@@@@@@@@@@@@@")
+                    val filteringJob = async {
+                        for (document in task.result!!) {
+                            // To check if the job is already registered
+                            // First I need to get the job document path reference
+                            // And then get the user document path reference & registered job document path reference
+                            CoroutineScope(Dispatchers.IO).async{
+                                try {
+                                    Log.d("FILTERING", "${document.id}")
+                                    CourseRegisteredList.add(courseRepo.checkCourseRegistered(document.id))
+                                }catch (e: Exception){
+                                    Log.d("ERROR", "Error getting documents: ", e)
+                                }
+                            }
                         }
-
-                        courseData.lectureVideos.clear()
-                        var lectureVideos = document.data["lecture_videos"]
-                        for (lectureVideosData in lectureVideos as ArrayList<Video>) {
-                            courseData.lectureVideos.add(lectureVideosData)
-                        }
-
-                        courseData.courseMaterials.clear()
-                        var courseMaterials = document.data["course_materials"]
-                        for (courseMaterialsData in courseMaterials as ArrayList<Files>) {
-                            courseData.courseMaterials.add(courseMaterialsData)
-                        }
-
-                        courseListArrayList.add(courseData)
                     }
+                    filteringJob.await()
 
-                    activity?.runOnUiThread {
-                        courseListAdapter.notifyDataSetChanged()
+                    CoroutineScope(Dispatchers.IO).async {
+                        Log.d("AFTER FILTERING", "###################")
+                        // To filter the registered job, I need to pass in the registered job id to the function
+                        // So that I could compare it and filter out add it into the array list.
+                        val deferredJobData = async{
+                            courseRepo.getCourseData(CourseRegisteredList)
+                        }
+                        courseListArrayList = deferredJobData.await()
+
+                        activity?.runOnUiThread {
+                            courseListAdapter.setCourseList(courseListArrayList)
+                            courseListAdapter.notifyDataSetChanged()
+                        }
                     }
                 }
+
+
             } else {
-                Toast.makeText(context, "Failed to load course list", Toast.LENGTH_SHORT).show()
+                // Handle error getting documents
+                Toast.makeText(requireContext(), "Error getting documents.", Toast.LENGTH_SHORT).show()
             }
         }
     }
