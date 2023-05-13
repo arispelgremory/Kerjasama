@@ -1,5 +1,7 @@
 package com.gremoryyx.kerjasama
 
+import LoginViewModelFactory
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -17,9 +20,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.tasks.await
+
+
 
 class LoginFragment : Fragment() {
     var auth: FirebaseAuth = Firebase.auth
+    private val loginViewModelFactory by lazy {
+        LoginViewModelFactory(requireActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE))
+    }
+    private val loginViewModel: LoginViewModel by viewModels { loginViewModelFactory }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,28 +58,14 @@ class LoginFragment : Fragment() {
     }
 
     private fun validateCredentials(username: String, password: String): Boolean {
-        // Add your logic to validate the credentials here.
-        // You might need to call an API or check against a database.
-
-        try{
-            auth.signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener() { task ->
-                    if (task.isSuccessful) {
-                        startActivity(Intent(requireContext(), MainActivity::class.java))
-                        requireActivity().finish()
-                    } else {
-                        Toast.makeText(requireContext(), "Login failed.",
-                            Toast.LENGTH_SHORT).show()
-                    }
-                }
-        }catch (e: Exception) {
-            Toast.makeText(
-                context, "Authentication failed.",
-                Toast.LENGTH_SHORT
-            ).show()
+        if(username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(requireContext(), "Username and Password cannot be empty.", Toast.LENGTH_SHORT).show()
+            return false
         }
 
 
-        return username.isNotEmpty() && password.isNotEmpty()
+        loginViewModel.signInWithEmailAndPassword(username, password)
+        return true
+
     }
 }

@@ -1,5 +1,8 @@
 package com.gremoryyx.kerjasama
 
+import LoginViewModelFactory
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,12 +12,18 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import com.gremoryyx.kerjasama.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 
 class ProfileAccountFragment : Fragment() {
+
     val userRepo = UserRepository()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val loginViewModelFactory by lazy {
+        LoginViewModelFactory(requireActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE))
+    }
+    private val loginViewModel: LoginViewModel by viewModels { loginViewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +39,16 @@ class ProfileAccountFragment : Fragment() {
         val saveButton = getView()?.findViewById<Button>(R.id.profile_save)
         saveButton?.setOnClickListener {
             updateAccount()
+        }
+
+        val logoutButton = getView()?.findViewById<Button>(R.id.profile_logout)
+        logoutButton?.setOnClickListener {
+            loginViewModel.logoutUser()
+            auth.signOut()
+            Intent(context, WelcomeActivity::class.java).also {
+                startActivity(it)
+                requireActivity().finish()
+            }
         }
     }
 
