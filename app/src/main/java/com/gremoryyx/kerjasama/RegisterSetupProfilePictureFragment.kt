@@ -20,7 +20,7 @@ class RegisterSetupProfilePictureFragment : Fragment() {
 
     private lateinit var username: String
     private var ProfilePictureListener: RegisterSetupProfilePictureFragment.OnProfilePictureFragmentInteractionListener? = null
-    private lateinit var imageUri: Uri
+    private var imageUri = Uri.EMPTY
     private val getPhoto = registerForActivityResult(ActivityResultContracts.GetContent()){ uri ->
         if(uri != null){
             imageUri = uri
@@ -52,7 +52,6 @@ class RegisterSetupProfilePictureFragment : Fragment() {
 
      public fun sendDataToActivity(): Bundle {
         val data = Bundle()
-
         val userImage: Uri = imageUri
          Log.d("Send Data To Activity From Profile setup##########", "Image URI: $userImage")
         data.putString("user_image", userImage.toString())

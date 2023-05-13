@@ -35,18 +35,6 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
     var loginRepo = LoginRepository()
     var jobRepo = JobRepository()
 
-    fun filterJobList(filteredJobList: ArrayList<RegisteredJobData>) {
-        registeredJobAdapter.updateJobList(filteredJobList)
-    }
-
-    fun getJobList(): ArrayList<RegisteredJobData> {
-        return registeredJobArrayList
-    }
-
-    fun getJobArrayList(): ArrayList<RegisteredJobData> {
-        return registeredJobArrayList
-    }
-
     override fun onResume(){
         super.onResume()
         if (loginRepo.validateUser()){
@@ -184,7 +172,7 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
                                 withContext(Dispatchers.IO) {
                                     if (jobRepo.validateDocument(jobRef, resJob)) {
                                         registeredJobArrayList.clear()
-                                        var regJobData = jobRepo.getData(resJob)
+                                        var regJobData = jobRepo.getRegisteredJobData(resJob)
 
                                         registeredJobArrayList.add(regJobData)
                                         withContext(Dispatchers.Main) {

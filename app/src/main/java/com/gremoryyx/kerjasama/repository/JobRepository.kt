@@ -13,10 +13,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.gremoryyx.kerjasama.JobData
 import com.gremoryyx.kerjasama.R
 import com.gremoryyx.kerjasama.RegisteredJobData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.*
@@ -79,7 +81,79 @@ class JobRepository {
             }
     }
 
-    suspend fun getData(doc:DocumentReference): RegisteredJobData = suspendCoroutine{ continuation ->
+    suspend fun getJobData(regJobID: ArrayList<String>): ArrayList<JobData> = suspendCoroutine { continuation ->
+        val jobRef = db.collection("Job")
+        val filteredJobArrayList = ArrayList<JobData>()
+        Log.d("GETTING JOB DATA", "TESTING")
+        jobRef.get().addOnSuccessListener { documents ->
+            CoroutineScope(Dispatchers.IO).async {
+                val displayRegJob = async {
+                    for (document in documents) {
+                        if (!regJobID.contains(document.id)) {
+                            Log.d("ADD THE DATA INTO ARRAY LIST: ", "ADDING")
+                            val jobImage = (document.data["job_image"]).toString()
+                            // Suspend the current coroutine and wait for the image retrieval
+                            val bitmap = getImageFile(jobImage).await()
+                            val jobData = JobData()
+                            jobData.jobImage = bitmap
+                            jobData.jobName = (document.data["job_name"]).toString()
+                            jobData.companyName = (document.data["company"]).toString()
+                            jobData.jobType = (document.data["job_type"]).toString()
+                            jobData.location = (document.data["location"]).toString()
+                            jobData.duration = (document.data["work_duration"]).toString()
+                            jobData.salary = (document.data["salary"]).toString()
+                            jobData.jobDescription = (document.data["job_description"]).toString()
+
+                            jobData.walfares.clear()
+                            val walfaresList = document.data["walfares"]
+                            for (walfaresData in walfaresList as ArrayList<String>) {
+                                jobData.walfares.add(walfaresData)
+                            }
+
+                            jobData.requirements.clear()
+                            val requirementList = document.data["requirements"]
+                            for (requirementData in requirementList as ArrayList<String>) {
+                                jobData.requirements.add(requirementData)
+                            }
+                            filteredJobArrayList.add(jobData)
+                        }
+                    }
+                    continuation.resume(filteredJobArrayList)
+                }
+                displayRegJob.await()
+            }
+
+        }.addOnFailureListener { exception ->
+            Log.d("JOB DATA", "Error getting documents: ", exception)
+            // Resume the continuation with an empty list or handle the failure case
+            continuation.resume(ArrayList())
+        }
+    }
+
+    suspend fun checkJobRegistered(checkJobID: String): String = suspendCoroutine{ continuation ->
+        val userRepo = UserRepository()
+        val currentUserID = userRepo.getUserID()
+        val regJobRef = db.collection("Registered Job")
+        regJobRef.get().addOnSuccessListener{
+            for (doc in it){
+                //User id in regjob references user's field :
+                if ((doc.data["user"] as DocumentReference).id == currentUserID){
+                    //Get the matches job field id
+                    val jobID = (doc.data["job"] as DocumentReference).id
+
+                    if (jobID == checkJobID){
+                        //If the job is already registered, then I don't need add into the job list
+                        continuation.resume(jobID)
+                    }
+                }
+                Log.d("WAITING THE FILTERING", "${doc.id}")
+            }
+        }.addOnFailureListener { exception ->
+            continuation.resumeWithException(exception)
+        }
+    }
+
+    suspend fun getRegisteredJobData(doc:DocumentReference): RegisteredJobData = suspendCoroutine{ continuation ->
         CoroutineScope(Dispatchers.IO).launch {
             jobRef = db.collection("Job")
             jobRef.document("${doc.id}").get().addOnSuccessListener { documents ->
