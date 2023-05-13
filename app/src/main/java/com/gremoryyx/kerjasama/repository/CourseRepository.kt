@@ -27,10 +27,10 @@ class CourseRepository {
         courseImgBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
     }
 
-    fun getImageFile(courseImage: String): Task<Bitmap> {
+    fun getImageFile(courseImage: DocumentReference): Task<Bitmap> {
         val courseStorageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("Course")
-        val courseImgRef = courseStorageRef.child("${courseImage}.jpg")
-        Log.d("IMAGE########", "getImageFile: ${courseImgRef.toString()}")
+        val courseImgRef = courseStorageRef.child("${courseImage.id}")
+        Log.d("IMAGE########", "getImageFile: ${courseImgRef}")
         return courseImgRef.getBytes(Long.MAX_VALUE)
             .continueWithTask { task ->
                 if (!task.isSuccessful) {
@@ -46,45 +46,47 @@ class CourseRepository {
     }
 
     suspend fun getCourseData(regCourseID: ArrayList<String>): ArrayList<CourseData> = suspendCoroutine { continuation ->
-        val jobRef = db.collection("Job")
+        val courseRef = db.collection("Course")
         val filteredCourseArrayList = ArrayList<CourseData>()
         Log.d("GETTING COURSE DATA", "TESTING")
-        jobRef.get().addOnSuccessListener { documents ->
+        courseRef.get().addOnSuccessListener { documents ->
             CoroutineScope(Dispatchers.IO).async {
                 val displayRegJob = async {
                     for (document in documents) {
                         if (!regCourseID.contains(document.id)) {
                             Log.d("ADD THE DATA INTO ARRAY LIST: ", "ADDING")
-                            val courseImage = document.data["course_image"].toString()
+                            val courseImage = document.data["course_image"] as DocumentReference
                             // Suspend the current coroutine and wait for the image retrieval
                             val bitmap = getImageFile(courseImage).await()
                             val courseData = CourseData()
                             courseData.courseImage = bitmap
+
                             courseData.courseName = document.data["course_name"].toString()
                             courseData.courseDescription = document.data["course_description"].toString()
                             courseData.instructorName = document.data["instructor_name"].toString()
                             courseData.ratingNumber = document.data["rating_number"].toString().toFloat()
-                            courseData.usersRated = document.data["users_rated"].toString().toInt()
+                            courseData.usersRated = document.data["user_rated"].toString().toInt()
                             courseData.lastUpdate = document.data["last_update"].toString()
 
-                            courseData.itemsToLearn.clear()
-                            var itemsToLearn = document.data["items_to_learn"]
-                            for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
-                                courseData.itemsToLearn.add(itemsToLearnData)
-                            }
-
-                            courseData.lectureVideos.clear()
-                            var lectureVideos = document.data["lecture_videos"]
-                            for (lectureVideosData in lectureVideos as ArrayList<MediaStore.Video>) {
-                                courseData.lectureVideos.add(lectureVideosData)
-                            }
-
-                            courseData.courseMaterials.clear()
-                            var courseMaterials = document.data["course_materials"]
-                            for (courseMaterialsData in courseMaterials as ArrayList<MediaStore.Files>) {
-                                courseData.courseMaterials.add(courseMaterialsData)
-                            }
+//                            courseData.itemsToLearn.clear()
+//                            var itemsToLearn = document.data["items_to_learn"]
+//                            for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
+//                                courseData.itemsToLearn.add(itemsToLearnData)
+//                            }
+//
+//                            courseData.lectureVideos.clear()
+//                            var lectureVideos = document.data["lecture_videos"]
+//                            for (lectureVideosData in lectureVideos as ArrayList<MediaStore.Video>) {
+//                                courseData.lectureVideos.add(lectureVideosData)
+//                            }
+//
+//                            courseData.courseMaterials.clear()
+//                            var courseMaterials = document.data["course_materials"]
+//                            for (courseMaterialsData in courseMaterials as ArrayList<MediaStore.Files>) {
+//                                courseData.courseMaterials.add(courseMaterialsData)
+//                            }
                             filteredCourseArrayList.add(courseData)
+                            Log.d("COURSE DATA", "${document.id} => ${document.data}")
                         }
                     }
                     continuation.resume(filteredCourseArrayList)

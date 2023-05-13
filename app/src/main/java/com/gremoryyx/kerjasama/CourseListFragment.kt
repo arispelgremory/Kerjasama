@@ -27,7 +27,7 @@ class CourseListFragment : Fragment(), JobSearchListener {
     private lateinit var db: FirebaseFirestore
     var loginRepo = LoginRepository()
     var courseRepo = CourseRepository()
-//    var regisFrag = RegisteredCourseFragment()
+    var regisFrag = CourseRegisteredFragment()
     var userRepo = UserRepository()
 
     fun updateCourseList(newList: ArrayList<CourseData>) {

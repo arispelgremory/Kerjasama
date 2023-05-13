@@ -5,7 +5,7 @@
     android:id="@+id/courseCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="24dp"
+    android:layout_marginHorizontal="6dp"
     android:layout_marginVertical="4dp"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
@@ -29,6 +29,7 @@
                 android:id="@+id/courseImageView"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginRight="14dp"
                 android:src="@drawable/job_image" />
 
             <LinearLayout
