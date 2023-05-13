@@ -68,11 +68,23 @@ class CourseRepository {
                             courseData.usersRated = document.data["user_rated"].toString().toInt()
                             courseData.lastUpdate = document.data["last_update"].toString()
 
-//                            courseData.itemsToLearn.clear()
-//                            var itemsToLearn = document.data["items_to_learn"]
-//                            for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
-//                                courseData.itemsToLearn.add(itemsToLearnData)
-//                            }
+                            courseData.language.clear()
+                            var language = document.data["language"]
+                            for (languageData in language as ArrayList<String>) {
+                                courseData.language.add(languageData)
+                            }
+
+                            courseData.captions.clear()
+                            var captions = document.data["captions"]
+                            for (captionsData in captions as ArrayList<String>) {
+                                courseData.captions.add(captionsData)
+                            }
+
+                            courseData.itemsToLearn.clear()
+                            var itemsToLearn = document.data["items_to_learn"]
+                            for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
+                                courseData.itemsToLearn.add(itemsToLearnData)
+                            }
 //
 //                            courseData.lectureVideos.clear()
 //                            var lectureVideos = document.data["lecture_videos"]

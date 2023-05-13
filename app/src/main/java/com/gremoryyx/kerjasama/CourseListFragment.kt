@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.util.Log
 import com.gremoryyx.kerjasama.repository.CourseRepository
+import io.grpc.InternalMetadata.serialize
 import kotlinx.coroutines.async
 
 class CourseListFragment : Fragment(), JobSearchListener {
@@ -76,7 +77,15 @@ class CourseListFragment : Fragment(), JobSearchListener {
         // Card onClick
         courseListAdapter.setOnCardViewClickListener { courseData ->
 
-            // TODO: Replace fragment
+            val detailCourseFragment = CourseDetailFragment()
+            var args = Bundle()
+            args.putParcelable("courseData", courseData)
+            detailCourseFragment.arguments = args
+
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout, detailCourseFragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         return view

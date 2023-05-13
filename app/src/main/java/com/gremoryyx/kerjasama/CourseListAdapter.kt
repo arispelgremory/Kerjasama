@@ -62,6 +62,10 @@ class CourseListAdapter (private val courseList: ArrayList<CourseData>): Recycle
                 usersRated.text = "(" + course.usersRated.toString() + ")"
 
                 currentCourse = course
+
+                courseCard.setOnClickListener {
+                    onCardViewClickListener?.invoke(course)
+                }
             }
         }
     }
