@@ -39,7 +39,6 @@ class LoginViewModel(private val sharedPreferences: SharedPreferences) : ViewMod
         editor.apply()
 
         _isLoggedIn.value = false
-        Log.d("LoginViewModel", "logoutUser: ${isLoggedIn.value.toString()}")
     }
 
 

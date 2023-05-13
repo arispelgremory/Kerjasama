@@ -54,7 +54,18 @@ class LoginFragment : Fragment() {
 
             validateCredentials(username, password)
 
+
         }
+
+        // Observe the login state LiveData and handle UI updates
+        loginViewModel.isLoggedIn.observe(requireActivity(), Observer { isLoggedIn ->
+            if (isLoggedIn) {
+                startActivity(Intent(requireActivity(), MainActivity::class.java))
+                requireActivity().finish()
+            }
+        })
+
+
     }
 
     private fun validateCredentials(username: String, password: String): Boolean {

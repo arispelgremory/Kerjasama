@@ -28,8 +28,6 @@ class WelcomeActivity : AppCompatActivity() {
             if (isLoggedIn) {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
-            } else {
-                Toast.makeText(this, "not logged in", Toast.LENGTH_SHORT).show()
             }
         })
 
