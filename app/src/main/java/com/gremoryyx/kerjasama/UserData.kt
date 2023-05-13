@@ -11,9 +11,10 @@ data class UserData(
     var date_of_birth: String,
     var phone_number: String,
     var highest_qualifications: String,
+    var certificate:ArrayList<String>,
     var bio: String
 
 
 ){
-    constructor(): this("", "", "", "", "", "","","","")
+    constructor(): this("","","","","","","","",ArrayList<String>(),"")
 }

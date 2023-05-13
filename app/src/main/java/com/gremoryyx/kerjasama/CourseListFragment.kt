@@ -28,8 +28,6 @@ class CourseListFragment : Fragment(), JobSearchListener {
     private lateinit var db: FirebaseFirestore
     var loginRepo = LoginRepository()
     var courseRepo = CourseRepository()
-    var regisFrag = CourseRegisteredFragment()
-    var userRepo = UserRepository()
 
     fun updateCourseList(newList: ArrayList<CourseData>) {
         courseListAdapter.setCourseList(newList)
@@ -37,11 +35,12 @@ class CourseListFragment : Fragment(), JobSearchListener {
     }
 
     fun resetCourseList() {
-        courseListArrayList.clear()
+
+        courseListArrayList = ArrayList()
         CoroutineScope(Dispatchers.IO).launch {
             courseListLoadCourse()
         }
-        courseListRecyclerView.scrollToPosition(0)
+//        courseListRecyclerView.scrollToPosition(0)
     }
 
     override fun onSearchInput(newText: String) {
@@ -63,8 +62,6 @@ class CourseListFragment : Fragment(), JobSearchListener {
         courseListAdapter = CourseListAdapter(courseListArrayList)
         courseListRecyclerView.adapter = courseListAdapter
 
-        defaultCourseList = ArrayList(courseListArrayList)
-
         if (loginRepo.validateUser()) {
             CoroutineScope(Dispatchers.IO).launch {
                 courseListLoadCourse()
@@ -76,16 +73,15 @@ class CourseListFragment : Fragment(), JobSearchListener {
 
         // Card onClick
         courseListAdapter.setOnCardViewClickListener { courseData ->
-
             val detailCourseFragment = CourseDetailFragment()
             var args = Bundle()
             args.putParcelable("courseData", courseData)
             detailCourseFragment.arguments = args
-
             requireActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_layout, detailCourseFragment)
                 .addToBackStack(null)
                 .commit()
+
         }
 
         return view
@@ -117,12 +113,14 @@ class CourseListFragment : Fragment(), JobSearchListener {
                     filteringJob.await()
 
                     CoroutineScope(Dispatchers.IO).async {
-                        Log.d("AFTER FILTERING", "###################")
+                        Log.d("AFTER COURSE FILTERING", "###################")
+                        Log.d("AFTER COURSE FILTERING", "${CourseRegisteredList}")
                         // To filter the registered job, I need to pass in the registered job id to the function
                         // So that I could compare it and filter out add it into the array list.
                         val deferredJobData = async{
                             courseRepo.getCourseData(CourseRegisteredList)
                         }
+
                         courseListArrayList = deferredJobData.await()
 
                         activity?.runOnUiThread {

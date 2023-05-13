@@ -8,339 +8,350 @@
     tools:context=".CourseDetailFragment">
 
     <LinearLayout
+        android:id="@+id/wholeCourseDetailLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginVertical="8dp"
-        android:layout_marginHorizontal="18dp"
-        android:paddingBottom="60px">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-
-        <ImageButton
-            android:id="@+id/courseDetailBackBtn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/arrow_back"
-            android:background="@color/white"
-            />
-    </LinearLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/courseDetailLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/courseDetailImageView"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                tools:src="@drawable/job_image" />
-
-            <TextView
-                android:id="@+id/courseDetailName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Course Name Here_Lorem ipsum dolor sit amet, consectetur"
-                android:textColor="#333333"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/courseDetailDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra ac nisl eu pellentesque. Vestibulum eu consectetur eros. Nunc posuere, ipsum nec tempor auctor, turpis massa fringilla orci, at dictum massa elit pretium metus."
-                android:textColor="#666666"
-                android:textSize="12sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="14px">
-
-                <TextView
-                    android:id="@+id/courseDetailRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4.5"
-                    android:textColor="#FFB800"
-                    android:textSize="12sp" />
-
-                <RatingBar
-                    android:id="@+id/courseDetailRatingBar"
-                    style="?android:attr/ratingBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginLeft="10px"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:progressTint="#FFB800"
-                    android:rating="4.5"
-                    android:stepSize="0.5"  />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/courseDetailUserRated"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textSize="12sp"
-                android:text="(1234567 ratings) 345,6789 students" />
-
-            <TextView
-                android:id="@+id/courseDetailInstructor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textSize="12sp"
-                android:text="Offered by Dr. Chong Tik Tok" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="18dp"
+            android:paddingBottom="60px">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="12dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
 
-            <LinearLayout
+            <ImageButton
+                android:id="@+id/courseDetailBackBtn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/courseDetailLastUpdateImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop = "1dp"
-                    android:src="@drawable/outline_error_outline_16" />
-
-                <TextView
-                    android:id="@+id/courseDetailLastUpdateTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:text="Last Updated 3/2023" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="12px">
-
-                <ImageView
-                    android:id="@+id/courseDetailLangImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop = "1dp"
-                    tools:src="@drawable/baseline_public_16"/>
-
-                <TextView
-                    android:id="@+id/courseDetailLangTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:text="English" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="12px">
-
-                <ImageView
-                    android:id="@+id/courseDetailCCImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop = "1dp"
-                    android:src="@drawable/baseline_closed_caption_off_16" />
-
-                <TextView
-                    android:id="@+id/courseDetailCCTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:text="English, Chinese, Malay" />
-            </LinearLayout>
-
+                android:src="@drawable/arrow_back"
+                android:background="@color/white"
+                />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/courseDetailApplyBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="24px"
-                android:backgroundTint="#ed2d2d"
-                android:text="Apply Now"
-                app:cornerRadius="8dp"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingHorizontal="18dp"
-                android:paddingVertical="10dp"
-                android:background="@drawable/rounded_box">
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/courseDetailImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    tools:src="@drawable/job_image" />
 
                 <TextView
-                    android:id="@+id/courseDetailLearnTextView"
+                    android:id="@+id/courseDetailName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="What you'll learn"
-                    android:textStyle="bold"
-                    />
+                    android:layout_marginTop="10dp"
+                    android:text="Course Name Here_Lorem ipsum dolor sit amet, consectetur"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/courseDetailDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra ac nisl eu pellentesque. Vestibulum eu consectetur eros. Nunc posuere, ipsum nec tempor auctor, turpis massa fringilla orci, at dictum massa elit pretium metus."
+                    android:textColor="#666666"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginTop="15px"
-                    android:paddingLeft="2dp">
-
-                    <ImageView
-                        android:id="@+id/courseDetailListCheckMark1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:src="@drawable/check_mark" />
+                    android:layout_marginTop="14px">
 
                     <TextView
-                        android:id="@+id/courseDetailFirstList"
+                        android:id="@+id/courseDetailRating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="4.5"
+                        android:textColor="#FFB800"
+                        android:textSize="12sp" />
+
+                    <RatingBar
+                        android:id="@+id/courseDetailRatingBar"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginLeft="10px"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:progressTint="#FFB800"
+                        android:rating="4.5"
+                        android:stepSize="0.5"  />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/courseDetailUserRated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="12sp"
+                    android:text="(1234567 ratings) 345,6789 students" />
+
+                <TextView
+                    android:id="@+id/courseDetailInstructor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="12sp"
+                    android:text="Offered by Dr. Chong Tik Tok" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/courseDetailLastUpdateImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop = "1dp"
+                        android:src="@drawable/outline_error_outline_16" />
+
+                    <TextView
+                        android:id="@+id/courseDetailLastUpdateTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
                         android:layout_weight="1"
-                        android:layout_marginLeft="12px"
                         android:textSize="12sp"
-                        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra ac nisl eu pellentesque." />
+                        android:text="Last Updated 3/2023" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginTop="15px"
-                    android:paddingLeft="2dp">
+                    android:layout_marginTop="12px">
 
                     <ImageView
-                        android:id="@+id/courseDetailListCheckMark2"
+                        android:id="@+id/courseDetailLangImageView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:src="@drawable/check_mark" />
+                        android:paddingTop = "1dp"
+                        tools:src="@drawable/baseline_public_16"/>
 
                     <TextView
-                        android:id="@+id/courseDetailSecondList"
+                        android:id="@+id/courseDetailLangTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
                         android:layout_weight="1"
-                        android:layout_marginLeft="12px"
                         android:textSize="12sp"
-                        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra ac nisl eu pellentesque." />
+                        android:text="English" />
+
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginTop="15px"
-                    android:paddingLeft="2dp">
+                    android:layout_marginTop="12px">
 
                     <ImageView
-                        android:id="@+id/courseDetailListCheckMark3"
+                        android:id="@+id/courseDetailCCImageView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:src="@drawable/check_mark" />
+                        android:paddingTop = "1dp"
+                        android:src="@drawable/baseline_closed_caption_off_16" />
 
                     <TextView
-                        android:id="@+id/courseDetailThirdList"
+                        android:id="@+id/courseDetailCCTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
                         android:layout_weight="1"
-                        android:layout_marginLeft="12px"
                         android:textSize="12sp"
-                        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra ac nisl eu pellentesque." />
+                        android:text="English, Chinese, Malay" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="15px"
-                    android:paddingLeft="2dp">
+            </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/courseDeailListCheckMark4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:src="@drawable/check_mark" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/courseDetailFourthList"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="12px"
-                        android:textSize="12sp"
-                        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra ac nisl eu pellentesque." />
-                </LinearLayout>
+                <Button
+                    android:id="@+id/courseDetailApplyBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="24px"
+                    android:backgroundTint="#ed2d2d"
+                    android:text="Apply Now"
+                    app:cornerRadius="8dp"/>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="15px"
-                    android:paddingLeft="2dp">
-
-                    <ImageView
-                        android:id="@+id/courseDetailListCheckMark5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:src="@drawable/check_mark" />
+                    android:orientation="vertical"
+                    android:paddingHorizontal="18dp"
+                    android:paddingVertical="10dp"
+                    android:background="@drawable/rounded_box">
 
                     <TextView
-                        android:id="@+id/courseDetailFifthList"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/courseDetailLearnTextView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="12px"
-                        android:textSize="12sp"
-                        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra ac nisl eu pellentesque." />
+                        android:text="What you'll learn"
+                        android:textStyle="bold"
+                        />
+
+                    <LinearLayout
+                        android:id="@+id/courseDetailFirstListLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="15px"
+                        android:paddingLeft="2dp">
+
+                        <ImageView
+                            android:id="@+id/courseDetailListCheckMark1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/check_mark" />
+
+                        <TextView
+                            android:id="@+id/courseDetailFirstList"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="12px"
+                            android:textSize="12sp"
+                            android:text="" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/courseDetailSecondListLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="15px"
+                        android:paddingLeft="2dp">
+
+                        <ImageView
+                            android:id="@+id/courseDetailListCheckMark2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/check_mark" />
+
+                        <TextView
+                            android:id="@+id/courseDetailSecondList"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="12px"
+                            android:textSize="12sp"
+                            android:text="" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/courseDetailThirdListLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="15px"
+                        android:paddingLeft="2dp">
+
+                        <ImageView
+                            android:id="@+id/courseDetailListCheckMark3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/check_mark" />
+
+                        <TextView
+                            android:id="@+id/courseDetailThirdList"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="12px"
+                            android:textSize="12sp"
+                            android:text="" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/courseDetailFourthListLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="15px"
+                        android:paddingLeft="2dp">
+
+                        <ImageView
+                            android:id="@+id/courseDeailListCheckMark4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/check_mark" />
+
+                        <TextView
+                            android:id="@+id/courseDetailFourthList"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="12px"
+                            android:textSize="12sp"
+                            android:text="" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/courseDetailFifthListLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="15px"
+                        android:paddingLeft="2dp">
+
+                        <ImageView
+                            android:id="@+id/courseDetailListCheckMark5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/check_mark" />
+
+                        <TextView
+                            android:id="@+id/courseDetailFifthList"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="12px"
+                            android:textSize="12sp"
+                            android:text="" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
-
     </LinearLayout>
-
 </ScrollView>

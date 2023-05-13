@@ -36,7 +36,7 @@ class CourseRepository {
                 if (!task.isSuccessful) {
                     throw task.exception!!
                 } else {
-                    Log.d("Get Image Failed!!!", "getImageFile: ${task.result}")
+                    Log.d("Get Image Success!!!", "getImageFile: ${task.result}")
                 }
                 val data = task.result
                 val bitmap = android.graphics.BitmapFactory.decodeByteArray(data, 0, data!!.size)
@@ -128,7 +128,7 @@ class CourseRepository {
                         continuation.resume(courseID)
                     }
                 }
-                Log.d("WAITING THE FILTERING", "${doc.id}")
+                Log.d("WAITING THE FILTERING CHECKING REGISTERED COURSE", "${doc.id}")
             }
         }.addOnFailureListener { exception ->
             continuation.resumeWithException(exception)
