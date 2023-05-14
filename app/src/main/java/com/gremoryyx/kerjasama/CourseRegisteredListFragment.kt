@@ -1,6 +1,7 @@
 package com.gremoryyx.kerjasama
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.gremoryyx.kerjasama.repository.CourseRepository
 import com.gremoryyx.kerjasama.repository.LoginRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.gremoryyx.kerjasama.repository.UserRepository
+import kotlinx.coroutines.*
 
 class CourseRegisteredListFragment : Fragment(), SearchListener {
     private lateinit var courseRegisteredListRecyclerView: RecyclerView
@@ -28,17 +27,18 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
     private lateinit var db: FirebaseFirestore
     var loginRepo = LoginRepository()
     var courseRepo = CourseRepository()
+    var userRepo = UserRepository()
 
-    override fun onResume() {
-        super.onResume()
-        if (loginRepo.validateUser()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                courseRegisteredLoadCourses()
-            }
-        } else {
-            Toast.makeText(context, "Login First", Toast.LENGTH_LONG).show()
-        }
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        if (loginRepo.validateUser()) {
+//            CoroutineScope(Dispatchers.IO).launch {
+//                courseRegisteredLoadCourses()
+//            }
+//        } else {
+//            Toast.makeText(context, "Login First", Toast.LENGTH_LONG).show()
+//        }
+//    }
 
     fun updateRegisteredCourseList(newList: ArrayList<CourseData>) {
         courseRegisteredArrayList.clear()
@@ -53,19 +53,21 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
         updateRegisteredCourseList(newCourseList as ArrayList<CourseData>)
     }
 
-    override fun onCreateView (
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_course_registered_list, container, false)
 
-        courseRegisteredListRecyclerView = view.findViewById(R.id.course_registered_list_recycler_view)
+        courseRegisteredListRecyclerView =
+            view.findViewById(R.id.course_registered_list_recycler_view)
         courseRegisteredListRecyclerView.layoutManager = LinearLayoutManager(context)
         courseRegisteredListRecyclerView.setHasFixedSize(true)
 
         courseRegisteredArrayList = ArrayList()
         courseRegisteredListAdapter = CourseRegisteredListAdapter(courseRegisteredArrayList)
         courseRegisteredListRecyclerView.adapter = courseRegisteredListAdapter
+        //courseRegisteredListAdapter.notifyDataSetChanged()
 
         originalCourseRegisteredList = ArrayList(courseRegisteredArrayList)
 
@@ -73,40 +75,55 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
             CoroutineScope(Dispatchers.IO).launch {
                 courseRegisteredLoadCourses()
             }
-        }
-        else {
+        } else {
             Toast.makeText(context, "Login First", Toast.LENGTH_LONG).show()
         }
         return view
     }
 
     private suspend fun courseRegisteredLoadCourses() {
+        Log.d("CourseRegistered", "courseRegisteredLoadCourses: LOADING!!!!!!!")
         db = FirebaseFirestore.getInstance()
-        val user = Firebase.auth.currentUser
-        val reg_courseRef = db.collection("Course Registered")
-        reg_courseRef.get().addOnCompleteListener{ task ->
-            if (task.isSuccessful) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    for (document in task.result!!) {
-                        var refCourse = document.data["course"] as DocumentReference
-                        var refUser = document.data["user"] as DocumentReference
+        var regCourseData = ArrayList<String>()
+        val reg_courseRef = db.collection("Registered Course")
+        val courseRef = db.collection("Course")
 
-                        if (refUser.id == user!!.uid) {
-                            val courseRef = db.collection("Course")
-                            CoroutineScope(Dispatchers.IO).launch {
-                                withContext(Dispatchers.IO) {
-                                    if (courseRepo.validateDocument(courseRef, refCourse)) {
-                                        var regCourseData = courseRepo.getCourseRegisteredData(refCourse)
+        reg_courseRef.get().addOnCompleteListener { Task ->
+            if (Task.isSuccessful) {
+                for (document in Task.result!!) {
+                    if (document.data["user"] == userRepo.getUserRef()) {
+                        Log.d("courseRegisteredLoadCourses", "YES it is the same")
+                        val from_courseRef = document.data["course"] as DocumentReference
 
-                                        courseRegisteredArrayList.add(regCourseData)
-                                        withContext(Dispatchers.Main) {
-                                            courseRegisteredListAdapter.notifyDataSetChanged()
-                                        }
-                                    }
-                                }
+                        Log.d(
+                            "courseRegisteredLoadCourses",
+                            "Get from course: ${courseRef.document(from_courseRef.id).path}"
+                        )
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val retrieveRegCourse = async {
+                                courseRepo.getCourseRegisteredData(
+                                    courseRef.document(from_courseRef.id),
+                                    (document.data["lectures_watched"] as Long).toInt()
+                                )
                             }
+
+                            courseRegisteredArrayList = retrieveRegCourse.await()
+                            activity?.runOnUiThread {
+                                courseRegisteredListAdapter.setCourseRegisteredList(
+                                    courseRegisteredArrayList
+                                )
+                                courseRegisteredListAdapter.notifyDataSetChanged()
+                            }
+
+//                            if (retrieveRegCourse.isCompleted) {
+//                                Log.d("IS COMPLETED", "retrieve: DONE")
+//                                courseRegisteredArrayList.add(retrieveRegCourse.getCompleted())
+//                                Log.d("IS COMPLETED", "retrieved data: $courseRegisteredArrayList")
+//                            }
                         }
                     }
+
+                    Log.d("This is THE END", "courseRegisteredLoadCourses: END")
                 }
             }
         }

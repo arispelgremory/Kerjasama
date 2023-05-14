@@ -123,6 +123,7 @@ class CourseListFragment : Fragment(), SearchListener {
                         courseListArrayList = deferredJobData.await()
 
                         activity?.runOnUiThread {
+                            Log.d("AFTER REG COURSE ADDED", "$courseListArrayList")
                             courseListAdapter.setCourseList(courseListArrayList)
                             courseListAdapter.notifyDataSetChanged()
                         }

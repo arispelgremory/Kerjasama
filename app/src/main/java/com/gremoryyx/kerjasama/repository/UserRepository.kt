@@ -37,6 +37,10 @@ class UserRepository {
         return auth.currentUser!!.uid
     }
 
+    fun getUserRef(): DocumentReference {
+        return db.collection("User").document(getUserID())
+    }
+
     suspend fun getImageFile(userImage: String): Bitmap = suspendCoroutine { continuation ->
         try{
             val userStorageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("User")

@@ -1,7 +1,6 @@
 package com.gremoryyx.kerjasama.repository
 
 import android.graphics.Bitmap
-import android.provider.MediaStore
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
@@ -126,11 +125,9 @@ class CourseRepository {
 
                     if (courseID == checkCourseID){
                         //If the job is already registered, then I don't need add into the job list
+                        Log.d("CHECKING REGISTERED COURSE", "$courseID Already Registered")
                         continuation.resume(courseID)
                     }
-
-                    Log.d("CourseID to Check", "${checkCourseID}")
-                    Log.d("CourseID Registered", "${courseID}")
                 }
                 Log.d("WAITING THE FILTERING CHECKING REGISTERED COURSE", "${doc.id}")
             }
@@ -139,9 +136,25 @@ class CourseRepository {
         }
     }
 
-    suspend fun validateDocument(collection:CollectionReference, courseRefPath: DocumentReference): Boolean = suspendCoroutine { continuation ->
-        collection.get().addOnSuccessListener {
-            if (collection.document("${courseRefPath.id}") != null){
+    suspend fun validateDocument(courseName: String, courseDesc: String): String= suspendCoroutine { continuation ->
+        var courseRef = ""
+        db.collection("Course").get().addOnSuccessListener {
+            for (doc in it){
+                if (doc.data["course_name"].toString() == courseName && doc.data["course_description"].toString() == courseDesc){
+                    Log.d("VALIDATE DOCUMENT", "validateDocument: ${doc.reference.path}")
+                    courseRef = doc.reference.path
+                }
+            }
+            continuation.resume(courseRef)
+        }.addOnFailureListener{
+            Log.d("VALIDATE DOCUMENT", "validate Course Failed: ${it}")
+            continuation.resumeWithException(it)
+        }
+    }
+    suspend fun validateDocument(courseCollection:CollectionReference, courseRefPath: DocumentReference): Boolean = suspendCoroutine { continuation ->
+        var courseToDisplay: DocumentReference
+        courseCollection.get().addOnSuccessListener {
+            if (courseCollection.document("${courseRefPath.id}") != null){
                 continuation.resume(true)
             } else {
                 continuation.resume(false)
@@ -152,7 +165,8 @@ class CourseRepository {
         }
     }
 
-    suspend fun getCourseRegisteredData(doc: DocumentReference): CourseData = suspendCoroutine { continuation ->
+    suspend fun getCourseRegisteredData(doc: DocumentReference, watched_lecture:Int): ArrayList<CourseData> = suspendCoroutine { continuation ->
+        var temp = ArrayList<CourseData>()
         CoroutineScope(Dispatchers.IO).launch {
             courseRef = db.collection("Course")
             courseRef.document("${doc.id}").get().addOnSuccessListener { documents ->
@@ -160,36 +174,48 @@ class CourseRepository {
                 val courseImage = documents.data?.get("course_image") as DocumentReference
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    val bitmap = getImageFile(courseImage).await()
-                    // Suspend the current coroutine and wait for the image retrieval
-                    regCourseData.courseImage = bitmap
+                    val waitingData = async {
+                        val bitmap = getImageFile(courseImage).await()
+                        // Suspend the current coroutine and wait for the image retrieval
+                        regCourseData.courseImage = bitmap
 
-                    regCourseData.courseName = documents.data?.get("course_name").toString()
-                    regCourseData.courseDescription = documents.data?.get("course_description").toString()
-                    regCourseData.instructorName = documents.data?.get("instructor_name").toString()
-                    regCourseData.ratingNumber = documents.data?.get("rating_number").toString().toFloat()
-                    regCourseData.usersRated = documents.data?.get("user_rated").toString().toInt()
-                    regCourseData.lastUpdate = documents.data?.get("last_update").toString()
+                        regCourseData.courseName = documents.data?.get("course_name").toString()
+                        regCourseData.courseDescription = documents.data?.get("course_description").toString()
+                        regCourseData.instructorName = documents.data?.get("instructor_name").toString()
+                        regCourseData.ratingNumber = documents.data?.get("rating_number").toString().toFloat()
+                        regCourseData.usersRated = documents.data?.get("user_rated").toString().toInt()
+                        regCourseData.lastUpdate = documents.data?.get("last_update").toString()
+                        regCourseData.lecturesWatched = watched_lecture
+                        regCourseData.language.clear()
+                        var language = documents.data?.get("language")
+                        for (languageData in language as ArrayList<String>) {
+                            regCourseData.language.add(languageData)
+                        }
 
-                    regCourseData.language.clear()
-                    var language = documents.data?.get("language")
-                    for (languageData in language as ArrayList<String>) {
-                        regCourseData.language.add(languageData)
+                        regCourseData.captions.clear()
+                        var captions = documents.data?.get("captions")
+                        for (captionsData in captions as ArrayList<String>) {
+                            regCourseData.captions.add(captionsData)
+                        }
+
+                        regCourseData.itemsToLearn.clear()
+                        var itemsToLearn = documents.data?.get("items_to_learn")
+                        for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
+                            regCourseData.itemsToLearn.add(itemsToLearnData)
+                        }
                     }
+                    waitingData.await()
 
-                    regCourseData.captions.clear()
-                    var captions = documents.data?.get("captions")
-                    for (captionsData in captions as ArrayList<String>) {
-                        regCourseData.captions.add(captionsData)
-                    }
-
-                    regCourseData.itemsToLearn.clear()
-                    var itemsToLearn = documents.data?.get("items_to_learn")
-                    for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
-                        regCourseData.itemsToLearn.add(itemsToLearnData)
-                    }
+                    temp.add(regCourseData)
+                    Log.d("getCourseRegisteredData DATA", "After GET DATA: $regCourseData")
+                    continuation.resume(temp)
                 }
+
+
             }
+
         }
     }
+
+
 }
