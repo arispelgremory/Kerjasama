@@ -22,6 +22,7 @@ class CourseRepository {
     var courseImgBitmap: Bitmap
     private var db = FirebaseFirestore.getInstance()
     lateinit var courseRef: CollectionReference
+    var temp = ArrayList<CourseData>()
 
     init {
         courseImgBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
@@ -166,7 +167,7 @@ class CourseRepository {
     }
 
     suspend fun getCourseRegisteredData(doc: DocumentReference, watched_lecture:Int): ArrayList<CourseData> = suspendCoroutine { continuation ->
-        var temp = ArrayList<CourseData>()
+
         CoroutineScope(Dispatchers.IO).launch {
             courseRef = db.collection("Course")
             courseRef.document("${doc.id}").get().addOnSuccessListener { documents ->

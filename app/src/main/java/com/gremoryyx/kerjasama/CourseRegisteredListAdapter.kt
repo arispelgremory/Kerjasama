@@ -49,7 +49,6 @@ class CourseRegisteredListAdapter (private val courseRegisteredList: ArrayList<C
         private var currentCourse: CourseData? = null
 
         fun bind(course: CourseData) {
-            Log.d("ADAPTER VIEWHOLDER!!!!!", "BINDING COURSE: $course")
             if (currentCourse == null || currentCourse != course) {
                 courseRegisteredImageView.setImageBitmap(course.courseImage)
                 courseRegisteredName.text = course.courseName
