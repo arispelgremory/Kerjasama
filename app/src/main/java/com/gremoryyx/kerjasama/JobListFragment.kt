@@ -1,6 +1,5 @@
 package com.gremoryyx.kerjasama
 
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -21,14 +20,11 @@ import com.google.rpc.context.AttributeContext.Auth
 import com.gremoryyx.kerjasama.repository.JobRepository
 import com.gremoryyx.kerjasama.repository.LoginRepository
 import com.gremoryyx.kerjasama.repository.UserRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import org.w3c.dom.Document
 
-class JobListFragment : Fragment(), JobSearchListener {
+class JobListFragment : Fragment(), SearchListener {
 
     private lateinit var jobListRecyclerView: RecyclerView
     private lateinit var jobListArrayList: ArrayList<JobData>
@@ -41,27 +37,17 @@ class JobListFragment : Fragment(), JobSearchListener {
     var regisFrag = RegisteredJobFragment()
     var userRepo = UserRepository()
 
-    fun filterJobList(filteredJobList: ArrayList<JobData>) {
-        jobAdapter.updateJobList(filteredJobList)
-    }
-
-    fun getJobList(): ArrayList<JobData> {
-        return jobListArrayList
-    }
-
-    fun getJobArrayList(): ArrayList<JobData> {
-        return jobListArrayList
-    }
-
     fun updateJobList(newList: List<JobData>) {
-        jobListArrayList.clear()
         jobAdapter.setJobList(newList)
         jobAdapter.notifyDataSetChanged()
     }
 
     fun resetJobList() {
-        jobAdapter.setJobList(originalJobList)
-        jobAdapter.notifyDataSetChanged()
+        jobListArrayList.clear()
+        CoroutineScope(Dispatchers.IO).launch{
+            jobListLoadJobs()
+        }
+        jobListRecyclerView.scrollToPosition(0)
     }
 
     override fun onSearchInput(newText: String) {
@@ -82,7 +68,9 @@ class JobListFragment : Fragment(), JobSearchListener {
         jobListRecyclerView.setHasFixedSize(true)
 
         jobListArrayList = ArrayList()
+
         jobAdapter = JobAdapter(jobListArrayList)
+
         jobListRecyclerView.adapter = jobAdapter
 
         originalJobList = ArrayList(jobListArrayList)
@@ -96,11 +84,8 @@ class JobListFragment : Fragment(), JobSearchListener {
             Toast.makeText(context, "Login First", Toast.LENGTH_LONG).show()
         }
 
-
-
         // Contact Button OnClick
         jobAdapter.setOnContactButtonClickListenerLambda { job ->
-            // Handle the click event for the "more" button here
             val emailIntent = Intent(Intent.ACTION_SENDTO)
             emailIntent.data = Uri.parse("mailto:")
             emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("example@example.com"))
@@ -112,7 +97,6 @@ class JobListFragment : Fragment(), JobSearchListener {
 
         // Apply Button OnClick
         jobAdapter.setOnApplyButtonClickListenerLambda { job ->
-            // Handle the click event for the "more" button here
             applyJob(job)
         }
 
@@ -169,46 +153,45 @@ class JobListFragment : Fragment(), JobSearchListener {
         }
 
     }
-
     private suspend fun jobListLoadJobs() {
         db = FirebaseFirestore.getInstance()
         val JobRef = db.collection("Job")
+        var RegisteredJobList = ArrayList<String>()
         JobRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    for (document in task.result!!) {
-                        val jobData = JobData()
-                        // Use CoroutineScope to wait for the image to be retrieved
-                        val jobImage = (document.data["job_image"]).toString()
-                        val bitmap = jobRepo.getImageFile(jobImage).await()
-                        jobData.jobImage = bitmap
-                        jobData.jobName = (document.data["job_name"]).toString()
-                        jobData.companyName = (document.data["company"]).toString()
-                        jobData.jobType = (document.data["job_type"]).toString()
-                        jobData.location = (document.data["location"]).toString()
-                        jobData.duration = (document.data["work_duration"]).toString()
-                        jobData.salary = (document.data["salary"]).toString()
-                        jobData.jobDescription = (document.data["job_description"]).toString()
-
-                        jobData.walfares.clear()
-                        var walfaresList = document.data["walfares"]
-                        for (walfaresData in walfaresList as ArrayList<String>) {
-                            jobData.walfares.add(walfaresData)
+                CoroutineScope(Dispatchers.IO).async {
+                    val filteringJob = async {
+                        for (document in task.result!!) {
+                            // To check if the job is already registered
+                            // First I need to get the job document path reference
+                            // And then get the user document path reference & registered job document path reference
+                            CoroutineScope(Dispatchers.IO).async{
+                                try {
+                                    RegisteredJobList.add(jobRepo.checkJobRegistered(document.id))
+                                }catch (e: Exception){
+                                    Log.d("ERROR", "Error getting documents: ", e)
+                                }
+                            }
                         }
-
-                        jobData.requirements.clear()
-                        var requirementList = document.data["requirements"]
-                        for (requirementData in requirementList as ArrayList<String>) {
-                            jobData.requirements.add(requirementData)
-                        }
-
-                        jobListArrayList.add(jobData)
-
                     }
-                    activity?.runOnUiThread {
-                        jobAdapter.notifyDataSetChanged()
+                    filteringJob.await()
+
+                    CoroutineScope(Dispatchers.IO).async {
+                        // To filter the registered job, I need to pass in the registered job id to the function
+                        // So that I could compare it and filter out add it into the array list.
+                        val deferredJobData = async{
+                            jobRepo.getJobData(RegisteredJobList)
+                        }
+                        jobListArrayList = deferredJobData.await()
+
+                        activity?.runOnUiThread {
+                            jobAdapter.setJobList(jobListArrayList)
+                            jobAdapter.notifyDataSetChanged()
+                        }
                     }
                 }
+
+
             } else {
                 // Handle error getting documents
                 Toast.makeText(requireContext(), "Error getting documents.", Toast.LENGTH_SHORT).show()

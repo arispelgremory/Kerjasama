@@ -28,7 +28,7 @@ class ProfileFragment : Fragment() {
 
         val tabLayout: TabLayout = view.findViewById(R.id.tab_layout)
         val viewPager: ViewPager2 = view.findViewById(R.id.tab_container)
-        val tabTitles = listOf("Register", "Account")
+        val tabTitles = listOf("Personal", "Account")
 
         // Initialize the TabPagerAdapter (Step 2)
         tabPagerAdapter = TabPagerAdapter(this, fragment)

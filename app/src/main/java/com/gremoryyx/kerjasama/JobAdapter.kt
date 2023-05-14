@@ -28,12 +28,6 @@ class JobAdapter(private val jobList: ArrayList<JobData>) : RecyclerView.Adapter
 
     }
 
-    fun updateJobList(newJobList: ArrayList<JobData>) {
-        jobList.clear()
-        jobList.addAll(newJobList)
-        notifyDataSetChanged()
-    }
-
     fun setJobList(newList: List<JobData>) {
         jobList.clear()
         jobList.addAll(newList)
@@ -75,6 +69,7 @@ class JobAdapter(private val jobList: ArrayList<JobData>) : RecyclerView.Adapter
         private val RequirementChipGroup: ChipGroup = itemView.findViewById(R.id.requirementChipGroup)
 
         private var currentJob: JobData? = null
+
 
         fun bind(job: JobData) {
             if (currentJob == null || currentJob != job) {

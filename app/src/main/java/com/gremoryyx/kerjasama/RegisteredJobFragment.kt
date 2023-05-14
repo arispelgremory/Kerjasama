@@ -14,7 +14,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.gremoryyx.kerjasama.repository.JobRepository
 import com.gremoryyx.kerjasama.repository.LoginRepository
@@ -24,7 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class RegisteredJobFragment : Fragment(), JobSearchListener {
+class RegisteredJobFragment : Fragment(), SearchListener {
     private lateinit var registeredJobRecyclerView: RecyclerView
     private lateinit var registeredJobArrayList: ArrayList<RegisteredJobData>
     private lateinit var registeredJobAdapter: RegisteredJobAdapter
@@ -34,18 +33,6 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
     private lateinit var db: FirebaseFirestore
     var loginRepo = LoginRepository()
     var jobRepo = JobRepository()
-
-    fun filterJobList(filteredJobList: ArrayList<RegisteredJobData>) {
-        registeredJobAdapter.updateJobList(filteredJobList)
-    }
-
-    fun getJobList(): ArrayList<RegisteredJobData> {
-        return registeredJobArrayList
-    }
-
-    fun getJobArrayList(): ArrayList<RegisteredJobData> {
-        return registeredJobArrayList
-    }
 
     override fun onResume(){
         super.onResume()
@@ -184,7 +171,7 @@ class RegisteredJobFragment : Fragment(), JobSearchListener {
                                 withContext(Dispatchers.IO) {
                                     if (jobRepo.validateDocument(jobRef, resJob)) {
                                         registeredJobArrayList.clear()
-                                        var regJobData = jobRepo.getData(resJob)
+                                        var regJobData = jobRepo.getRegisteredJobData(resJob)
 
                                         registeredJobArrayList.add(regJobData)
                                         withContext(Dispatchers.Main) {
