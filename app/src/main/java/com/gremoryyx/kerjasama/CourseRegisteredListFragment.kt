@@ -106,8 +106,9 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
                                     (document.data["lectures_watched"] as Long).toInt()
                                 )
                             }
-
+                            Log.d("courseRegisteredLoadCourses", "retrieved data!!!: $retrieveRegCourse")
                             courseRegisteredArrayList = retrieveRegCourse.await()
+
                             activity?.runOnUiThread {
                                 courseRegisteredListAdapter.setCourseRegisteredList(
                                     courseRegisteredArrayList
