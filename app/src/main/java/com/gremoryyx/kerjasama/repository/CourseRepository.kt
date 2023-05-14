@@ -10,9 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.gremoryyx.kerjasama.CourseData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -134,4 +132,51 @@ class CourseRepository {
             continuation.resumeWithException(exception)
         }
     }
+
+    suspend fun validateDocument(courseName: String, courseDesc: String): String= suspendCoroutine { continuation ->
+        var courseRef = ""
+        db.collection("Course").get().addOnSuccessListener {
+            for (doc in it){
+                if (doc.data["course_name"].toString() == courseName && doc.data["course_description"].toString() == courseDesc){
+                    Log.d("VALIDATE DOCUMENT", "validateDocument: ${doc.reference.path}")
+                    courseRef = doc.reference.path
+                }
+            }
+            continuation.resume(courseRef)
+        }.addOnFailureListener{
+            Log.d("VALIDATE DOCUMENT", "validate Course Failed: ${it}")
+            continuation.resumeWithException(it)
+        }
+    }
+
+//    suspend fun registerCourse(){
+//        val regCourseRef = db.collection("Registered Course")
+//        var regCourseDoc = ""
+//        CoroutineScope(Dispatchers.IO).launch {
+//            regCourseDoc = withContext(Dispatchers.IO){
+//                jobRepo.validateDocument(jobRef, jobData.jobName, jobData.companyName)
+//            }
+//
+//            //USER
+//            // get into the user collection and then compare the user.uid with the document.id to get the document path reference
+//            val userRef = db.collection("User")
+//            if (userRef.document("${userId}") != null){
+//                userDoc = userRef.document("${userId}").path
+//            }
+//
+//            if (jobDocument != "" && userDoc != ""){
+//                //ADD DATA TO REGISTERED JOB
+//                val docFormat_jobDocument: DocumentReference = db.document(jobDocument)
+//                val docFormat_userDoc: DocumentReference = db.document(userDoc)
+//                regRef.add(hashMapOf(
+//                    "job" to docFormat_jobDocument,
+//                    "registered_status" to "pending",
+//                    "user" to docFormat_userDoc
+//                ))
+//            }
+//        }
+//    }
+//
+
+
 }

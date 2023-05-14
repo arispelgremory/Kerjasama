@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.*
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.gremoryyx.kerjasama.repository.CourseRepository
+import com.gremoryyx.kerjasama.repository.UserRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val ARG_COURSE_DATA = "courseData"
 private var courseData = CourseData()
@@ -20,6 +23,7 @@ class CourseDetailFragment : Fragment() {
 
     private lateinit var db: FirebaseFirestore
     var courseRepo = CourseRepository()
+    var userRepo = UserRepository()
     var currentCourse = CourseData()
 
     override fun onCreateView(
@@ -51,6 +55,48 @@ class CourseDetailFragment : Fragment() {
             val fragmentManager = requireActivity().supportFragmentManager
             fragmentManager.popBackStack()
         }
+
+        val applyButton = getView()?.findViewById<Button>(R.id.courseDetailApplyBtn)
+        applyButton?.setOnClickListener {
+            applyCourse(data)
+
+        }
+
+    }
+
+    fun applyCourse(courseData: CourseData?) {
+        db = FirebaseFirestore.getInstance()
+        val regCourseRef = db.collection("Registered Course")
+        var courseDoc = ""
+        // I want to compare the course name and description
+        val currCourseName = courseData?.courseName.toString()
+        val currCourseDesc = courseData?.courseDescription.toString()
+        CoroutineScope(Dispatchers.IO).launch {
+            courseRepo.validateDocument(currCourseName, currCourseDesc)
+            if (courseData != null) {
+                courseDoc = withContext(Dispatchers.IO) {
+                    courseRepo.validateDocument(courseData.courseName, courseData.courseDescription)
+
+                }
+            }
+            val currUserRef = userRepo.getUserRef().path
+            Log.d("APPLY BUTTON", "User: $currUserRef")
+
+            if (courseDoc != "" && currUserRef != ""){
+                val docFormat_courseDoc: DocumentReference = db.document(courseDoc)
+                val docFomat_currUserRef: DocumentReference = db.document(currUserRef)
+                //ADD DATA TO REGISTERED JOB
+                regCourseRef.add(hashMapOf(
+                    "course" to docFormat_courseDoc,
+                    "lectures_watched" to 1,
+                    "user" to docFomat_currUserRef
+                ))
+            }
+
+
+
+        }
+
 
     }
 
