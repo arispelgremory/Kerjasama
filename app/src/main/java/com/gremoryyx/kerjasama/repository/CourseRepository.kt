@@ -128,6 +128,9 @@ class CourseRepository {
                         //If the job is already registered, then I don't need add into the job list
                         continuation.resume(courseID)
                     }
+
+                    Log.d("CourseID to Check", "${checkCourseID}")
+                    Log.d("CourseID Registered", "${courseID}")
                 }
                 Log.d("WAITING THE FILTERING CHECKING REGISTERED COURSE", "${doc.id}")
             }
