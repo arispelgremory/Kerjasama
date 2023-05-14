@@ -78,6 +78,18 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
         } else {
             Toast.makeText(context, "Login First", Toast.LENGTH_LONG).show()
         }
+
+        courseRegisteredListAdapter.setOnCardViewClickListener { courseData ->
+            val watchLectureFragment = CourseWatchLectureFragment()
+            var args = Bundle()
+            args.putParcelable("courseData", courseData)
+            watchLectureFragment.arguments = args
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout, watchLectureFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
         return view
     }
 

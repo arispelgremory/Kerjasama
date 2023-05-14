@@ -86,18 +86,18 @@ class CourseRepository {
                             for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
                                 courseData.itemsToLearn.add(itemsToLearnData)
                             }
-//
-//                            courseData.lectureVideos.clear()
-//                            var lectureVideos = document.data["lecture_videos"]
-//                            for (lectureVideosData in lectureVideos as ArrayList<MediaStore.Video>) {
-//                                courseData.lectureVideos.add(lectureVideosData)
-//                            }
-//
-//                            courseData.courseMaterials.clear()
-//                            var courseMaterials = document.data["course_materials"]
-//                            for (courseMaterialsData in courseMaterials as ArrayList<MediaStore.Files>) {
-//                                courseData.courseMaterials.add(courseMaterialsData)
-//                            }
+
+                            courseData.lectureVideos.clear()
+                            var lectureVideos = document.data["lecture_videos"]
+                            for (lectureVideosData in lectureVideos as ArrayList<String>) {
+                                courseData.lectureVideos.add(lectureVideosData)
+                            }
+
+                            courseData.lectureName.clear()
+                            var lectureName = document.data["lecture_name"]
+                            for (lecturenameData in lectureName as ArrayList<String>) {
+                                courseData.lectureName.add(lecturenameData)
+                            }
                             filteredCourseArrayList.add(courseData)
                             Log.d("COURSE DATA", "${document.id} => ${document.data}")
                         }

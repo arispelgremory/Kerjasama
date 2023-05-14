@@ -17,7 +17,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 private const val ARG_COURSE_DATA = "courseData"
-private var courseData = CourseData()
 
 class CourseDetailFragment : Fragment() {
 
@@ -46,20 +45,26 @@ class CourseDetailFragment : Fragment() {
 
         val backButton = getView()?.findViewById<ImageButton>(R.id.courseDetailBackBtn)
         backButton?.setOnClickListener {
-//            val courseFragment = CourseFragment()
-//            requireActivity().supportFragmentManager.beginTransaction()
-//                .replace(R.id.wholeCourseDetailLayout, courseFragment)
-//                .addToBackStack(null)
-//                .commit()
             val courseFragment = CourseFragment()
-            val fragmentManager = requireActivity().supportFragmentManager
-            fragmentManager.popBackStack()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, courseFragment)
+                .addToBackStack(null)
+                .commit()
+
+//            val fragmentManager = requireActivity().supportFragmentManager
+//            fragmentManager.popBackStack()
         }
 
         val applyButton = getView()?.findViewById<Button>(R.id.courseDetailApplyBtn)
         applyButton?.setOnClickListener {
             applyCourse(data)
-
+            val courseFragment = CourseFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, courseFragment)
+                .addToBackStack(null)
+                .commit()
+//            val fragmentManager = requireActivity().supportFragmentManager
+//            fragmentManager.popBackStack()
         }
 
     }

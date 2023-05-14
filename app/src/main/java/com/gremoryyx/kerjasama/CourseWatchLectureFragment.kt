@@ -2,6 +2,7 @@ package com.gremoryyx.kerjasama
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 
 private const val ARG_COURSE_DATA = "courseData"
-private var courseData = CourseData()
 
 class CourseWatchLectureFragment : Fragment() {
     private lateinit var videoListRecyclerView: RecyclerView
@@ -25,6 +25,7 @@ class CourseWatchLectureFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val data = arguments?.getParcelable<CourseData>(ARG_COURSE_DATA)
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_course_watch_lecture, container, false)
 
@@ -32,8 +33,10 @@ class CourseWatchLectureFragment : Fragment() {
         videoListRecyclerView.layoutManager = LinearLayoutManager(context)
         videoListRecyclerView.setHasFixedSize(true)
 
+        Log.d("DATA GIVEN HERE", data.toString())
+
         val videoView = view.findViewById<VideoView>(R.id.lectureVideoView)
-        var vPath = "gs://kerjasama-676767.appspot.com/Course/Videos/" + courseData.lectureVideos[0]
+        var vPath = "gs://kerjasama-676767.appspot.com/Course/Videos/" + data?.lectureVideos!![0]
         val videoUri = Uri.parse(vPath)
 
         val mediaController = MediaController(requireContext())
@@ -43,10 +46,10 @@ class CourseWatchLectureFragment : Fragment() {
         videoView.setVideoURI(videoUri)
 
         val lectures = ArrayList<CourseVideoData>()
-        for (i in 0..courseData.lectureVideos.size) {
-            vPath = "gs://kerjasama-676767.appspot.com/Course/Videos/" + courseData.lectureVideos[i]
+        for (i in 0..data?.lectureVideos!!.size) {
+            vPath = "gs://kerjasama-676767.appspot.com/Course/Videos/" + data?.lectureVideos!![i]
             val videoUri = Uri.parse(vPath)
-            lectures.add(CourseVideoData(videoUri, courseData.lectureName[i]))
+            lectures.add(CourseVideoData(videoUri, data?.lectureName!![i]))
         }
 
         videoListRecyclerView.adapter = courseWatchLectureAdapter
