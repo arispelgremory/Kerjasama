@@ -18,7 +18,6 @@ class CourseRegisteredListAdapter (private val courseRegisteredList: ArrayList<C
         }
 
     fun setCourseRegisteredList(newCourseRegisteredList: ArrayList<CourseData>) {
-        Log.d("ADAPTER!!!!!!", "PASSING NEW LIST: $newCourseRegisteredList")
         courseRegisteredList.clear()
         courseRegisteredList.addAll(newCourseRegisteredList)
     }

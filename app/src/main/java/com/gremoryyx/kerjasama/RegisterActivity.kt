@@ -267,10 +267,8 @@ class RegisterActivity : AppCompatActivity(),
             }.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val downloadUri = task.result
-                    Log.d("Register msg!!!!!!!!!!!!", "Image uploaded successfully: $downloadUri")
 
                     userData.putString("user_image", userData.getString("phone_number"))
-                    Log.d("Assign phonenumber to user_image", "${userData.getString("user_image")}")
                     continuation.resumeWith(Result.success(Unit))
                 } else {
                     // Handle failures
@@ -288,15 +286,12 @@ class RegisterActivity : AppCompatActivity(),
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d("Register msg", "createUserWithEmail:success")
                     task.result?.user?.let {
                         val newUser = UserData()
                         CoroutineScope(Dispatchers.Main).launch {
                             uploadImageToStorage(Uri.parse(userData.getString("user_image")))
 
                             newUser.user_image = userData.getString("user_image")!!
-                            Log.d("After passed image@@@@@", "${newUser.user_image}")
                             newUser.name = userData.getString("name")!!
                             newUser.email = userData.getString("email")!!
                             newUser.gender = userData.getString("gender")!!
@@ -304,8 +299,6 @@ class RegisterActivity : AppCompatActivity(),
                             newUser.ic_number = userData.getString("ic_number")!!
                             newUser.phone_number = "0"+userData.getString("phone_number")!!
                             newUser.highest_qualifications = userData.getString("highest_qualifications")!!
-                            Log.d("User GET REGISTERDATA#####", "${newUser}")
-                            Log.d("User ID#####", "${it.uid}")
                             db.collection("User").document("${it.uid}").set(newUser)
                                 .addOnSuccessListener {
                                     Log.d("User", "User added to database")
@@ -321,7 +314,6 @@ class RegisterActivity : AppCompatActivity(),
                     }
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w("Register msg", "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
                         baseContext,
                         "Authentication failed.",

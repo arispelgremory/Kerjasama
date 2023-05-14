@@ -61,7 +61,6 @@ class CourseWatchLectureFragment : Fragment() {
         }
         displayVideoDetails(data, view, 0)
         playCourseVideo(data, view,videoView, storageRef, 0)
-        Log.d("Here comes Lecture", lectures.toString())
 
         courseWatchLectureAdapter = CourseWatchLectureAdapter(lectures)
         videoListRecyclerView.adapter = courseWatchLectureAdapter
@@ -96,7 +95,6 @@ class CourseWatchLectureFragment : Fragment() {
         var courseVideoRef = storageRef.child("Course/Videos/" + data?.lectureVideos!![index] + ".mp4")
         val localTempFile = File.createTempFile("Videos", "mp4")
         courseVideoRef.getFile(localTempFile).addOnSuccessListener {
-            Log.d("Success", "Video downloaded")
             // File downloaded successfully, set the local file path as the video source for the VideoView
             val videoUri = Uri.fromFile(localTempFile)
             videoView.setVideoURI(videoUri)
@@ -109,8 +107,6 @@ class CourseWatchLectureFragment : Fragment() {
                 val videoWatched = db.collection("Course").document()
             }
 
-        }.addOnFailureListener {
-            Log.d("Failed", "Video failed to download")
         }
     }
 

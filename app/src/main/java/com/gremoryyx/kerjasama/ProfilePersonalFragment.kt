@@ -48,7 +48,6 @@ class ProfilePersonalFragment : Fragment() {
         // Save profile picture on click listener
         val getPhoto = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let { selectedUri ->
-                Log.d("ProfilePersonalFragment", "Image URI: $selectedUri")
                 CoroutineScope(Dispatchers.IO).launch {
                     saveProfilePicture(selectedUri)
 
@@ -93,7 +92,6 @@ class ProfilePersonalFragment : Fragment() {
     private suspend fun saveProfilePicture(userImageUri: Uri):Unit = suspendCoroutine{ continuation->
         val storageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("User")
         val userImageRef = storageRef.child(userData.user_image)
-        Log.d("img msg!!!!!!!!!!!!", "Image Ref: $userImageRef")
         val uploadTask = userImageRef.putFile(userImageUri)
 
         // Get the URL of the uploaded image file
@@ -107,7 +105,6 @@ class ProfilePersonalFragment : Fragment() {
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val downloadUri = task.result
-                Log.d("Updated img msg!!!!!!!!!!!!", "Image uploaded successfully: $downloadUri")
                 continuation.resumeWith(Result.success(Unit))
             } else {
                 // Handle failures
@@ -128,16 +125,12 @@ class ProfilePersonalFragment : Fragment() {
                 CoroutineScope(Dispatchers.Main).launch {
                     try{
                         val bitmap = userRepo.getImageFile(userData.user_image)
-                        Log.d("After getimagefile##############!!!!!!!!!!", "$bitmap")
                         if (bitmap != Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)) {
-                            Log.d("ProfilePersonalFragment!!!!!!!!!!", "Bitmap is not null")
                             getView()?.findViewById<ImageView>(R.id.profile_picture)
                                 ?.setImageBitmap(bitmap)
-                        } else {
-                            Log.d("ProfilePersonalFragment!!!!!!!!!!", "Bitmap is null")
                         }
                     }catch (e: Exception) {
-                        Log.d("ProfilePersonalFragment NEVER UPLOAD IMAGE!!!!!!!!!!", "Exception: $e")
+
                     }
 
                     getView()?.findViewById<TextView>(R.id.profile_username)?.text = userData.name

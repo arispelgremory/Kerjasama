@@ -99,8 +99,6 @@ class ProfileAccountFragment : Fragment() {
                 }
 
             }else{
-                Log.d("newPassword!!!","$newPassword")
-                Log.d("confirmPassword!!!","$confirmPassword")
                 // Display error message
                 Toast.makeText(context, "Password not match!", Toast.LENGTH_LONG).show()
             }

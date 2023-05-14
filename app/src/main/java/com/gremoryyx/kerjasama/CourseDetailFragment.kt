@@ -48,8 +48,6 @@ class CourseDetailFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
 
-//            val fragmentManager = requireActivity().supportFragmentManager
-//            fragmentManager.popBackStack()
         }
 
         val applyButton = getView()?.findViewById<Button>(R.id.courseDetailApplyBtn)
@@ -60,8 +58,6 @@ class CourseDetailFragment : Fragment() {
                 .replace(R.id.frame_layout, courseFragment)
                 .addToBackStack(null)
                 .commit()
-//            val fragmentManager = requireActivity().supportFragmentManager
-//            fragmentManager.popBackStack()
         }
 
     }
@@ -82,7 +78,6 @@ class CourseDetailFragment : Fragment() {
                 }
             }
             val currUserRef = userRepo.getUserRef().path
-            Log.d("APPLY BUTTON", "User: $currUserRef")
 
             if (courseDoc != "" && currUserRef != ""){
                 val docFormat_courseDoc: DocumentReference = db.document(courseDoc)

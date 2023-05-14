@@ -93,7 +93,6 @@ class CourseListFragment : Fragment(), SearchListener {
         courseRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 CoroutineScope(Dispatchers.IO).async {
-                    Log.d("FILTERING", "@@@@@@@@@@@@@@@@@@@@@@")
                     val filteringJob = async {
                         for (document in task.result!!) {
                             // To check if the job is already registered
@@ -101,10 +100,8 @@ class CourseListFragment : Fragment(), SearchListener {
                             // And then get the user document path reference & registered job document path reference
                             CoroutineScope(Dispatchers.IO).async{
                                 try {
-                                    Log.d("FILTERING", "${document.id}")
                                     CourseRegisteredList.add(courseRepo.checkCourseRegistered(document.id))
                                 }catch (e: Exception){
-                                    Log.d("ERROR", "Error getting documents: ", e)
                                 }
                             }
                         }
@@ -112,8 +109,6 @@ class CourseListFragment : Fragment(), SearchListener {
                     filteringJob.await()
 
                     CoroutineScope(Dispatchers.IO).async {
-                        Log.d("AFTER COURSE FILTERING", "###################")
-                        Log.d("AFTER COURSE FILTERING", "${CourseRegisteredList}")
                         // To filter the registered job, I need to pass in the registered job id to the function
                         // So that I could compare it and filter out add it into the array list.
                         val deferredJobData = async{
@@ -123,7 +118,6 @@ class CourseListFragment : Fragment(), SearchListener {
                         courseListArrayList = deferredJobData.await()
 
                         activity?.runOnUiThread {
-                            Log.d("AFTER REG COURSE ADDED", "$courseListArrayList")
                             courseListAdapter.setCourseList(courseListArrayList)
                             courseListAdapter.notifyDataSetChanged()
                         }
@@ -133,7 +127,6 @@ class CourseListFragment : Fragment(), SearchListener {
 
             } else {
                 // Handle error getting documents
-                Toast.makeText(requireContext(), "Error getting documents.", Toast.LENGTH_SHORT).show()
             }
         }
     }

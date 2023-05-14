@@ -9,7 +9,6 @@ class LoginViewModelFactory(private val sharedPreferences: SharedPreferences) :
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        Log.d("LoginViewModelFactory", "create: ${sharedPreferences.getBoolean("isLoggedIn", false)}")
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(sharedPreferences) as T
         }

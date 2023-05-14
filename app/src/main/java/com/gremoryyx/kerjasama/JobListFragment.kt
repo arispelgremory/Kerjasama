@@ -169,7 +169,7 @@ class JobListFragment : Fragment(), SearchListener {
                                 try {
                                     RegisteredJobList.add(jobRepo.checkJobRegistered(document.id))
                                 }catch (e: Exception){
-                                    Log.d("ERROR", "Error getting documents: ", e)
+
                                 }
                             }
                         }
@@ -194,7 +194,7 @@ class JobListFragment : Fragment(), SearchListener {
 
             } else {
                 // Handle error getting documents
-                Toast.makeText(requireContext(), "Error getting documents.", Toast.LENGTH_SHORT).show()
+
             }
         }
     }

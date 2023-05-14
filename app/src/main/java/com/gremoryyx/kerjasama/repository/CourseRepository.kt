@@ -31,7 +31,6 @@ class CourseRepository {
         courseRef.get().addOnSuccessListener {
             for (document in it){
                 if (document.data["course_name"].toString() == courseName){
-                    Log.d("COURSE NAME", "getCourseRefByCourseName: ${document.id}")
                     currentCourseRef = document.id
                     break
                 }
@@ -63,13 +62,10 @@ class CourseRepository {
     fun getImageFile(courseImage: DocumentReference): Task<Bitmap> {
         val courseStorageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("Course")
         val courseImgRef = courseStorageRef.child("${courseImage.id}")
-        Log.d("IMAGE########", "getImageFile: ${courseImgRef}")
         return courseImgRef.getBytes(Long.MAX_VALUE)
             .continueWithTask { task ->
                 if (!task.isSuccessful) {
                     throw task.exception!!
-                } else {
-                    Log.d("Get Image Success!!!", "getImageFile: ${task.result}")
                 }
                 val data = task.result
                 val bitmap = android.graphics.BitmapFactory.decodeByteArray(data, 0, data!!.size)
@@ -81,13 +77,11 @@ class CourseRepository {
     suspend fun getCourseData(regCourseID: ArrayList<String>): ArrayList<CourseData> = suspendCoroutine { continuation ->
         val courseRef = db.collection("Course")
         val filteredCourseArrayList = ArrayList<CourseData>()
-        Log.d("GETTING COURSE DATA", "TESTING")
         courseRef.get().addOnSuccessListener { documents ->
             CoroutineScope(Dispatchers.IO).async {
                 val displayRegJob = async {
                     for (document in documents) {
                         if (!regCourseID.contains(document.id)) {
-                            Log.d("ADD THE DATA INTO ARRAY LIST: ", "ADDING")
                             val courseImage = document.data["course_image"] as DocumentReference
                             // Suspend the current coroutine and wait for the image retrieval
                             val bitmap = getImageFile(courseImage).await()
@@ -132,7 +126,6 @@ class CourseRepository {
                             }
 
                             filteredCourseArrayList.add(courseData)
-                            Log.d("COURSE DATA", "${document.id} => ${document.data}")
                         }
                     }
                     continuation.resume(filteredCourseArrayList)
@@ -141,7 +134,6 @@ class CourseRepository {
             }
 
         }.addOnFailureListener { exception ->
-            Log.d("COURSE DATA", "Error getting documents: ", exception)
             // Resume the continuation with an empty list or handle the failure case
             continuation.resume(ArrayList())
         }
@@ -159,11 +151,9 @@ class CourseRepository {
 
                     if (courseID == checkCourseID){
                         //If the job is already registered, then I don't need add into the job list
-                        Log.d("CHECKING REGISTERED COURSE", "$courseID Already Registered")
                         continuation.resume(courseID)
                     }
                 }
-                Log.d("WAITING THE FILTERING CHECKING REGISTERED COURSE", "${doc.id}")
             }
         }.addOnFailureListener { exception ->
             continuation.resumeWithException(exception)
@@ -175,13 +165,11 @@ class CourseRepository {
         db.collection("Course").get().addOnSuccessListener {
             for (doc in it){
                 if (doc.data["course_name"].toString() == courseName && doc.data["course_description"].toString() == courseDesc){
-                    Log.d("VALIDATE DOCUMENT", "validateDocument: ${doc.reference.path}")
                     courseRef = doc.reference.path
                 }
             }
             continuation.resume(courseRef)
         }.addOnFailureListener{
-            Log.d("VALIDATE DOCUMENT", "validate Course Failed: ${it}")
             continuation.resumeWithException(it)
         }
     }
@@ -253,7 +241,6 @@ class CourseRepository {
                     waitingData.await()
 
                     temp.add(regCourseData)
-                    Log.d("getCourseRegisteredData DATA", "After GET DATA: $regCourseData")
                     continuation.resume(temp)
                 }
 

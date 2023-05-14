@@ -29,17 +29,6 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
     var courseRepo = CourseRepository()
     var userRepo = UserRepository()
 
-//    override fun onResume() {
-//        super.onResume()
-//        if (loginRepo.validateUser()) {
-//            CoroutineScope(Dispatchers.IO).launch {
-//                courseRegisteredLoadCourses()
-//            }
-//        } else {
-//            Toast.makeText(context, "Login First", Toast.LENGTH_LONG).show()
-//        }
-//    }
-
     fun updateRegisteredCourseList(newList: ArrayList<CourseData>) {
         courseRegisteredArrayList.clear()
         courseRegisteredListAdapter.setCourseRegisteredList(newList)
@@ -96,7 +85,6 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
     }
 
     private suspend fun courseRegisteredLoadCourses() {
-        Log.d("CourseRegistered", "courseRegisteredLoadCourses: LOADING!!!!!!!")
         db = FirebaseFirestore.getInstance()
         var regCourseData = ArrayList<String>()
         val reg_courseRef = db.collection("Registered Course")
@@ -106,13 +94,7 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
             if (Task.isSuccessful) {
                 for (document in Task.result!!) {
                     if (document.data["user"] == userRepo.getUserRef()) {
-                        Log.d("courseRegisteredLoadCourses", "YES it is the same")
                         val from_courseRef = document.data["course"] as DocumentReference
-
-                        Log.d(
-                            "courseRegisteredLoadCourses",
-                            "Get from course: ${courseRef.document(from_courseRef.id).path}"
-                        )
                         CoroutineScope(Dispatchers.IO).launch {
                             val retrieveRegCourse = async {
                                 courseRepo.getCourseRegisteredData(
@@ -120,10 +102,7 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
                                     (document.data["lectures_watched"] as Long).toInt()
                                 )
                             }
-                            Log.d("courseRegisteredLoadCourses", "retrieved data!!!: $retrieveRegCourse")
                             courseRegisteredArrayList = retrieveRegCourse.await()
-
-                            Log.d("Retrieved Data Complete", "courseRegisteredLoadCourses: $courseRegisteredArrayList")
 
                             activity?.runOnUiThread {
                                 courseRegisteredListAdapter.setCourseRegisteredList(
@@ -139,8 +118,6 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
 //                            }
                         }
                     }
-
-                    Log.d("This is THE END", "courseRegisteredLoadCourses: END")
                 }
             }
         }

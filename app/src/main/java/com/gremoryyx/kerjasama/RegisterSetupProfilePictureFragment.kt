@@ -24,7 +24,6 @@ class RegisterSetupProfilePictureFragment : Fragment() {
     private val getPhoto = registerForActivityResult(ActivityResultContracts.GetContent()){ uri ->
         if(uri != null){
             imageUri = uri
-            Log.d("RegisterSetupProfilePictureFragment", "Image URI: $uri")
             // Set the image view to the selected image
             requireView().findViewById<ImageView>(R.id.register_profile_picture).setImageURI(uri)
         }
@@ -53,7 +52,6 @@ class RegisterSetupProfilePictureFragment : Fragment() {
      public fun sendDataToActivity(): Bundle {
         val data = Bundle()
         val userImage: Uri = imageUri
-         Log.d("Send Data To Activity From Profile setup##########", "Image URI: $userImage")
         data.putString("user_image", userImage.toString())
 
         return data

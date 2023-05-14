@@ -140,14 +140,14 @@ class RegisteredJobFragment : Fragment(), SearchListener {
                                         registeredJobAdapter.notifyDataSetChanged()
                                     }
                                 }else{
-                                    Log.d("Job!!!!", "Error getting documents: ", task.exception)
+
                                 }
                             }
                         }
                     }
                 }
             }else{
-                Log.d("User!!!!", "Error getting documents: ", task.exception)
+
             }
         }
 
