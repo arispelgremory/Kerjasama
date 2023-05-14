@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.MediaController
 import android.widget.TextView
 import android.widget.VideoView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +39,7 @@ class CourseWatchLectureFragment : Fragment() {
         videoListRecyclerView.setHasFixedSize(true)
 
         Log.d("DATA GIVEN HERE", data.toString())
+        Log.d("THIS IS FROM LECTUREFRAG", data?.lectureName.toString())
 
         val storageRef = FirebaseStorage.getInstance().reference
         val videoView = view.findViewById<VideoView>(R.id.lectureVideoView)
@@ -61,6 +64,15 @@ class CourseWatchLectureFragment : Fragment() {
             }
         }
 
+        val backButton = view.findViewById<ImageButton>(R.id.lectureBackButton)
+        backButton?.setOnClickListener {
+            val courseFragment = CourseFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, courseFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
         return view
     }
 
@@ -78,7 +90,15 @@ class CourseWatchLectureFragment : Fragment() {
             // File downloaded successfully, set the local file path as the video source for the VideoView
             val videoUri = Uri.fromFile(localTempFile)
             videoView.setVideoURI(videoUri)
-            videoView.start()
+
+            val mediaController = MediaController(requireContext())
+            mediaController.setAnchorView(videoView)
+            videoView.setMediaController(mediaController)
+
+            videoView.setOnCompletionListener {
+                val videoWatched = db.collection("Course").document()
+            }
+
         }.addOnFailureListener {
             Log.d("Failed", "Video failed to download")
         }
