@@ -1,5 +1,6 @@
 package com.gremoryyx.kerjasama
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +18,10 @@ class CourseRegisteredListAdapter (private val courseRegisteredList: ArrayList<C
         }
 
     fun setCourseRegisteredList(newCourseRegisteredList: ArrayList<CourseData>) {
-            courseRegisteredList.clear()
-            courseRegisteredList.addAll(newCourseRegisteredList)
-        }
+        Log.d("ADAPTER!!!!!!", "PASSING NEW LIST: $newCourseRegisteredList")
+        courseRegisteredList.clear()
+        courseRegisteredList.addAll(newCourseRegisteredList)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseRegisteredViewHolder {
             val itemView = LayoutInflater.from(parent.context).inflate(R.layout.course_registered_list_item, parent, false)
@@ -36,8 +38,8 @@ class CourseRegisteredListAdapter (private val courseRegisteredList: ArrayList<C
         }
 
     inner class CourseRegisteredViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val courseCard: CardView = itemView.findViewById(R.id.courseCardView)
-        private val courseRegisteredImageView: ImageView = itemView.findViewById(R.id.courseRegisteredCardView)
+        val courseCard: CardView = itemView.findViewById(R.id.courseRegisteredCardView)
+        private val courseRegisteredImageView: ImageView = itemView.findViewById(R.id.courseRegisteredImageView)
         private val courseRegisteredName: TextView = itemView.findViewById(R.id.courseNameRegisteredTextView)
         private val instructorRegisteredName: TextView = itemView.findViewById(R.id.instructorNameRegisteredTextView)
         private val progressBar: ProgressBar = itemView.findViewById(R.id.courseProgressBar)
@@ -47,14 +49,15 @@ class CourseRegisteredListAdapter (private val courseRegisteredList: ArrayList<C
         private var currentCourse: CourseData? = null
 
         fun bind(course: CourseData) {
+            Log.d("ADAPTER VIEWHOLDER!!!!!", "BINDING COURSE: $course")
             if (currentCourse == null || currentCourse != course) {
                 courseRegisteredImageView.setImageBitmap(course.courseImage)
                 courseRegisteredName.text = course.courseName
                 instructorRegisteredName.text = course.instructorName
 
-                val numberOfLectures = course.lectureVideos.size
+                val numberOfLectures = 5
                 var numberOfLecturesWatched = course.lecturesWatched.toInt()
-                var progress = (numberOfLecturesWatched / numberOfLectures).toFloat()
+                var progress = (numberOfLecturesWatched.toFloat() / numberOfLectures.toFloat())
                 progress *= 100
 
                 progressBar.progress = progress.toInt()
@@ -62,7 +65,7 @@ class CourseRegisteredListAdapter (private val courseRegisteredList: ArrayList<C
                 if (progress.toInt() == 100)
                     courseProgressStatus.text = "Completed"
                 else
-                    courseProgressStatus.text = progress.toString() + "% Completed"
+                    courseProgressStatus.text = (progress.toInt()).toString() + "% Completed"
 
                 courseCard.setOnClickListener {
                     onCardViewClickListener?.let { click ->

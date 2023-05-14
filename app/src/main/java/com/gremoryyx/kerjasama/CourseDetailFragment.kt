@@ -88,7 +88,7 @@ class CourseDetailFragment : Fragment() {
                 //ADD DATA TO REGISTERED JOB
                 regCourseRef.add(hashMapOf(
                     "course" to docFormat_courseDoc,
-                    "lectures_watched" to 1,
+                    "lectures_watched" to 0,
                     "user" to docFomat_currUserRef
                 ))
             }
