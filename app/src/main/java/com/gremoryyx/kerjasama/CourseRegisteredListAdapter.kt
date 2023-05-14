@@ -54,14 +54,14 @@ class CourseRegisteredListAdapter (private val courseRegisteredList: ArrayList<C
                 courseRegisteredName.text = course.courseName
                 instructorRegisteredName.text = course.instructorName
 
-                val numberOfLectures = 5
+                val numberOfLectures = course.lectureVideos.size
                 var numberOfLecturesWatched = course.lecturesWatched.toInt()
                 var progress = (numberOfLecturesWatched.toFloat() / numberOfLectures.toFloat())
                 progress *= 100
 
                 progressBar.progress = progress.toInt()
 
-                if (progress.toInt() == 100)
+                if (progress.toInt() >= 100)
                     courseProgressStatus.text = "Completed"
                 else
                     courseProgressStatus.text = (progress.toInt()).toString() + "% Completed"

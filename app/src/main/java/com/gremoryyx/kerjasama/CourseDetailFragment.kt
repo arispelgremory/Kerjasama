@@ -94,12 +94,7 @@ class CourseDetailFragment : Fragment() {
                     "user" to docFomat_currUserRef
                 ))
             }
-
-
-
         }
-
-
     }
 
     fun readCourseDetails(data: CourseData?) {
@@ -107,6 +102,7 @@ class CourseDetailFragment : Fragment() {
         val courseName = getView()?.findViewById<TextView>(R.id.courseDetailName)
         val courseDesc = getView()?.findViewById<TextView>(R.id.courseDetailDescription)
         val courseRate = getView()?.findViewById<TextView>(R.id.courseDetailRating)
+        val courseRatingBar = getView()?.findViewById<RatingBar>(R.id.courseDetailRatingBar)
         val courseUserRate = getView()?.findViewById<TextView>(R.id.courseDetailUserRated)
         val courseInstructor = getView()?.findViewById<TextView>(R.id.courseDetailInstructor)
         val courseLastUpdate = getView()?.findViewById<TextView>(R.id.courseDetailLastUpdateTextView)
@@ -122,9 +118,10 @@ class CourseDetailFragment : Fragment() {
         data?.courseName?.let { courseName?.setText(it) }
         data?.courseDescription?.let { courseDesc?.setText(it) }
         data?.ratingNumber?.let { courseRate?.setText(it.toString()) }
-        data?.usersRated?.let { courseUserRate?.setText(it.toString()) }
-        data?.instructorName?.let { courseInstructor?.setText(it) }
-        data?.lastUpdate?.let { courseLastUpdate?.setText(it) }
+        data?.ratingNumber.let { courseRatingBar?.rating = it!!.toFloat()}
+        data?.usersRated?.let { courseUserRate?.setText("Total " + it.toString() + " Users Rated") }
+        data?.instructorName?.let { courseInstructor?.setText("Offered by " + it) }
+        data?.lastUpdate?.let { courseLastUpdate?.setText("Last Updated " + it) }
 
 
         val LanguageList = data?.language!!
