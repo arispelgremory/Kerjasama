@@ -24,6 +24,7 @@ class ProfilePersonalFragment : Fragment() {
     private val userRepo = UserRepository()
     private var userData = UserData()
 
+
     private val getPhoto = registerForActivityResult(ActivityResultContracts.GetContent()){ uri ->
         if(uri != null){
             requireView().findViewById<ImageView>(R.id.profile_picture).setImageURI(uri)
