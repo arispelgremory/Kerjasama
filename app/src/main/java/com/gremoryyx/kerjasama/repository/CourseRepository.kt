@@ -95,9 +95,10 @@ class CourseRepository {
 
                             courseData.lectureName.clear()
                             var lectureName = document.data["lecture_name"]
-                            for (lecturenameData in lectureName as ArrayList<String>) {
-                                courseData.lectureName.add(lecturenameData)
+                            for (lectureNameData in lectureName as ArrayList<String>) {
+                                courseData.lectureName.add(lectureNameData)
                             }
+
                             filteredCourseArrayList.add(courseData)
                             Log.d("COURSE DATA", "${document.id} => ${document.data}")
                         }
@@ -203,6 +204,18 @@ class CourseRepository {
                         var itemsToLearn = documents.data?.get("items_to_learn")
                         for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
                             regCourseData.itemsToLearn.add(itemsToLearnData)
+                        }
+
+                        regCourseData.lectureName.clear()
+                        var lectureName = documents.data?.get("lecture_name")
+                        for (lectureNameData in lectureName as ArrayList<String>) {
+                            regCourseData.lectureName.add(lectureNameData)
+                        }
+
+                        regCourseData.lectureVideos.clear()
+                        var lectureVideos = documents.data?.get("lecture_videos")
+                        for (lectureVideosData in lectureVideos as ArrayList<String>) {
+                            regCourseData.lectureVideos.add(lectureVideosData)
                         }
                     }
                     waitingData.await()

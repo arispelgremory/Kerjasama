@@ -36,22 +36,24 @@ class CourseWatchLectureFragment : Fragment() {
         Log.d("DATA GIVEN HERE", data.toString())
 
         val videoView = view.findViewById<VideoView>(R.id.lectureVideoView)
-        var vPath = "gs://kerjasama-676767.appspot.com/Course/Videos/" + data?.lectureVideos!![0]
-        val videoUri = Uri.parse(vPath)
-
-        val mediaController = MediaController(requireContext())
-        mediaController.setAnchorView(videoView)
-        videoView.setMediaController(mediaController)
-
-        videoView.setVideoURI(videoUri)
 
         val lectures = ArrayList<CourseVideoData>()
-        for (i in 0..data?.lectureVideos!!.size) {
-            vPath = "gs://kerjasama-676767.appspot.com/Course/Videos/" + data?.lectureVideos!![i]
+        for (i in 0 until data?.lectureVideos!!.size) {
+            var vPath = "gs://kerjasama-676767.appspot.com/Course/Videos/" + data?.lectureVideos!![i] + ".mp4"
             val videoUri = Uri.parse(vPath)
             lectures.add(CourseVideoData(videoUri, data?.lectureName!![i]))
         }
 
+        Log.d("Here comes Lecture", lectures.toString())
+
+        videoView.setVideoURI(lectures[0].videoURI)
+        val mediaController = MediaController(requireContext())
+        mediaController.setAnchorView(videoView)
+        videoView.setMediaController(mediaController)
+
+
+
+        courseWatchLectureAdapter = CourseWatchLectureAdapter(lectures)
         videoListRecyclerView.adapter = courseWatchLectureAdapter
 
         courseWatchLectureAdapter.setOnCardViewClickListener { index ->

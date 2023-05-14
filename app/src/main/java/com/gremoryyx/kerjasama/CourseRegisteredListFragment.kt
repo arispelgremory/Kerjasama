@@ -80,6 +80,8 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
         }
 
         courseRegisteredListAdapter.setOnCardViewClickListener { courseData ->
+            Log.d("RICKROLL", courseData.toString())
+
             val watchLectureFragment = CourseWatchLectureFragment()
             var args = Bundle()
             args.putParcelable("courseData", courseData)
@@ -120,6 +122,8 @@ class CourseRegisteredListFragment : Fragment(), SearchListener {
                             }
                             Log.d("courseRegisteredLoadCourses", "retrieved data!!!: $retrieveRegCourse")
                             courseRegisteredArrayList = retrieveRegCourse.await()
+
+                            Log.d("Retrieved Data Complete", "courseRegisteredLoadCourses: $courseRegisteredArrayList")
 
                             activity?.runOnUiThread {
                                 courseRegisteredListAdapter.setCourseRegisteredList(
