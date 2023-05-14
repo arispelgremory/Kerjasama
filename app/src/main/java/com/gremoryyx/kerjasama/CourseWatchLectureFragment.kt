@@ -1,59 +1,61 @@
 package com.gremoryyx.kerjasama
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.MediaController
+import android.widget.VideoView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_COURSE_DATA = "courseData"
+private var courseData = CourseData()
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CourseWatchLectureFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CourseWatchLectureFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var videoListRecyclerView: RecyclerView
+    private lateinit var courseWatchLectureAdapter: CourseWatchLectureAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course_watch_lecture, container, false)
+        val view = inflater.inflate(R.layout.fragment_course_watch_lecture, container, false)
+
+        videoListRecyclerView = view.findViewById(R.id.lecture_list_recycler_view)
+        videoListRecyclerView.layoutManager = LinearLayoutManager(context)
+        videoListRecyclerView.setHasFixedSize(true)
+
+        val videoView = view.findViewById<VideoView>(R.id.lectureVideoView)
+        var vPath = "gs://kerjasama-676767.appspot.com/Course/Videos/" + courseData.lectureVideos[0]
+        val videoUri = Uri.parse(vPath)
+
+        val mediaController = MediaController(requireContext())
+        mediaController.setAnchorView(videoView)
+        videoView.setMediaController(mediaController)
+
+        videoView.setVideoURI(videoUri)
+
+        val lectures = ArrayList<CourseVideoData>()
+        for (i in 0..courseData.lectureVideos.size) {
+            vPath = "gs://kerjasama-676767.appspot.com/Course/Videos/" + courseData.lectureVideos[i]
+            val videoUri = Uri.parse(vPath)
+            lectures.add(CourseVideoData(videoUri, courseData.lectureName[i]))
+        }
+
+        videoListRecyclerView.adapter = courseWatchLectureAdapter
+
+        courseWatchLectureAdapter.setOnCardViewClickListener { index ->
+            videoView.setVideoURI(lectures[index].videoURI)
+        }
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CourseWatchLectureFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CourseWatchLectureFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

@@ -1,3 +1,8 @@
 package com.gremoryyx.kerjasama
 
-data class CourseVideoData()
+import android.net.Uri
+
+data class CourseVideoData(
+    val videoURI: Uri,
+    val videoTitle: String,
+)

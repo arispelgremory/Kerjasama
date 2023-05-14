@@ -18,7 +18,7 @@ data class CourseData(
     var captions: ArrayList<String>,
     var itemsToLearn: ArrayList<String>,
     var lectureVideos: ArrayList<String>,
-    var courseMaterials: ArrayList<String>,
+    var lectureName: ArrayList<String>,
     var lecturesWatched: Number
 
 ): Parcelable
@@ -40,7 +40,7 @@ data class CourseData(
         parcel.writeList(captions)
         parcel.writeList(itemsToLearn)
         parcel.writeList(lectureVideos)
-        parcel.writeList(courseMaterials)
+        parcel.writeList(lectureName)
         parcel.writeInt(lecturesWatched.toInt())
     }
 
@@ -57,10 +57,10 @@ data class CourseData(
             val language = parcel.readArrayList(String::class.java.classLoader) as ArrayList<String>
             val captions = parcel.readArrayList(String::class.java.classLoader) as ArrayList<String>
             val itemsToLearn = parcel.readArrayList(String::class.java.classLoader) as ArrayList<String>
+            val lectureName = parcel.readArrayList(String::class.java.classLoader) as ArrayList<String>
             val lectureVideos = parcel.readArrayList(String::class.java.classLoader) as ArrayList<String>
-            val courseMaterials = parcel.readArrayList(String::class.java.classLoader) as ArrayList<String>
             val lecturesWatched = parcel.readInt()
-            return CourseData(courseImage!!, courseName!!, courseDescription!!, instructorName!!, ratingNumber, usersRated, lastUpdate!!, language, captions,itemsToLearn, lectureVideos, courseMaterials, lecturesWatched)
+            return CourseData(courseImage!!, courseName!!, courseDescription!!, instructorName!!, ratingNumber, usersRated, lastUpdate!!, language, captions,itemsToLearn, lectureVideos, lectureName, lecturesWatched)
         }
 
         override fun newArray(size: Int): Array<CourseData?> {
