@@ -16,6 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.gremoryyx.kerjasama.repository.CourseRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 private const val ARG_COURSE_DATA = "courseData"
@@ -25,6 +29,7 @@ class CourseWatchLectureFragment : Fragment() {
     private lateinit var courseWatchLectureAdapter: CourseWatchLectureAdapter
 
     private lateinit var db: FirebaseFirestore
+    val courseRepo = CourseRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +43,13 @@ class CourseWatchLectureFragment : Fragment() {
         videoListRecyclerView.layoutManager = LinearLayoutManager(context)
         videoListRecyclerView.setHasFixedSize(true)
 
-        Log.d("DATA GIVEN HERE", data.toString())
-        Log.d("THIS IS FROM LECTUREFRAG", data?.lectureName.toString())
+//        Log.d("THIS IS FROM LECTUREFRAG", data)
+        CoroutineScope(Dispatchers.IO).launch {
+            val courseDoc = courseRepo?.getCourseRefByCourseName(data?.courseName!!).toString()
+            courseRepo.updateLectureWatched(courseDoc)
+
+        }
+
 
         val storageRef = FirebaseStorage.getInstance().reference
         val videoView = view.findViewById<VideoView>(R.id.lectureVideoView)

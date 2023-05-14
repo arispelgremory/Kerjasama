@@ -3,16 +3,11 @@ package com.gremoryyx.kerjasama.repository
 import android.graphics.Bitmap
 import android.util.Log
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.gremoryyx.kerjasama.CourseData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -26,6 +21,43 @@ class CourseRepository {
 
     init {
         courseImgBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+    }
+
+    suspend fun getCourseRefByCourseName(courseName: String): String {
+        var currentCourseRef = ""
+        val deferredCourseRef = CompletableDeferred<String>()
+        db = FirebaseFirestore.getInstance()
+        courseRef = db.collection("Course")
+        courseRef.get().addOnSuccessListener {
+            for (document in it){
+                if (document.data["course_name"].toString() == courseName){
+                    Log.d("COURSE NAME", "getCourseRefByCourseName: ${document.id}")
+                    currentCourseRef = document.id
+                    break
+                }
+            }
+            deferredCourseRef.complete(currentCourseRef)
+        }
+        return deferredCourseRef.await()
+    }
+
+    suspend fun updateLectureWatched(checkCourseID: String): Boolean = suspendCoroutine { continuation ->
+        val userRepo = UserRepository()
+        val currentUserID = userRepo.getUserID()
+        val courseRegRef = db.collection("Registered Course")
+        courseRegRef.get().addOnSuccessListener {
+            for (doc in it) {
+                if ((doc.data["user"] as DocumentReference).id == currentUserID) {
+                    val courseID = (doc.data["course"] as DocumentReference).id
+
+                    if (courseID == checkCourseID) {
+                        courseRegRef.document(doc.id).update("lectures_watched", FieldValue.increment(1))
+                    }
+                }
+            }
+        }.addOnFailureListener { exception ->
+            continuation.resumeWithException(exception)
+        }
     }
 
     fun getImageFile(courseImage: DocumentReference): Task<Bitmap> {
