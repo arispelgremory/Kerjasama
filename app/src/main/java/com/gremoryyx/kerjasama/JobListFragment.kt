@@ -160,7 +160,6 @@ class JobListFragment : Fragment(), SearchListener {
         JobRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 CoroutineScope(Dispatchers.IO).async {
-                    Log.d("FILTERING", "@@@@@@@@@@@@@@@@@@@@@@")
                     val filteringJob = async {
                         for (document in task.result!!) {
                             // To check if the job is already registered
@@ -168,7 +167,6 @@ class JobListFragment : Fragment(), SearchListener {
                             // And then get the user document path reference & registered job document path reference
                             CoroutineScope(Dispatchers.IO).async{
                                 try {
-                                    Log.d("FILTERING", "${document.id}")
                                     RegisteredJobList.add(jobRepo.checkJobRegistered(document.id))
                                 }catch (e: Exception){
                                     Log.d("ERROR", "Error getting documents: ", e)
@@ -179,7 +177,6 @@ class JobListFragment : Fragment(), SearchListener {
                     filteringJob.await()
 
                     CoroutineScope(Dispatchers.IO).async {
-                        Log.d("AFTER FILTERING", "###################")
                         // To filter the registered job, I need to pass in the registered job id to the function
                         // So that I could compare it and filter out add it into the array list.
                         val deferredJobData = async{

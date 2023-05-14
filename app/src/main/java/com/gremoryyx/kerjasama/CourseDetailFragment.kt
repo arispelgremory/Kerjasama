@@ -38,9 +38,6 @@ class CourseDetailFragment : Fragment() {
 
         //Retrieve course details
         val data = arguments?.getParcelable<CourseData>(ARG_COURSE_DATA)
-        Log.d("PASSING COURSE DATA FROM LIST!!!!!!!", "onViewCreated: $data")
-        Log.d("PASSING COURSE DATA FROM LIST!!!!!!!", "Course Name: ${data?.courseName}")
-        Log.d("PASSING COURSE DATA FROM LIST!!!!!!!", "Course Image: ${data?.courseImage}")
         readCourseDetails(data)
 
         val backButton = getView()?.findViewById<ImageButton>(R.id.courseDetailBackBtn)

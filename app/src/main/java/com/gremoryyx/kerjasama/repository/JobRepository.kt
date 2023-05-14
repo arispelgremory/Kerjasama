@@ -65,7 +65,6 @@ class JobRepository {
     fun getImageFile(jobImage: String): Task<Bitmap> {
         val jobStorageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("Job")
         val jobImgRef = jobStorageRef.child("${jobImage}.jpg")
-        Log.d("IMAGE#######", "getImageFile: ${jobImgRef.toString()}")
         return jobImgRef.getBytes(Long.MAX_VALUE)
             .continueWithTask { task ->
                 if (!task.isSuccessful) {
@@ -84,18 +83,15 @@ class JobRepository {
     suspend fun getJobData(regJobID: ArrayList<String>): ArrayList<JobData> = suspendCoroutine { continuation ->
         val jobRef = db.collection("Job")
         val filteredJobArrayList = ArrayList<JobData>()
-        Log.d("GETTING JOB DATA", "TESTING")
         jobRef.get().addOnSuccessListener { documents ->
             CoroutineScope(Dispatchers.IO).async {
                 val displayRegJob = async {
                     for (document in documents) {
                         if (!regJobID.contains(document.id)) {
-                            Log.d("ADD THE DATA INTO ARRAY LIST: ", "ADDING")
                             val jobImage = (document.data["job_image"]).toString()
                             // Suspend the current coroutine and wait for the image retrieval
                             val bitmap = getImageFile(jobImage).await()
                             val jobData = JobData()
-                            Log.d("JOB IMAGE", "getJobData BITMAP: ${bitmap}")
                             jobData.jobImage = bitmap
 
                             jobData.jobName = (document.data["job_name"]).toString()
@@ -148,7 +144,6 @@ class JobRepository {
                         continuation.resume(jobID)
                     }
                 }
-                Log.d("WAITING THE FILTERING", "${doc.id}")
             }
         }.addOnFailureListener { exception ->
             continuation.resumeWithException(exception)

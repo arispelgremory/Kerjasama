@@ -46,7 +46,6 @@ class UserRepository {
             val userStorageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("User")
             val userImgRef = userStorageRef.child(userImage)
             var bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-            Log.d("IMAGE#######", "getImageFile: $userImgRef")
             userImgRef.getBytes(Long.MAX_VALUE)
                 .addOnSuccessListener { data ->
                     bitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
