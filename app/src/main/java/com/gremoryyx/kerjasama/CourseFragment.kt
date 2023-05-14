@@ -26,7 +26,7 @@ class CourseFragment : Fragment() {
 
         val fragment = listOf(
             CourseListFragment(),
-            CourseRegisteredFragment()
+            CourseRegisteredListFragment()
         )
 
         val tabLayout: TabLayout = view.findViewById(R.id.courseTabLayout)

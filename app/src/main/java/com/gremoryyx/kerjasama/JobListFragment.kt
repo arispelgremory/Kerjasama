@@ -1,6 +1,5 @@
 package com.gremoryyx.kerjasama
 
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -25,7 +24,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import org.w3c.dom.Document
 
-class JobListFragment : Fragment(), JobSearchListener {
+class JobListFragment : Fragment(), SearchListener {
 
     private lateinit var jobListRecyclerView: RecyclerView
     private lateinit var jobListArrayList: ArrayList<JobData>

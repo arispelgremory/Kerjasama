@@ -10,7 +10,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.gremoryyx.kerjasama.CourseData
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -179,4 +182,58 @@ class CourseRepository {
 //
 
 
+
+//    suspend fun validateDocument(collection:CollectionReference, courseRefPath: DocumentReference): Boolean = suspendCoroutine { continuation ->
+//        collection.get().addOnSuccessListener {
+//            if (collection.document("${courseRefPath.id}") != null){
+//                continuation.resume(true)
+//            } else {
+//                continuation.resume(false)
+//            }
+//        }.addOnFailureListener {
+//            Log.d("${it}", "FAILED: ${it.message}")
+//            continuation.resumeWithException(it)
+//        }
+//    }
+
+    suspend fun getCourseRegisteredData(doc: DocumentReference): CourseData = suspendCoroutine { continuation ->
+        CoroutineScope(Dispatchers.IO).launch {
+            courseRef = db.collection("Course")
+            courseRef.document("${doc.id}").get().addOnSuccessListener { documents ->
+                var regCourseData = CourseData()
+                val courseImage = documents.data?.get("course_image") as DocumentReference
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val bitmap = getImageFile(courseImage).await()
+                    // Suspend the current coroutine and wait for the image retrieval
+                    regCourseData.courseImage = bitmap
+
+                    regCourseData.courseName = documents.data?.get("course_name").toString()
+                    regCourseData.courseDescription = documents.data?.get("course_description").toString()
+                    regCourseData.instructorName = documents.data?.get("instructor_name").toString()
+                    regCourseData.ratingNumber = documents.data?.get("rating_number").toString().toFloat()
+                    regCourseData.usersRated = documents.data?.get("user_rated").toString().toInt()
+                    regCourseData.lastUpdate = documents.data?.get("last_update").toString()
+
+                    regCourseData.language.clear()
+                    var language = documents.data?.get("language")
+                    for (languageData in language as ArrayList<String>) {
+                        regCourseData.language.add(languageData)
+                    }
+
+                    regCourseData.captions.clear()
+                    var captions = documents.data?.get("captions")
+                    for (captionsData in captions as ArrayList<String>) {
+                        regCourseData.captions.add(captionsData)
+                    }
+
+                    regCourseData.itemsToLearn.clear()
+                    var itemsToLearn = documents.data?.get("items_to_learn")
+                    for (itemsToLearnData in itemsToLearn as ArrayList<String>) {
+                        regCourseData.itemsToLearn.add(itemsToLearnData)
+                    }
+                }
+            }
+        }
+    }
 }

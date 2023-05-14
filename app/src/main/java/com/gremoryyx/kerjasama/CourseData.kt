@@ -18,11 +18,12 @@ data class CourseData(
     var captions: ArrayList<String>,
     var itemsToLearn: ArrayList<String>,
     var lectureVideos: ArrayList<String>,
-    var courseMaterials: ArrayList<String>
+    var courseMaterials: ArrayList<String>,
+    var lecturesWatched: Number
 
 ): Parcelable
 {
-    constructor(): this(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888), "", "", "", 0.0f, 0, "",  ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+    constructor(): this(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888), "", "", "", 0.0f, 0, "",  ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), 0)
     override fun describeContents(): Int {
         return 0
     }
@@ -40,6 +41,7 @@ data class CourseData(
         parcel.writeList(itemsToLearn)
         parcel.writeList(lectureVideos)
         parcel.writeList(courseMaterials)
+        parcel.writeInt(lecturesWatched.toInt())
     }
 
     companion object CREATOR : Parcelable.Creator<CourseData> {
@@ -57,7 +59,8 @@ data class CourseData(
             val itemsToLearn = parcel.readArrayList(String::class.java.classLoader) as ArrayList<String>
             val lectureVideos = parcel.readArrayList(String::class.java.classLoader) as ArrayList<String>
             val courseMaterials = parcel.readArrayList(String::class.java.classLoader) as ArrayList<String>
-            return CourseData(courseImage!!, courseName!!, courseDescription!!, instructorName!!, ratingNumber, usersRated, lastUpdate!!, language, captions,itemsToLearn, lectureVideos, courseMaterials)
+            val lecturesWatched = parcel.readInt()
+            return CourseData(courseImage!!, courseName!!, courseDescription!!, instructorName!!, ratingNumber, usersRated, lastUpdate!!, language, captions,itemsToLearn, lectureVideos, courseMaterials, lecturesWatched)
         }
 
         override fun newArray(size: Int): Array<CourseData?> {
