@@ -1,31 +1,23 @@
 package com.gremoryyx.kerjasama
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.firebase.firestore.auth.User
+import androidx.fragment.app.Fragment
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.gremoryyx.kerjasama.repository.UserRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.OutputStream
+import kotlinx.coroutines.*
 import kotlin.coroutines.suspendCoroutine
 
 class ProfilePersonalFragment : Fragment() {
@@ -71,12 +63,36 @@ class ProfilePersonalFragment : Fragment() {
             getPhoto.launch("image/*")
         }
 
+        val saveButton = getView()?.findViewById<TextView>(R.id.profile_save)
+        saveButton?.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).async {
+                withContext(Dispatchers.Default) {
+                    saveProfileInfo()
+                    readProfileInfo()
+                }
+            }
+        }
+
     }
+
+    private fun saveProfileInfo(){
+        val phoneEditText = getView()?.findViewById<TextView>(R.id.profile_phone_number)
+        if (phoneEditText?.text != "" && phoneEditText?.text != userData.phone_number && phoneEditText?.length()!! >= 10) {
+            userData.phone_number = phoneEditText?.text.toString()
+            userRepo.updateUserPhoneNumber(userData.phone_number)
+        }
+
+        val bioEditText = getView()?.findViewById<TextView>(R.id.profile_bio)
+        userData.bio = bioEditText?.text.toString()
+        userRepo.updateUserBio(userData.bio)
+
+    }
+
 
 
     private suspend fun saveProfilePicture(userImageUri: Uri):Unit = suspendCoroutine{ continuation->
         val storageRef = Firebase.storage("gs://kerjasama-676767.appspot.com").reference.child("User")
-        val userImageRef = storageRef.child("${userData.user_image}")
+        val userImageRef = storageRef.child(userData.user_image)
         Log.d("img msg!!!!!!!!!!!!", "Image Ref: $userImageRef")
         val uploadTask = userImageRef.putFile(userImageUri)
 
@@ -124,12 +140,15 @@ class ProfilePersonalFragment : Fragment() {
                         Log.d("ProfilePersonalFragment NEVER UPLOAD IMAGE!!!!!!!!!!", "Exception: $e")
                     }
 
-
                     getView()?.findViewById<TextView>(R.id.profile_username)?.text = userData.name
                     getView()?.findViewById<TextView>(R.id.profile_ic_number)?.text = userData.ic_number
                     getView()?.findViewById<TextView>(R.id.profile_phone_number)?.text = userData.phone_number
+                    val listView = getView()?.findViewById<ListView>(R.id.certView)
+                    val adapter = ArrayAdapter<String>(requireContext(), R.layout.cert_list_item, userData.certificate)
+                    listView?.adapter =adapter
+                    getView()?.findViewById<TextView>(R.id.profile_bio)?.text = userData.bio
                     getView()?.findViewById<TextView>(R.id.profile_gender)?.text = userData.gender
-                    getView()?.findViewById<TextView>(R.id.profile_certification)?.text = userData.highest_qualifications
+                    getView()?.findViewById<TextView>(R.id.profile_highest_qualifications)?.text = userData.highest_qualifications
                 }
 
             }

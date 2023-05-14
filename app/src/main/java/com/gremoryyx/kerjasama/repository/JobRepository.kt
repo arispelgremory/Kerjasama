@@ -95,7 +95,9 @@ class JobRepository {
                             // Suspend the current coroutine and wait for the image retrieval
                             val bitmap = getImageFile(jobImage).await()
                             val jobData = JobData()
+                            Log.d("JOB IMAGE", "getJobData BITMAP: ${bitmap}")
                             jobData.jobImage = bitmap
+
                             jobData.jobName = (document.data["job_name"]).toString()
                             jobData.companyName = (document.data["company"]).toString()
                             jobData.jobType = (document.data["job_type"]).toString()

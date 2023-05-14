@@ -70,6 +70,8 @@ class UserRepository {
             it.get("phone_number")?.let { phone_number -> userData.phone_number = phone_number.toString() }
             it.get("ic_number")?.let { ic_number -> userData.ic_number = ic_number.toString() }
             it.get("gender")?.let { gender -> userData.gender = gender.toString() }
+            it.get("bio")?.let { bio -> userData.bio = bio.toString() }
+            it.get("certificate")?.let{ certificate -> userData.certificate = certificate as ArrayList<String> }
             it.get("highest_qualifications")?.let { highest_qualifications -> userData.highest_qualifications = highest_qualifications.toString() }
         }
 
@@ -78,6 +80,16 @@ class UserRepository {
     fun updateUserEmail(newEmail:String){
         val userRef = db.collection("User").document(getUserID())
         userRef.update("email", newEmail)
+    }
+
+    fun updateUserPhoneNumber(newPhoneNum:String){
+        val userRef = db.collection("User").document(getUserID())
+        userRef.update("phone_number", newPhoneNum)
+    }
+
+    fun updateUserBio(newBio:String){
+        val userRef = db.collection("User").document(getUserID())
+        userRef.update("bio", newBio)
     }
 
 
