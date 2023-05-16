@@ -66,6 +66,14 @@ class ProfileAccountFragment : Fragment() {
                         // Update the user's email in the database
                         userRepo.updateUserEmail(newEmail.toString())
                         Toast.makeText(context, "Email updated", Toast.LENGTH_LONG).show()
+
+                        // logout if email updated
+                        loginViewModel.logoutUser()
+                        Intent(context, WelcomeActivity::class.java).also {
+                            startActivity(it)
+                            requireActivity().finish()
+                        }
+
                     } else {
                         // Display error message
                         Toast.makeText(context, "Email update failed", Toast.LENGTH_LONG).show()
@@ -88,6 +96,14 @@ class ProfileAccountFragment : Fragment() {
                             if (task.isSuccessful) {
                                 // Update the user's password in the database
                                 Toast.makeText(context, "Password updated", Toast.LENGTH_LONG).show()
+
+                                // logout if password updated
+                                loginViewModel.logoutUser()
+                                Intent(context, WelcomeActivity::class.java).also {
+                                    startActivity(it)
+                                    requireActivity().finish()
+                                }
+
                             } else {
                                 // Display error message
                                 Toast.makeText(context, "Password update failed", Toast.LENGTH_LONG).show()
