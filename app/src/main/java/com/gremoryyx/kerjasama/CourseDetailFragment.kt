@@ -160,16 +160,16 @@ class CourseDetailFragment : Fragment() {
                 courseFifthList?.text = numLearn
             }
 
-           if (learnList.indexOf(numLearn) == CaptionList.size-2) {
-               view?.findViewById<LinearLayout>(R.id.courseDetailFifthListLayout)?.visibility = View.GONE
-           }else if (learnList.indexOf(numLearn) == CaptionList.size-3){
-               view?.findViewById<LinearLayout>(R.id.courseDetailFourthListLayout)?.visibility = View.GONE
-            }else if (learnList.indexOf(numLearn) == CaptionList.size-4){
-               view?.findViewById<LinearLayout>(R.id.courseDetailThirdListLayout)?.visibility = View.GONE
-            }else if (learnList.indexOf(numLearn) == CaptionList.size-5){
-               view?.findViewById<LinearLayout>(R.id.courseDetailSecondListLayout)?.visibility = View.GONE
-            }else if (learnList.indexOf(numLearn) == CaptionList.size-6){
-               view?.findViewById<LinearLayout>(R.id.courseDetailFirstListLayout)?.visibility = View.GONE
+           if (learnList.indexOf(numLearn) == 4) {
+               view?.findViewById<LinearLayout>(R.id.courseDetailFifthListLayout)?.visibility = View.VISIBLE
+           }else if (learnList.indexOf(numLearn) == 3){
+               view?.findViewById<LinearLayout>(R.id.courseDetailFourthListLayout)?.visibility = View.VISIBLE
+            }else if (learnList.indexOf(numLearn) == 2){
+               view?.findViewById<LinearLayout>(R.id.courseDetailThirdListLayout)?.visibility = View.VISIBLE
+            }else if (learnList.indexOf(numLearn) == 1){
+               view?.findViewById<LinearLayout>(R.id.courseDetailSecondListLayout)?.visibility = View.VISIBLE
+            }else if (learnList.indexOf(numLearn) == 0){
+               view?.findViewById<LinearLayout>(R.id.courseDetailFirstListLayout)?.visibility = View.VISIBLE
             }
 
         }
